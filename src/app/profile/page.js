@@ -685,7 +685,7 @@ function ProfilePageContent() {
           {/* Placement Summary */}
           <div className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 mb-8">
             <h3 className="font-headline font-bold text-base text-on-surface mb-4">Placement Summary</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 font-sans text-sm">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 font-sans text-sm">
               <div className="flex flex-col gap-1">
                 <span className="text-xs text-on-surface-variant uppercase tracking-wide">Active Placement</span>
                 <span className="font-semibold text-on-surface">{assignedSchool ? assignedSchool.name : "Unassigned"}</span>
@@ -703,10 +703,6 @@ function ProfilePageContent() {
               <div className="flex flex-col gap-1">
                 <span className="text-xs text-on-surface-variant uppercase tracking-wide">Assigned Students</span>
                 <span className="font-semibold text-on-surface">{profile.fellow.students ? profile.fellow.students.length : 0} Students</span>
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-xs text-on-surface-variant uppercase tracking-wide">Evaluation Rating</span>
-                <span className="font-semibold text-primary">{profile.fellow.evaluationRating || "4.8"} / 5.0</span>
               </div>
             </div>
           </div>

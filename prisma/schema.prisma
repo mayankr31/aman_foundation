@@ -1171,7 +1171,7 @@ model LeaveTypeConfig {
   policyNote                  String?
   annualQuota                 Float    @default(0)
   quarterlyQuota              Float?
-  quotaPeriod                 String   @default("FINANCIAL_YEAR")
+  quotaPeriod                 String   @default("CALENDAR_YEAR")
   maxConsecutiveDays          Int?
   maxConsecutiveMonths        Int?
   softMaxConsecutive          Boolean  @default(false)

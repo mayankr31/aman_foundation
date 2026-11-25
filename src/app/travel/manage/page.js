@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
@@ -10,10 +12,11 @@ import FilePreviewLink from "@/components/files/FilePreviewLink";
 
 export default function TravelManagePage() {
   const { token, user, isInitializing, can, canDeleteRecords } = useAuth();
+  const toast = useToast();
+  const confirm = useConfirm();
   const router = useRouter();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [toast, setToast] = useState({ show: false, message: "" });
 
   const [showRejectModal, setShowRejectModal] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("");
@@ -40,10 +43,7 @@ export default function TravelManagePage() {
   }, [requests, searchQuery, staffFilter]);
   const { pageItems: pagedRequests, currentPage, setCurrentPage } = usePagination(filteredRequests, 10);
 
-  const triggerToast = (msg) => {
-    setToast({ show: true, message: msg });
-    setTimeout(() => setToast({ show: false, message: "" }), 3000);
-  };
+  const triggerToast = (msg, type = "success") => toast[type](msg);
 
   const isAllowed = user?.roleName === "ADMIN" || can("travel-management");
 
@@ -90,10 +90,10 @@ export default function TravelManagePage() {
         setRequests(prev => prev.map(r => r.id === id ? json.data : r));
         triggerToast("Request approved!");
       } else {
-        triggerToast(json.error || "Failed to approve");
+        triggerToast(json.error || "Failed to approve", "error");
       }
     } catch (e) {
-      triggerToast("An error occurred");
+      triggerToast("An error occurred", "error");
     }
   };
 
@@ -116,10 +116,10 @@ export default function TravelManagePage() {
         setShowRejectModal(null);
         setRejectionReason("");
       } else {
-        triggerToast(json.error || "Failed to reject");
+        triggerToast(json.error || "Failed to reject", "error");
       }
     } catch (e) {
-      triggerToast("An error occurred");
+      triggerToast("An error occurred", "error");
     }
   };
 
@@ -142,10 +142,10 @@ export default function TravelManagePage() {
         setShowRevertModal(null);
         setRevertReason("");
       } else {
-        triggerToast(json.error || "Failed to send request back");
+        triggerToast(json.error || "Failed to send request back", "error");
       }
     } catch (e) {
-      triggerToast("An error occurred");
+      triggerToast("An error occurred", "error");
     }
   };
 
@@ -164,15 +164,21 @@ export default function TravelManagePage() {
         setRequests(prev => prev.map(r => r.id === id ? json.data : r));
         triggerToast("Marked as completed");
       } else {
-        triggerToast(json.error || "Failed");
+        triggerToast(json.error || "Failed", "error");
       }
     } catch (e) {
-      triggerToast("An error occurred");
+      triggerToast("An error occurred", "error");
     }
   };
 
   const handleDeleteRequest = async (req) => {
-    if (!window.confirm(`Delete the travel request to ${req.destination}? This cannot be undone.`)) return;
+    const confirmed = await confirm({
+      title: "Delete Travel Request",
+      message: `Delete the travel request to ${req.destination}? This cannot be undone.`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/travel-requests/${req.id}`, {
         method: "DELETE",
@@ -183,7 +189,7 @@ export default function TravelManagePage() {
       setRequests((prev) => prev.filter((item) => item.id !== req.id));
       triggerToast("Travel request deleted");
     } catch (error) {
-      triggerToast(error.message || "Failed to delete request");
+      triggerToast(error.message || "Failed to delete request", "error");
     }
   };
 
@@ -505,12 +511,6 @@ export default function TravelManagePage() {
         </div>
       )}
 
-      {toast.show && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[400]">
-          <span className="material-symbols-outlined text-emerald-400 text-lg">info</span>
-          {toast.message}
-        </div>
-      )}
     </div>
   );
 }

@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 
 export default function SugarcaneCultivation() {
   const { token } = useAuth();
+  const toast = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [farmers, setFarmers] = useState([]);
@@ -142,7 +144,7 @@ export default function SugarcaneCultivation() {
         });
         const json = await res.json();
         if (!json.success) {
-          alert(json.error || "Failed to create new participant");
+          toast.error(json.error || "Failed to create new participant");
           return;
         }
         benId = json.data.id;
@@ -194,8 +196,9 @@ export default function SugarcaneCultivation() {
       const detailJson = await detailRes.json();
       if (detailJson.success) {
         setRefreshTrigger(prev => prev + 1);
+        toast.success("Farmer enrolled in sugarcane cultivation");
       } else {
-        alert(detailJson.error || "Failed to save sugarcane details");
+        toast.error(detailJson.error || "Failed to save sugarcane details");
       }
     } catch (err) {
       console.error("Enrolling farmer error:", err);
@@ -239,8 +242,9 @@ export default function SugarcaneCultivation() {
         setNewProgramLand("");
         setShowAddProgramModal(false);
         setRefreshTrigger(prev => prev + 1);
+        toast.success("Sugarcane program added");
       } else {
-        alert(json.error || "Failed to create sugarcane program");
+        toast.error(json.error || "Failed to create sugarcane program");
       }
     } catch (err) {
       console.error("Adding sugarcane program error:", err);
@@ -329,8 +333,9 @@ export default function SugarcaneCultivation() {
       if (json.success) {
         setShowEditAssignModal(false);
         setRefreshTrigger(prev => prev + 1);
+        toast.success("Sugarcane assignment updated");
       } else {
-        alert(json.error || "Failed to update sugarcane assignment");
+        toast.error(json.error || "Failed to update sugarcane assignment");
       }
     } catch (err) {
       console.error("Updating sugarcane assignment error:", err);
@@ -361,7 +366,7 @@ export default function SugarcaneCultivation() {
     };
   });
 
-  const { pageItems: pagedProgramStats, currentPage, setCurrentPage } = usePagination(programStats, 9);
+  const { pageItems: pagedProgramStats, currentPage, setCurrentPage } = usePagination(programStats, 9, { pageParam: "page" });
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto w-full pb-24">
@@ -549,9 +554,13 @@ export default function SugarcaneCultivation() {
               High-level distribution schemes mapping allotted land parcels, yield targets, and participant involvement.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans">
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans"
+            data-list-page-param="page"
+            data-list-detail-prefix="/livelihood/sugarcane/"
+          >
             {pagedProgramStats.map((prog) => (
-              <Link href={`/livelihood/sugarcane/${prog.id}`} key={prog.id} className="p-5 border border-surface-container-high rounded-xl bg-surface-container-low/20 space-y-4 hover:bg-surface-container-low transition-colors block text-left no-underline">
+              <Link href={`/livelihood/sugarcane/${prog.id}`} key={prog.id} data-list-item-key={prog.id} className="p-5 border border-surface-container-high rounded-xl bg-surface-container-low/20 space-y-4 hover:bg-surface-container-low transition-colors block text-left no-underline">
                 <div>
                   <span className="px-2.5 py-0.5 rounded text-[9px] bg-secondary-container/20 text-secondary uppercase tracking-wider font-bold">
                     Active Program

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import EmptyState from "@/components/ui/EmptyState";
 import Pagination from "@/components/ui/Pagination";
 import DateInput from "@/components/ui/DateInput";
@@ -13,6 +14,7 @@ import { isProgramStaffRole } from "@/lib/roles";
 
 export default function PtaPrograms() {
   const { token, user } = useAuth();
+  const toast = useToast();
   const isAdmin = user?.roleName === "ADMIN";
   const canManageEvents = user?.roleName === "ADMIN" || isProgramStaffRole(user?.roleName);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -164,8 +166,8 @@ export default function PtaPrograms() {
         return d.getMonth() === month && d.getFullYear() === year;
       });
 
-  const { pageItems: pagedPrograms, currentPage: programsPage, setCurrentPage: setProgramsPage } = usePagination(programs, 6);
-  const { pageItems: pagedDisplayedEvents, currentPage: eventsPage, setCurrentPage: setEventsPage } = usePagination(displayedEvents, 6);
+  const { pageItems: pagedPrograms, currentPage: programsPage, setCurrentPage: setProgramsPage } = usePagination(programs, 6, { pageParam: "ptaProgramsPage" });
+  const { pageItems: pagedDisplayedEvents, currentPage: eventsPage, setCurrentPage: setEventsPage } = usePagination(displayedEvents, 6, { pageParam: "ptaEventsPage" });
 
   // Form states
   const [newName, setNewName] = useState("");
@@ -180,7 +182,7 @@ export default function PtaPrograms() {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     if (!newName || !newDesc) {
-      alert("Title and Description are required.");
+      toast.error("Title and Description are required.");
       return;
     }
 
@@ -212,7 +214,7 @@ export default function PtaPrograms() {
             setPrograms(loadJson.data);
           }
         } else {
-          alert(json.error || "Failed to add program");
+          toast.error(json.error || "Failed to add program");
         }
       } else {
         let isoDate = new Date().toISOString();
@@ -251,7 +253,7 @@ export default function PtaPrograms() {
             })));
           }
         } else {
-          alert(json.error || "Failed to add event");
+          toast.error(json.error || "Failed to add event");
         }
       }
     } catch (err) {
@@ -352,7 +354,11 @@ export default function PtaPrograms() {
                 <span className="material-symbols-outlined text-primary">workspace_premium</span>
                 Long-Running Programs
               </h3>
-              <div className="space-y-4">
+              <div
+                className="space-y-4"
+                data-list-page-param="ptaProgramsPage"
+                data-list-detail-prefix="/education/pta/program/"
+              >
                 {programs.length === 0 && (
                   <EmptyState
                     icon="workspace_premium"
@@ -364,6 +370,7 @@ export default function PtaPrograms() {
                   <Link
                     key={p.id}
                     href={`/education/pta/program/${p.id}`}
+                    data-list-item-key={p.id}
                     className="p-4 bg-surface rounded-lg border border-surface-container hover:bg-surface-container-low transition-colors block group cursor-pointer"
                   >
                     <div className="flex justify-between items-start gap-3 mb-2 font-sans">
@@ -476,11 +483,16 @@ export default function PtaPrograms() {
                   )}
                 </h4>
 
-                <div className="space-y-3">
+                <div
+                  className="space-y-3"
+                  data-list-page-param="ptaEventsPage"
+                  data-list-detail-prefix="/education/pta/event/"
+                >
                   {pagedDisplayedEvents.map((e) => (
                     <Link
                       key={e.id}
                       href={`/education/pta/event/${e.id}`}
+                      data-list-item-key={e.id}
                       className="p-3 bg-surface rounded-lg border border-surface-container hover:bg-surface-container-low transition-colors block group cursor-pointer"
                     >
                       <div className="flex justify-between items-start gap-3 mb-1 font-sans">

@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import AssessmentTemplatesModal from "@/components/AssessmentTemplatesModal";
@@ -94,6 +95,7 @@ export default function StudentProfileDetail() {
   const router = useRouter();
   const { user, token, isInitializing, canDeleteRecords, can } = useAuth();
   const toast = useToast();
+  const confirm = useConfirm();
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -339,7 +341,13 @@ export default function StudentProfileDetail() {
   }
 
   async function handleDeleteAssessmentForm(formId) {
-    if (!confirm("Delete this assessment form?")) return;
+    const confirmed = await confirm({
+      title: "Delete Assessment Form",
+      message: "Delete this assessment form?",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/assessment-forms/${formId}`, {
       method: "DELETE",
       headers: authHeaders()
@@ -372,8 +380,9 @@ export default function StudentProfileDetail() {
         setEditPhoto(null);
         await loadStudent();
         setModal(null);
+        toast.success("Details saved");
       }
-      else alert(json.error || "Failed to save");
+      else toast.error(json.error || "Failed to save");
     } finally { setSaving(false); }
   }
 
@@ -393,7 +402,7 @@ export default function StudentProfileDetail() {
       toast.success("Student deleted successfully");
       router.push("/education/students");
     } catch (err) {
-      alert(err.message || "Failed to delete student");
+      toast.error(err.message || "Failed to delete student");
       setSaving(false);
     }
   }
@@ -411,11 +420,14 @@ export default function StudentProfileDetail() {
         body: fd
       });
       const json = await res.json();
-      if (json.success) await loadStudent();
-      else alert(json.error || "Failed to upload photo");
+      if (json.success) {
+        await loadStudent();
+        toast.success("Photo updated");
+      }
+      else toast.error(json.error || "Failed to upload photo");
     } catch (err) {
       console.error("Failed to upload photo:", err);
-      alert("Error uploading photo");
+      toast.error("Error uploading photo");
     } finally {
       setUploadingPhoto(false);
       e.target.value = "";
@@ -432,7 +444,7 @@ export default function StudentProfileDetail() {
       });
       const json = await res.json();
       if (json.success) { await loadStudent(); }
-      else alert(json.error || "Failed to update migration status");
+      else toast.error(json.error || "Failed to update migration status");
     } finally { setSaving(false); setShowConfirmMigrate(false); }
   }
 
@@ -445,8 +457,8 @@ export default function StudentProfileDetail() {
         body: JSON.stringify({ schoolId: schoolId || null })
       });
       const json = await res.json();
-      if (json.success) { await loadStudent(); setModal(null); }
-      else alert(json.error || "Failed to update school");
+      if (json.success) { await loadStudent(); setModal(null); toast.success("School updated"); }
+      else toast.error(json.error || "Failed to update school");
     } finally { setSaving(false); }
   }
 
@@ -475,7 +487,13 @@ export default function StudentProfileDetail() {
   }
 
   async function handleDeleteTransition(transitionId) {
-    if (!confirm("Delete this transition record?")) return;
+    const confirmed = await confirm({
+      title: "Delete Transition Record",
+      message: "Delete this transition record?",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/students/${id}/transitions`, {
       method: "DELETE",
       headers: authHeaders(),

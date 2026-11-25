@@ -7,6 +7,17 @@ import { formatDate } from "@/lib/date";
 import { formatRoleLabel } from "@/lib/roles";
 import Avatar from "@/components/ui/Avatar";
 
+function formatBirthdayDate(dateKey) {
+  if (!dateKey) return "";
+  const date = new Date(`${dateKey}T12:00:00+05:30`);
+  if (Number.isNaN(date.getTime())) return dateKey;
+  return date.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    timeZone: "Asia/Kolkata",
+  });
+}
+
 function Initial({ name, avatar, tone = "teal" }) {
   const initial = (name || "?").charAt(0).toUpperCase();
   const classes =
@@ -48,6 +59,8 @@ export default function TeamToday() {
   if (loading || !data) return null;
 
   const birthdays = data.birthdays || [];
+  const upcomingBirthdays = data.upcomingBirthdays || [];
+  const upcomingDays = data.upcomingBirthdayDays || 30;
   const onLeave = data.onLeave || [];
 
   return (
@@ -64,33 +77,73 @@ export default function TeamToday() {
           <div className="flex items-center justify-between gap-2 mb-4">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-amber-500">cake</span>
-              <h3 className="font-bold text-on-surface">Birthdays Today</h3>
+              <h3 className="font-bold text-on-surface">Birthdays</h3>
             </div>
             <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100">
-              {birthdays.length}
+              {birthdays.length} today
             </span>
           </div>
 
           {loading ? (
             <p className="text-xs text-on-surface-variant py-3">Loading...</p>
-          ) : birthdays.length === 0 ? (
-            <p className="text-xs text-on-surface-variant py-3">No birthdays today.</p>
           ) : (
-            <div className="space-y-2">
-              {birthdays.map((person) => (
-                <div key={person.id} className="flex items-center gap-3 rounded-lg bg-amber-50/60 dark:bg-amber-900/10 border border-amber-100/70 dark:border-amber-900/20 px-3 py-2.5">
-                  <Initial name={person.name} avatar={person.avatar} tone="amber" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-on-surface truncate">{person.name}</p>
-                    <p className="text-[11px] text-on-surface-variant truncate">
-                      {formatRoleLabel(person.role)}
-                      {person.department ? ` · ${person.department}` : ""}
-                    </p>
-                  </div>
-                  <span className="text-lg" aria-hidden="true">🎂</span>
+            <>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Today</p>
+              {birthdays.length === 0 ? (
+                <p className="text-xs text-on-surface-variant py-2">No birthdays today.</p>
+              ) : (
+                <div className="space-y-2">
+                  {birthdays.map((person) => (
+                    <div key={person.id} className="flex items-center gap-3 rounded-lg bg-amber-50/60 dark:bg-amber-900/10 border border-amber-100/70 dark:border-amber-900/20 px-3 py-2.5">
+                      <Initial name={person.name} avatar={person.avatar} tone="amber" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-on-surface truncate">{person.name}</p>
+                        <p className="text-[11px] text-on-surface-variant truncate">
+                          {formatRoleLabel(person.role)}
+                          {person.department ? ` · ${person.department}` : ""}
+                        </p>
+                      </div>
+                      <span className="text-lg" aria-hidden="true">🎂</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              )}
+
+              <div className="my-4 h-px bg-outline-variant/20" />
+
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                  Upcoming · next {upcomingDays} days
+                </p>
+                <span className="text-[10px] font-bold text-slate-500">{upcomingBirthdays.length}</span>
+              </div>
+              {upcomingBirthdays.length === 0 ? (
+                <p className="text-xs text-on-surface-variant py-2">No upcoming birthdays.</p>
+              ) : (
+                <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+                  {upcomingBirthdays.map((person) => (
+                    <div key={person.id} className="flex items-center gap-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 px-3 py-2.5">
+                      <Initial name={person.name} avatar={person.avatar} />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-on-surface truncate">{person.name}</p>
+                        <p className="text-[11px] text-on-surface-variant truncate">
+                          {formatRoleLabel(person.role)}
+                          {person.department ? ` · ${person.department}` : ""}
+                        </p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-[10px] font-bold text-amber-700 dark:text-amber-400">
+                          {formatBirthdayDate(person.dateKey)}
+                        </p>
+                        <p className="text-[9px] text-on-surface-variant">
+                          {person.daysUntil === 1 ? "Tomorrow" : `in ${person.daysUntil} days`}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
 

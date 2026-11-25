@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import Pagination from "@/components/ui/Pagination";
 import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
@@ -28,9 +30,11 @@ function Modal({ title, onClose, children }) {
 export default function PtaProgramDetail() {
   const { id } = useParams();
   const { token, isInitializing } = useAuth();
+  const toast = useToast();
+  const confirm = useConfirm();
   const [program, setProgram] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { pageItems: pagedEvents, currentPage: eventsPage, setCurrentPage: setEventsPage } = usePagination(program?.events || [], 6);
+  const { pageItems: pagedEvents, currentPage: eventsPage, setCurrentPage: setEventsPage } = usePagination(program?.events || [], 6, { pageParam: "eventsPage" });
   const [modal, setModal] = useState(null); // 'editProgram' | 'addSchool'
   const [saving, setSaving] = useState(false);
   const [allSchools, setAllSchools] = useState([]);
@@ -91,8 +95,8 @@ export default function PtaProgramDetail() {
     try {
       const res = await fetch(`/api/programs/${id}`, { method: "PATCH", headers: authHeaders(), body: JSON.stringify(editForm) });
       const json = await res.json();
-      if (json.success) { await loadProgram(); setModal(null); }
-      else alert(json.error || "Failed to save");
+      if (json.success) { await loadProgram(); setModal(null); toast.success("Program saved"); }
+      else toast.error(json.error || "Failed to save");
     } finally { setSaving(false); }
   }
 
@@ -123,8 +127,9 @@ export default function PtaProgramDetail() {
         await loadProgram();
         setModal(null);
         setEventForm({ title: "", description: "", date: "", time: "", location: "", status: "Scheduled" });
+        toast.success("Event added");
       } else {
-        alert(json.error || "Failed to add event");
+        toast.error(json.error || "Failed to add event");
       }
     } finally { setSaving(false); }
   }
@@ -135,16 +140,24 @@ export default function PtaProgramDetail() {
       headers: authHeaders(),
       body: JSON.stringify({ programId: id })
     });
+    toast.success("School added to program");
     await loadProgram();
   }
 
   async function handleRemoveSchool(schoolId) {
-    if (!confirm("Remove this school from the program?")) return;
+    const confirmed = await confirm({
+      title: "Remove School",
+      message: "Remove this school from the program?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/schools/${schoolId}/programs`, {
       method: "DELETE",
       headers: authHeaders(),
       body: JSON.stringify({ programId: id })
     });
+    toast.success("School removed from program");
     await loadProgram();
   }
 
@@ -154,16 +167,24 @@ export default function PtaProgramDetail() {
       headers: authHeaders(),
       body: JSON.stringify({ programId: id })
     });
+    toast.success("After school centre added to program");
     await loadProgram();
   }
 
   async function handleRemoveCentre(centreId) {
-    if (!confirm("Remove this after school centre from the program?")) return;
+    const confirmed = await confirm({
+      title: "Remove After School Centre",
+      message: "Remove this after school centre from the program?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/after-school-centres/${centreId}/programs`, {
       method: "DELETE",
       headers: authHeaders(),
       body: JSON.stringify({ programId: id })
     });
+    toast.success("After school centre removed from program");
     await loadProgram();
   }
 
@@ -308,9 +329,14 @@ export default function PtaProgramDetail() {
             {(!program.events || program.events.length === 0) ? (
               <p className="text-center py-8 text-on-surface-variant text-sm">No events scheduled for this program yet.</p>
             ) : (
-              <div className="space-y-4">
+              <div
+                className="space-y-4"
+                data-list-page-param="eventsPage"
+                data-list-detail-prefix="/education/pta/event/"
+              >
                 {pagedEvents.map(ev => (
                   <Link key={ev.id} href={`/education/pta/event/${ev.id}`}
+                    data-list-item-key={ev.id}
                     className="p-4 bg-surface-container-low rounded-lg flex justify-between items-start gap-3 hover:bg-surface-container transition-colors block group">
                     <div className="min-w-0">
                       <h4 className="font-bold text-on-surface group-hover:text-primary transition-colors break-words">{ev.title}</h4>

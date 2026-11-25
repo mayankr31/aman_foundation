@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
 import Avatar from "@/components/ui/Avatar";
+import usePagination from "@/lib/usePagination";
 
 export default function FellowsModule() {
   const { token, user } = useAuth();
@@ -16,7 +17,6 @@ export default function FellowsModule() {
       router.replace("/profile");
     }
   }, [user, router]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("All");
   const [fellows, setFellows] = useState([]);
@@ -62,7 +62,6 @@ export default function FellowsModule() {
       "Assigned Students": f.studentCount ?? 0,
       "LDJC": f.ldjcCount ?? 0,
       "Progress (%)": f.progress ?? 0,
-      "Evaluation Rating": f.evaluationRating ?? "",
       "Joined Date": formatDate(f.createdAt, ""),
     }));
 
@@ -74,12 +73,12 @@ export default function FellowsModule() {
     XLSX.writeFile(workbook, `fellows_export_${new Date().toISOString().split("T")[0]}.xlsx`);
   };
 
-  const ITEMS_PER_PAGE = 10;
-  const totalPages = Math.ceil(filteredFellows.length / ITEMS_PER_PAGE);
-  const paginatedFellows = filteredFellows.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  const {
+    pageItems: paginatedFellows,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredFellows, 10, { pageParam: "page" });
 
   return (
     <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -165,7 +164,11 @@ export default function FellowsModule() {
       </div>
 
       {/* List View */}
-        <div className="bg-surface-container-lowest rounded-xl ambient-shadow overflow-x-auto border border-surface-container-highest">
+        <div
+          className="bg-surface-container-lowest rounded-xl ambient-shadow overflow-x-auto border border-surface-container-highest"
+          data-list-page-param="page"
+          data-list-detail-prefix="/education/fellows/"
+        >
           <table className="mobile-card-table w-full min-w-[720px] table-fixed text-left border-collapse font-sans">
             <thead>
               <tr className="bg-surface-container-low border-b border-surface-container-highest text-on-surface-variant text-[0.75rem] uppercase tracking-[0.05em] font-semibold">
@@ -181,6 +184,7 @@ export default function FellowsModule() {
                 return (
                 <tr
                   key={i}
+                  data-list-item-key={f.id || f.name}
                   onClick={() => router.push(profileHref)}
                   className="border-b border-surface-container-highest hover:bg-surface-container-low transition-colors cursor-pointer"
                 >

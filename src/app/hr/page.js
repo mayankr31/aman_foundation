@@ -55,6 +55,7 @@ export default function HrEmployeeManagement() {
   const [directorySearch, setDirectorySearch] = useState("");
   const [directoryDept, setDirectoryDept] = useState("All");
   const [directoryStatus, setDirectoryStatus] = useState("ACTIVE");
+  const [directorySort, setDirectorySort] = useState("created-desc");
 
   const departmentOptions = useMemo(() => {
     const fromUsers = users.map((u) => u.department).filter(Boolean);
@@ -86,7 +87,38 @@ export default function HrEmployeeManagement() {
     });
   }, [users, directorySearch, directoryDept, directoryStatus]);
 
-  const { pageItems: pagedEmployees, currentPage, setCurrentPage } = usePagination(filteredEmployees, 10);
+  const sortedEmployees = useMemo(() => {
+    const list = [...filteredEmployees];
+    const byName = (a, b) =>
+      String(a.name || a.username || "").localeCompare(String(b.name || b.username || ""), undefined, {
+        sensitivity: "base",
+      });
+    const time = (value) => (value ? new Date(value).getTime() : null);
+
+    switch (directorySort) {
+      case "name-asc":
+        return list.sort(byName);
+      case "name-desc":
+        return list.sort((a, b) => byName(b, a));
+      case "joining-desc":
+      case "joining-asc":
+        return list.sort((a, b) => {
+          const aTime = time(a.dateOfJoining);
+          const bTime = time(b.dateOfJoining);
+          if (aTime == null && bTime == null) return 0;
+          if (aTime == null) return 1;
+          if (bTime == null) return -1;
+          return directorySort === "joining-asc" ? aTime - bTime : bTime - aTime;
+        });
+      case "created-asc":
+        return list.sort((a, b) => (time(a.createdAt) ?? 0) - (time(b.createdAt) ?? 0));
+      case "created-desc":
+      default:
+        return list.sort((a, b) => (time(b.createdAt) ?? 0) - (time(a.createdAt) ?? 0));
+    }
+  }, [filteredEmployees, directorySort]);
+
+  const { pageItems: pagedEmployees, currentPage, setCurrentPage } = usePagination(sortedEmployees, 10, { pageParam: "page" });
 
   const handleRowClick = (user) => {
     if (user.fellow?.id && can("education-fellows")) {
@@ -121,7 +153,7 @@ export default function HrEmployeeManagement() {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 bg-surface rounded-xl p-4 border border-outline-variant/5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 bg-surface rounded-xl p-4 border border-outline-variant/5">
               <input
                 type="text"
                 placeholder="Search name, role, email, ID..."
@@ -149,9 +181,26 @@ export default function HrEmployeeManagement() {
                 <option value="INACTIVE">Inactive / former</option>
                 <option value="All">All statuses</option>
               </select>
+              <select
+                value={directorySort}
+                onChange={(e) => setDirectorySort(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface dark:bg-slate-900"
+                aria-label="Sort employees"
+              >
+                <option value="created-desc">Sort: Newest account first</option>
+                <option value="created-asc">Sort: Oldest account first</option>
+                <option value="name-asc">Sort: Name A–Z</option>
+                <option value="name-desc">Sort: Name Z–A</option>
+                <option value="joining-desc">Sort: Joining date (newest)</option>
+                <option value="joining-asc">Sort: Joining date (oldest)</option>
+              </select>
             </div>
 
-            <div className="w-full overflow-x-auto">
+            <div
+              className="w-full overflow-x-auto"
+              data-list-page-param="page"
+              data-list-detail-prefix="/hr/,/education/fellows/"
+            >
               <table className="mobile-card-table w-full min-w-[860px] table-fixed text-left border-collapse font-sans text-sm">
                 <thead>
                   <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
@@ -167,7 +216,7 @@ export default function HrEmployeeManagement() {
                     const name = emp.name || emp.username || "?";
                     const initials = name.split(" ").map((n) => n[0]).join("").toUpperCase().substring(0, 2);
                     return (
-                    <tr key={emp.id} onClick={() => handleRowClick(emp)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
+                    <tr key={emp.id} data-list-item-key={emp.id} onClick={() => handleRowClick(emp)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
                       <td data-label="" className="py-4 px-4 font-bold text-on-surface">
                         <div className="flex items-center gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">

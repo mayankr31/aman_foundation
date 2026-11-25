@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import DateInput from "@/components/ui/DateInput";
 import { formatDate } from "@/lib/date";
 
@@ -26,6 +27,7 @@ function Modal({ title, onClose, children }) {
 export default function PtaEventDetail() {
   const { id } = useParams();
   const { token, isInitializing } = useAuth();
+  const toast = useToast();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(null);
@@ -76,8 +78,8 @@ export default function PtaEventDetail() {
         body: JSON.stringify({ title: editForm.title, description: editForm.description, date: dateTime, location: editForm.location, status: editForm.status })
       });
       const json = await res.json();
-      if (json.success) { await loadEvent(); setModal(null); }
-      else alert(json.error || "Failed to save");
+      if (json.success) { await loadEvent(); setModal(null); toast.success("Event saved"); }
+      else toast.error(json.error || "Failed to save");
     } finally { setSaving(false); }
   }
 

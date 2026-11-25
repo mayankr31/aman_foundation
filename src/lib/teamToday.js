@@ -11,10 +11,29 @@ import { formatRoleLabel } from "@/lib/roles";
 const SWEEP_DATE_KEY = "__amanBirthdaySweepDate";
 const SWEEP_AT_KEY = "__amanBirthdaySweepAt";
 const SWEEP_THROTTLE_MS = 15 * 60 * 1000;
+const UPCOMING_BIRTHDAY_DAYS = 30;
 
 function birthdayKey(value) {
   if (!value) return null;
   return getISTDateKey(value).slice(5);
+}
+
+/** Next occurrence (today or later) of a birthday as an IST date key. */
+function nextBirthdayDateKey(dob, todayKey) {
+  const monthDay = birthdayKey(dob);
+  if (!monthDay) return null;
+
+  const [month, day] = monthDay.split("-").map(Number);
+  const year = Number(todayKey.slice(0, 4));
+  const todayDate = dateKeyToUTCDate(todayKey);
+  if (!todayDate) return null;
+
+  let candidate = new Date(Date.UTC(year, month - 1, day));
+  if (candidate < todayDate) {
+    candidate = new Date(Date.UTC(year + 1, month - 1, day));
+  }
+
+  return Number.isNaN(candidate.getTime()) ? null : candidate.toISOString().slice(0, 10);
 }
 
 function userScopeWhere(scope) {
@@ -110,6 +129,43 @@ export async function getTodayBirthdays() {
   return { items, hasTeam: true };
 }
 
+export async function getUpcomingBirthdays({ days = UPCOMING_BIRTHDAY_DAYS } = {}) {
+  const todayKey = getISTDateKey();
+  const todayDate = dateKeyToUTCDate(todayKey);
+  if (!todayDate) return [];
+
+  const users = await prisma.user.findMany({
+    where: { status: "ACTIVE", dob: { not: null } },
+    select: {
+      id: true,
+      name: true,
+      dob: true,
+      avatar: true,
+      department: true,
+      role: { select: { name: true, displayName: true, rank: true } },
+    },
+    orderBy: { name: "asc" },
+  });
+
+  const items = [];
+  for (const person of users) {
+    const dateKey = nextBirthdayDateKey(person.dob, todayKey);
+    const nextDate = dateKeyToUTCDate(dateKey);
+    if (!nextDate) continue;
+
+    const daysUntil = Math.round((nextDate.getTime() - todayDate.getTime()) / (24 * 60 * 60 * 1000));
+    if (daysUntil < 1 || daysUntil > days) continue;
+
+    const copy = { ...person };
+    delete copy.dob;
+    items.push({ ...copy, dateKey, daysUntil });
+  }
+
+  return items.sort((a, b) =>
+    a.daysUntil - b.daysUntil || String(a.name || "").localeCompare(String(b.name || ""))
+  );
+}
+
 export async function getTodayLeaves(user) {
   // Organisation-wide: every active employee can see who is on leave today.
   const todayKey = getISTDateKey();
@@ -176,8 +232,9 @@ export async function getTodayLeaves(user) {
 }
 
 export async function getTeamToday(user) {
-  const [birthdays, leaves] = await Promise.all([
+  const [birthdays, upcomingBirthdays, leaves] = await Promise.all([
     getTodayBirthdays(),
+    getUpcomingBirthdays(),
     getTodayLeaves(user),
   ]);
 
@@ -185,6 +242,8 @@ export async function getTeamToday(user) {
     date: getISTDateKey(),
     hasTeam: true,
     birthdays: birthdays.items,
+    upcomingBirthdays,
+    upcomingBirthdayDays: UPCOMING_BIRTHDAY_DAYS,
     onLeave: leaves.items,
   };
 }

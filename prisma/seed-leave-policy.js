@@ -11,7 +11,6 @@ async function main() {
   for (const config of DEFAULT_LEAVE_CONFIGS) {
     const data = {
       ...config,
-      quarterlyQuota: null,
       active: true,
       isSystem: true,
     };

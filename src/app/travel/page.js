@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
@@ -12,11 +13,11 @@ import { validateAmount, validateDateOrder, firstError } from "@/lib/validation"
 
 export default function TravelPage() {
   const { token, user, isInitializing, can } = useAuth();
+  const toast = useToast();
   const router = useRouter();
   const [requests, setRequests] = useState([]);
   const { pageItems: pagedRequests, currentPage, setCurrentPage } = usePagination(requests, 10);
   const [loading, setLoading] = useState(true);
-  const [toast, setToast] = useState({ show: false, message: "" });
 
   const [showNewModal, setShowNewModal] = useState(false);
   const [newDestination, setNewDestination] = useState("");
@@ -42,10 +43,7 @@ export default function TravelPage() {
   });
   const [resubmitting, setResubmitting] = useState(false);
 
-  const triggerToast = (msg) => {
-    setToast({ show: true, message: msg });
-    setTimeout(() => setToast({ show: false, message: "" }), 3000);
-  };
+  const triggerToast = (msg, type = "success") => toast[type](msg);
 
   const isAllowed = user?.roleName !== "ADMIN" && can("travel");
 
@@ -80,7 +78,7 @@ export default function TravelPage() {
   const handleCreateRequest = async (e) => {
     e.preventDefault();
     if (!newDestination || !newPurpose || !newStartDate || !newEndDate) {
-      alert("Destination, Purpose, Start Date and End Date are required.");
+      triggerToast("Destination, Purpose, Start Date and End Date are required.", "error");
       return;
     }
     const validationMessage = firstError([
@@ -88,7 +86,7 @@ export default function TravelPage() {
       validateAmount(newExpectedExpenses, { min: 0 }),
     ]);
     if (validationMessage) {
-      alert(validationMessage);
+      triggerToast(validationMessage, "error");
       return;
     }
     setSubmitting(true);
@@ -118,10 +116,10 @@ export default function TravelPage() {
         setNewExpectedExpenses("");
         triggerToast("Travel request submitted!");
       } else {
-        triggerToast(json.error || "Failed to submit");
+        triggerToast(json.error || "Failed to submit", "error");
       }
     } catch (e) {
-      triggerToast("An error occurred");
+      triggerToast("An error occurred", "error");
     } finally {
       setSubmitting(false);
     }
@@ -132,14 +130,14 @@ export default function TravelPage() {
     if (!showExpenseModal) return;
     const validDetails = expenseDetails.filter(d => d.category && d.amount);
     if (validDetails.length === 0) {
-      alert("Add at least one expense line with a category and amount.");
+      triggerToast("Add at least one expense line with a category and amount.", "error");
       return;
     }
     const expenseError = firstError(
       validDetails.map((item) => validateAmount(item.amount, { required: true, min: 0.01 }))
     );
     if (expenseError) {
-      alert(expenseError);
+      triggerToast(expenseError, "error");
       return;
     }
     setSubmittingExpense(true);
@@ -169,10 +167,10 @@ export default function TravelPage() {
         triggerToast("Expense submitted!");
         fetchRequests();
       } else {
-        triggerToast(json.error || "Failed to submit expense");
+        triggerToast(json.error || "Failed to submit expense", "error");
       }
     } catch (e) {
-      triggerToast("An error occurred");
+      triggerToast("An error occurred", "error");
     } finally {
       setSubmittingExpense(false);
     }
@@ -197,7 +195,7 @@ export default function TravelPage() {
       validateAmount(resubmitForm.expectedExpenses, { min: 0 }),
     ]);
     if (validationMessage) {
-      alert(validationMessage);
+      triggerToast(validationMessage, "error");
       return;
     }
     setResubmitting(true);
@@ -216,10 +214,10 @@ export default function TravelPage() {
         triggerToast("Request resubmitted for approval");
         fetchRequests();
       } else {
-        triggerToast(json.error || "Failed to resubmit request");
+        triggerToast(json.error || "Failed to resubmit request", "error");
       }
     } catch {
-      triggerToast("An error occurred");
+      triggerToast("An error occurred", "error");
     } finally {
       setResubmitting(false);
     }
@@ -586,12 +584,6 @@ export default function TravelPage() {
         </div>
       )}
 
-      {toast.show && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[400]">
-          <span className="material-symbols-outlined text-emerald-400 text-lg">info</span>
-          {toast.message}
-        </div>
-      )}
     </div>
   );
 }

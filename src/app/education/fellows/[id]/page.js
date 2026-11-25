@@ -12,6 +12,7 @@ import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
 import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import PostFellowshipSurveyViewer from "@/components/PostFellowshipSurveyViewer";
@@ -54,6 +55,7 @@ function FellowProfileDetailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
+  const confirm = useConfirm();
   const [fellow, setFellow] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showPersonalDetailsForm, setShowPersonalDetailsForm] = useState(false);
@@ -61,8 +63,8 @@ function FellowProfileDetailContent() {
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const [ldjcRecords, setLdjcRecords] = useState([]);
   const [debriefRecords, setDebriefRecords] = useState([]);
-  const { pageItems: pagedLdjc, currentPage: ldjcPage, setCurrentPage: setLdjcPage } = usePagination(ldjcRecords, 10);
-  const { pageItems: pagedDebrief, currentPage: debriefPage, setCurrentPage: setDebriefPage } = usePagination(debriefRecords, 10);
+  const { pageItems: pagedLdjc, currentPage: ldjcPage, setCurrentPage: setLdjcPage } = usePagination(ldjcRecords, 10, { pageParam: "ldjcPage" });
+  const { pageItems: pagedDebrief, currentPage: debriefPage, setCurrentPage: setDebriefPage } = usePagination(debriefRecords, 10, { pageParam: "debriefPage" });
   const [engagementSurveys, setEngagementSurveys] = useState([]);
   const [postFellowshipSurveys, setPostFellowshipSurveys] = useState([]);
   const [viewingSurvey, setViewingSurvey] = useState(null);
@@ -258,7 +260,13 @@ function FellowProfileDetailContent() {
   };
 
   const handleDeleteSurvey = async (surveyType, surveyId) => {
-    if (!window.confirm(`Delete this ${surveyType === "engagement" ? "engagement" : "post fellowship"} survey?`)) return;
+    const confirmed = await confirm({
+      title: "Delete Survey",
+      message: `Delete this ${surveyType === "engagement" ? "engagement" : "post fellowship"} survey?`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     const endpoint =
       surveyType === "engagement"
         ? `/api/fellows/${id}/engagement-surveys/${surveyId}`
@@ -472,7 +480,7 @@ function FellowProfileDetailContent() {
       {/* Placement Summary */}
       <div className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 mb-8">
         <h3 className="section-title text-on-surface mb-4">Placement Summary</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 font-sans text-sm">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 font-sans text-sm">
           <div className="flex flex-col gap-1">
             <span className="text-xs text-on-surface-variant uppercase tracking-wide">Active Placement</span>
             <span className="font-semibold text-on-surface">{assignedSchool ? assignedSchool.name : "Unassigned"}</span>
@@ -484,10 +492,6 @@ function FellowProfileDetailContent() {
           <div className="flex flex-col gap-1">
             <span className="text-xs text-on-surface-variant uppercase tracking-wide">Assigned Students</span>
             <span className="font-semibold text-on-surface">{fellow.students ? fellow.students.length : 0} Students</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs text-on-surface-variant uppercase tracking-wide">Evaluation Rating</span>
-            <span className="font-semibold text-primary">{fellow.evaluationRating || "4.8"} / 5.0</span>
           </div>
         </div>
       </div>

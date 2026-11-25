@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 
 const inputClass =
   "w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm";
 
 export default function RatingCategoriesModal({ categories = [], token, onClose, onChanged }) {
   const toast = useToast();
+  const confirm = useConfirm();
   const [items, setItems] = useState(categories);
   const [label, setLabel] = useState("");
   const [saving, setSaving] = useState(false);
@@ -43,9 +45,13 @@ export default function RatingCategoriesModal({ categories = [], token, onClose,
   };
 
   const handleDelete = async (category) => {
-    if (!confirm(`Delete the "${category.label}" rating category? Existing scores are kept.`)) {
-      return;
-    }
+    const confirmed = await confirm({
+      title: "Delete Rating Category",
+      message: `Delete the "${category.label}" rating category? Existing scores are kept.`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/fellow-performance-rating-categories/${category.id}`, {
         method: "DELETE",

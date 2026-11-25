@@ -1,31 +1,35 @@
 import { prisma } from "@/lib/prisma";
 import { DEFAULT_LEAVE_CONFIGS } from "@/lib/leavePolicyDefaults";
 import {
+  CALENDAR_QUARTERS,
   QUOTA_PERIODS,
   daysInclusive,
   formatDays,
   formatPeriodKey,
+  formatQuarterKey,
+  getCalendarYearStart,
   getEntitlementLabel,
-  getFinancialYearRange,
-  getFinancialYearStart,
   getMaxEndDateForMonths,
   getServiceDays,
   getStoredLeaveTypeKey,
   parseDateOnly,
   parseLegacyLeaveRange,
   splitDaysByPeriod,
+  splitDaysByQuarter,
 } from "@/lib/leavePolicy";
 
 export {
+  CALENDAR_QUARTERS,
   QUOTA_PERIODS,
   addDays,
   addMonths,
   daysInclusive,
   formatDays,
   formatPeriodKey,
+  formatQuarterKey,
+  getCalendarYearRange,
+  getCalendarYearStart,
   getEntitlementLabel,
-  getFinancialYearRange,
-  getFinancialYearStart,
   getPolicyWarnings,
   getServiceDays,
   getStoredLeaveTypeKey,
@@ -33,6 +37,7 @@ export {
   parseLegacyLeaveRange,
   periodKeyForDate,
   splitDaysByPeriod,
+  splitDaysByQuarter,
 } from "@/lib/leavePolicy";
 
 export async function ensureLeaveConfigs() {
@@ -46,9 +51,25 @@ export async function ensureLeaveConfigs() {
       create: { ...config, active: true },
     });
   }
-  return prisma.leaveTypeConfig.findMany({
+
+  // Leave balances now reset on 1 January. Existing policies created under the
+  // old April–March financial year are normalised once to calendar-year quotas.
+  await prisma.leaveTypeConfig.updateMany({
+    where: { quotaPeriod: QUOTA_PERIODS.FINANCIAL_YEAR },
+    data: { quotaPeriod: QUOTA_PERIODS.CALENDAR_YEAR },
+  });
+
+  const configs = await prisma.leaveTypeConfig.findMany({
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
   });
+
+  // Keep older policy notes in sync with the calendar-year switch without
+  // overwriting any other wording an admin may have customised.
+  return configs.map((config) =>
+    config.policyNote
+      ? { ...config, policyNote: config.policyNote.replace(/financial year/gi, "calendar year") }
+      : config
+  );
 }
 
 export function typeKeyFromName(name, configs) {
@@ -61,26 +82,44 @@ function expiryStatus(credit, now) {
   return credit.status;
 }
 
-function annualQuotaPeriod(quotaPeriod) {
-  return quotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR
-    ? QUOTA_PERIODS.CALENDAR_YEAR
-    : QUOTA_PERIODS.FINANCIAL_YEAR;
+function isAnnualQuotaPeriod(quotaPeriod) {
+  return (
+    quotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR ||
+    quotaPeriod === QUOTA_PERIODS.FINANCIAL_YEAR ||
+    quotaPeriod == null
+  );
+}
+
+function emptyQuarters() {
+  return CALENDAR_QUARTERS.map(({ quarter, label, months }) => ({
+    quarter,
+    label,
+    months,
+    used: 0,
+    pending: 0,
+    quota: null,
+    remaining: null,
+    available: null,
+  }));
 }
 
 /**
  * Computes the current leave policy balances from already-loaded records.
- * Annual/calendar quotas count approved and pending requests. Event-based and
- * unlimited types show usage for the selected financial year but do not carry
- * an annual balance.
+ * Annual quotas count approved and pending requests for the selected calendar
+ * year and are split into quarters. Event-based and unlimited types show usage
+ * for the same calendar year but do not carry an annual balance.
  */
-function computeLeaveSummary({ configs, leaves, credits, dateOfJoining, fyStart, calendarYear }) {
-  const fyRange = getFinancialYearRange(fyStart);
-  const configByKey = new Map(configs.map((config) => [config.key, config]));
+function computeLeaveSummary({ configs, leaves, credits, dateOfJoining, year }) {
   const types = {};
 
   for (const config of configs) {
     if (!config.active || config.key === "COMP_OFF" || config.systemType === "COMP_OFF") continue;
-    const quotaPeriod = config.quotaPeriod || QUOTA_PERIODS.FINANCIAL_YEAR;
+    const quotaPeriod = config.quotaPeriod || QUOTA_PERIODS.CALENDAR_YEAR;
+    const quarterlyQuota = Number(config.quarterlyQuota) > 0 ? Number(config.quarterlyQuota) : null;
+    const quarters = emptyQuarters();
+    if (isAnnualQuotaPeriod(quotaPeriod) && quarterlyQuota != null) {
+      for (const quarter of quarters) quarter.quota = quarterlyQuota;
+    }
     types[config.key] = {
       key: config.key,
       name: config.name,
@@ -89,6 +128,7 @@ function computeLeaveSummary({ configs, leaves, credits, dateOfJoining, fyStart,
       paid: config.paid !== false,
       quotaPeriod,
       entitlement: config.annualQuota,
+      quarterlyQuota,
       entitlementLabel: getEntitlementLabel(config),
       maxConsecutiveDays: config.maxConsecutiveDays,
       maxConsecutiveMonths: config.maxConsecutiveMonths,
@@ -100,6 +140,7 @@ function computeLeaveSummary({ configs, leaves, credits, dateOfJoining, fyStart,
       pending: 0,
       remaining: null,
       available: null,
+      quarters,
     };
 
     if (config.minServiceDays != null) {
@@ -118,22 +159,18 @@ function computeLeaveSummary({ configs, leaves, credits, dateOfJoining, fyStart,
 
     const key = getStoredLeaveTypeKey(leave, configs);
     const type = key ? types[key] : null;
-    const config = key ? configByKey.get(key) : null;
-    if (!type || !config) continue;
+    if (!type) continue;
 
-    const configQuotaPeriod = config.quotaPeriod || QUOTA_PERIODS.FINANCIAL_YEAR;
-    const isAnnual = [QUOTA_PERIODS.FINANCIAL_YEAR, QUOTA_PERIODS.CALENDAR_YEAR].includes(configQuotaPeriod);
+    const quarterSplit = splitDaysByQuarter(parsed.startDate, parsed.endDate);
     let countedDays = 0;
-
-    if (isAnnual) {
-      const split = splitDaysByPeriod(parsed.startDate, parsed.endDate, annualQuotaPeriod(configQuotaPeriod));
-      const displayKey =
-        configQuotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR ? `CY-${calendarYear}` : `FY-${fyStart}`;
-      countedDays = split[displayKey] || 0;
-    } else {
-      const overlapStart = parsed.startDate > fyRange.start ? parsed.startDate : fyRange.start;
-      const overlapEnd = parsed.endDate < fyRange.end ? parsed.endDate : fyRange.end;
-      countedDays = overlapStart <= overlapEnd ? daysInclusive(overlapStart, overlapEnd) : 0;
+    for (const [quarterKey, quarterDays] of Object.entries(quarterSplit)) {
+      const [rawYear, rawQuarter] = quarterKey.split("-");
+      if (Number(rawYear) !== Number(year)) continue;
+      const quarterIndex = Number(String(rawQuarter).replace("Q", "")) - 1;
+      if (quarterIndex < 0 || quarterIndex > 3) continue;
+      countedDays += quarterDays;
+      if (leave.status === "APPROVED") type.quarters[quarterIndex].used += quarterDays;
+      else type.quarters[quarterIndex].pending += quarterDays;
     }
 
     if (!countedDays) continue;
@@ -142,20 +179,37 @@ function computeLeaveSummary({ configs, leaves, credits, dateOfJoining, fyStart,
   }
 
   for (const type of Object.values(types)) {
-    if ([QUOTA_PERIODS.FINANCIAL_YEAR, QUOTA_PERIODS.CALENDAR_YEAR].includes(type.quotaPeriod)) {
+    if (isAnnualQuotaPeriod(type.quotaPeriod)) {
       type.remaining = Math.max(0, Number(type.entitlement) - type.used);
       type.available = Math.max(0, Number(type.entitlement) - type.used - type.pending);
+      for (const quarter of type.quarters) {
+        if (quarter.quota == null) continue;
+        quarter.remaining = Math.max(0, Number(quarter.quota) - quarter.used);
+        quarter.available = Math.max(0, Number(quarter.quota) - quarter.used - quarter.pending);
+      }
     }
   }
 
   const annualPaidTypes = Object.values(types).filter(
-    (type) => type.paid && [QUOTA_PERIODS.FINANCIAL_YEAR, QUOTA_PERIODS.CALENDAR_YEAR].includes(type.quotaPeriod)
+    (type) => type.paid && isAnnualQuotaPeriod(type.quotaPeriod)
   );
   const totals = {
     paidEntitlement: annualPaidTypes.reduce((sum, type) => sum + Number(type.entitlement || 0), 0),
     paidUsed: annualPaidTypes.reduce((sum, type) => sum + type.used, 0),
     paidPending: annualPaidTypes.reduce((sum, type) => sum + type.pending, 0),
     paidAvailable: annualPaidTypes.reduce((sum, type) => sum + Number(type.available || 0), 0),
+    byQuarter: CALENDAR_QUARTERS.map(({ quarter, label, months }, index) => {
+      let used = 0;
+      let pending = 0;
+      let cappedTypes = 0;
+      for (const type of annualPaidTypes) {
+        const quarterData = type.quarters[index];
+        used += quarterData.used;
+        pending += quarterData.pending;
+        if (quarterData.quota != null) cappedTypes += 1;
+      }
+      return { quarter, label, months, used, pending, cappedTypes };
+    }),
   };
 
   const now = new Date();
@@ -165,8 +219,8 @@ function computeLeaveSummary({ configs, leaves, credits, dateOfJoining, fyStart,
   }));
 
   return {
-    fyStart,
-    fyLabel: `FY ${fyStart}-${String(fyStart + 1).slice(-2)}`,
+    year: Number(year),
+    yearLabel: String(year),
     types,
     totals,
     compOff: {
@@ -179,8 +233,8 @@ function computeLeaveSummary({ configs, leaves, credits, dateOfJoining, fyStart,
   };
 }
 
-/** Computes the leave balances for a single user. */
-export async function getUserLeaveSummary(userId, fyStart = getFinancialYearStart()) {
+/** Computes the leave balances for a single user for the given calendar year. */
+export async function getUserLeaveSummary(userId, year = getCalendarYearStart()) {
   const [configs, leaves, credits, user] = await Promise.all([
     ensureLeaveConfigs(),
     prisma.leave.findMany({
@@ -202,8 +256,7 @@ export async function getUserLeaveSummary(userId, fyStart = getFinancialYearStar
     leaves,
     credits,
     dateOfJoining: user?.dateOfJoining,
-    fyStart,
-    calendarYear: new Date().getUTCFullYear(),
+    year,
   });
 }
 
@@ -212,12 +265,12 @@ export async function getUserLeaveSummary(userId, fyStart = getFinancialYearStar
  * joining dates once so a team-wide balance table does not run N+1 queries.
  * Returns the annual leave-type columns plus a map keyed by user id.
  */
-export async function getLeaveSummariesForUsers(userIds, fyStart = getFinancialYearStart()) {
+export async function getLeaveSummariesForUsers(userIds, year = getCalendarYearStart()) {
   const ids = [...new Set((userIds || []).filter(Boolean))];
-  const fyLabel = `FY ${fyStart}-${String(fyStart + 1).slice(-2)}`;
+  const yearLabel = String(year);
 
   if (!ids.length) {
-    return { fyStart, fyLabel, columns: [], summaries: {} };
+    return { year, yearLabel, columns: [], summaries: {} };
   }
 
   const [configs, leaves, credits, users] = await Promise.all([
@@ -249,7 +302,6 @@ export async function getLeaveSummariesForUsers(userIds, fyStart = getFinancialY
   }
 
   const joiningByUser = new Map(users.map((entry) => [entry.id, entry.dateOfJoining]));
-  const calendarYear = new Date().getUTCFullYear();
   const summaries = {};
 
   for (const id of ids) {
@@ -258,26 +310,22 @@ export async function getLeaveSummariesForUsers(userIds, fyStart = getFinancialY
       leaves: leavesByUser.get(id) || [],
       credits: creditsByUser.get(id) || [],
       dateOfJoining: joiningByUser.get(id),
-      fyStart,
-      calendarYear,
+      year,
     });
   }
 
   const columns = configs
     .filter((config) => config.active && config.key !== "COMP_OFF" && config.systemType !== "COMP_OFF")
-    .filter((config) =>
-      [QUOTA_PERIODS.FINANCIAL_YEAR, QUOTA_PERIODS.CALENDAR_YEAR].includes(
-        config.quotaPeriod || QUOTA_PERIODS.FINANCIAL_YEAR
-      )
-    )
+    .filter((config) => isAnnualQuotaPeriod(config.quotaPeriod))
     .map((config) => ({
       key: config.key,
       name: config.name,
       code: config.code || null,
       paid: config.paid !== false,
+      quarterlyQuota: Number(config.quarterlyQuota) > 0 ? Number(config.quarterlyQuota) : null,
     }));
 
-  return { fyStart, fyLabel, columns, summaries };
+  return { year, yearLabel, columns, summaries };
 }
 
 /**
@@ -358,7 +406,7 @@ export async function validateLeaveQuota({
   }
 
   if (config.quotaPeriod === QUOTA_PERIODS.UNLIMITED) {
-    const summary = await getUserLeaveSummary(userId, getFinancialYearStart(startDate));
+    const summary = await getUserLeaveSummary(userId, getCalendarYearStart(startDate));
     if (config.paid === false && summary.totals.paidAvailable > 0) {
       warnings.push("PAID_LEAVE_AVAILABLE");
     }
@@ -377,8 +425,8 @@ export async function validateLeaveQuota({
     return { ok: true, config, days, warnings };
   }
 
-  const quotaPeriod = annualQuotaPeriod(config.quotaPeriod);
-  const requestedSplit = splitDaysByPeriod(startDate, endDate, quotaPeriod);
+  const requestedSplit = splitDaysByPeriod(startDate, endDate);
+  const requestedQuarterSplit = splitDaysByQuarter(startDate, endDate);
   const leaves = await prisma.leave.findMany({
     where: {
       userId,
@@ -397,6 +445,7 @@ export async function validateLeaveQuota({
   });
 
   const usedByPeriod = {};
+  const usedByQuarter = {};
   for (const leave of leaves) {
     const key = getStoredLeaveTypeKey(leave, configs);
     if (key !== leaveTypeKey) continue;
@@ -405,9 +454,15 @@ export async function validateLeaveQuota({
         ? { startDate: parseDateOnly(leave.startDate), endDate: parseDateOnly(leave.endDate) }
         : parseLegacyLeaveRange(leave.dates);
     if (!parsed.startDate || !parsed.endDate) continue;
-    const split = splitDaysByPeriod(parsed.startDate, parsed.endDate, quotaPeriod);
+
+    const split = splitDaysByPeriod(parsed.startDate, parsed.endDate);
     for (const [periodKey, periodDays] of Object.entries(split)) {
       usedByPeriod[periodKey] = (usedByPeriod[periodKey] || 0) + periodDays;
+    }
+
+    const quarterSplit = splitDaysByQuarter(parsed.startDate, parsed.endDate);
+    for (const [quarterKey, quarterDays] of Object.entries(quarterSplit)) {
+      usedByQuarter[quarterKey] = (usedByQuarter[quarterKey] || 0) + quarterDays;
     }
   }
 
@@ -418,10 +473,27 @@ export async function validateLeaveQuota({
     if (requestedDays > remaining) {
       return {
         ok: false,
-        error: `Not enough ${config.name} balance in ${formatPeriodKey(periodKey, quotaPeriod)} (${formatDays(
+        error: `Not enough ${config.name} balance in ${formatPeriodKey(periodKey)} (${formatDays(
           Math.max(0, remaining)
         )} remaining).`,
       };
+    }
+  }
+
+  const quarterlyQuota = Number(config.quarterlyQuota);
+  if (config.quarterlyQuota != null && Number.isFinite(quarterlyQuota) && quarterlyQuota > 0) {
+    for (const [quarterKey, requestedDays] of Object.entries(requestedQuarterSplit)) {
+      if (!requestedDays) continue;
+      const usedDays = usedByQuarter[quarterKey] || 0;
+      const remaining = quarterlyQuota - usedDays;
+      if (requestedDays > remaining) {
+        return {
+          ok: false,
+          error: `Not enough ${config.name} balance in ${formatQuarterKey(quarterKey)} (${formatDays(
+            Math.max(0, remaining)
+          )} day${Math.max(0, remaining) === 1 ? "" : "s"} remaining this quarter).`,
+        };
+      }
     }
   }
 
@@ -431,6 +503,6 @@ export async function validateLeaveQuota({
     days,
     warnings,
     split: requestedSplit,
-    fyStart: getFinancialYearStart(startDate),
+    year: getCalendarYearStart(startDate),
   };
 }

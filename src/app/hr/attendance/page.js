@@ -96,7 +96,7 @@ export default function HrAttendanceLogs() {
       });
   }, [attendanceLogs, attendanceSearch]);
 
-  const { pageItems: pagedAttendance, currentPage, setCurrentPage } = usePagination(groupedAttendance, 10);
+  const { pageItems: pagedAttendance, currentPage, setCurrentPage } = usePagination(groupedAttendance, 10, { pageParam: "page" });
 
   const renderStatusPill = (status) => {
     let dotColor = "bg-emerald-500 animate-pulse";
@@ -159,7 +159,11 @@ export default function HrAttendanceLogs() {
               )}
             </div>
             
-            <div className="w-full overflow-x-auto">
+            <div
+              className="w-full overflow-x-auto"
+              data-list-page-param="page"
+              data-list-detail-prefix="/hr/attendance/"
+            >
               <table className="mobile-card-table w-full min-w-[760px] table-fixed text-left border-collapse font-sans text-sm">
                 <thead>
                   <tr className="border-b border-surface-container text-on-surface-variant font-semibold text-xs uppercase tracking-wider">
@@ -178,7 +182,7 @@ export default function HrAttendanceLogs() {
                     const metrics = computeAttendanceMetrics(log);
                     
                     return (
-                      <tr key={log.id} onClick={() => router.push(`/hr/attendance/${log.userId}`)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
+                      <tr key={log.id} data-list-item-key={log.userId} onClick={() => router.push(`/hr/attendance/${log.userId}`)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
                         <td data-label="" className="py-4 px-4">
                           <div className="flex items-center gap-3 min-w-0">
                             <div className="w-9 h-9 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 font-bold text-sm shrink-0">

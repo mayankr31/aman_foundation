@@ -5,6 +5,7 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import { formatDate, formatDateTime } from "@/lib/date";
 import DateInput from "@/components/ui/DateInput";
 import Pagination from "@/components/ui/Pagination";
@@ -61,6 +62,7 @@ function TaskDetailModal({ task, onClose, token, onChanged, canManage, currentUs
     timeSlot: normalizeTaskTimeSlot(task.timeSlot),
   });
   const toast = useToast();
+  const confirm = useConfirm();
 
   const saveChanges = async () => {
     if (!form.title.trim()) {
@@ -168,7 +170,13 @@ function TaskDetailModal({ task, onClose, token, onChanged, canManage, currentUs
   };
 
   const deleteTask = async () => {
-    if (!confirm("Delete this task permanently?")) return;
+    const confirmed = await confirm({
+      title: "Delete Task",
+      message: "Delete this task permanently?",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/tasks/${task.id}`, {
         method: "DELETE",
@@ -378,6 +386,9 @@ function TasksPageContent() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [canViewTeam, setCanViewTeam] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [assignables, setAssignables] = useState([]);
@@ -405,28 +416,36 @@ function TasksPageContent() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [view, statusFilter, priorityFilter, setCurrentPage]);
+  }, [view, statusFilter, priorityFilter, dateFrom, dateTo, setCurrentPage]);
 
   const loadTasks = useCallback(async () => {
     if (!token) return;
+    if (dateFrom && dateTo && dateFrom > dateTo) {
+      toast.error("From date must be on or before To date");
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const params = new URLSearchParams({ view });
       if (statusFilter) params.set("status", statusFilter);
       if (priorityFilter) params.set("priority", priorityFilter);
+      if (dateFrom) params.set("from", dateFrom);
+      if (dateTo) params.set("to", dateTo);
       const res = await fetch(`/api/tasks?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to load tasks");
       setTasks(data.data || []);
+      setCanViewTeam(Boolean(data.meta?.hasTeam));
     } catch (err) {
       toast.error(err.message);
     } finally {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, view, statusFilter, priorityFilter]);
+  }, [token, view, statusFilter, priorityFilter, dateFrom, dateTo]);
 
   useEffect(() => {
     loadTasks();
@@ -580,7 +599,7 @@ function TasksPageContent() {
                 { key: "mine", label: "My Tasks" },
               ]
             : [{ key: "mine", label: "My Tasks" }]),
-          ...(!isAdmin && hasTeam ? [{ key: "team", label: "Team Tasks" }] : []),
+          ...(!isAdmin && canViewTeam ? [{ key: "team", label: "Team Tasks" }] : []),
           { key: "assigned-by-me", label: "Assigned by Me" },
         ].map((tab) => (
           <button
@@ -603,6 +622,41 @@ function TasksPageContent() {
             {PRIORITIES.map((priority) => <option key={priority} value={priority}>{priority}</option>)}
           </select>
         </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Date range</span>
+        <DateInput
+          value={dateFrom}
+          max={dateTo || undefined}
+          onChange={(e) => setDateFrom(e.target.value)}
+          placeholder="From date"
+          className="w-36 max-w-full px-3 py-2 rounded-full text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+        />
+        <span className="text-xs text-slate-400">to</span>
+        <DateInput
+          value={dateTo}
+          min={dateFrom || undefined}
+          onChange={(e) => setDateTo(e.target.value)}
+          placeholder="To date"
+          className="w-36 max-w-full px-3 py-2 rounded-full text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+        />
+        {(dateFrom || dateTo) && (
+          <button
+            type="button"
+            onClick={() => {
+              setDateFrom("");
+              setDateTo("");
+            }}
+            className="px-3 py-2 rounded-full text-xs font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-1"
+          >
+            <span className="material-symbols-outlined text-[15px]">close</span>
+            Clear
+          </button>
+        )}
+        <p className="text-[10px] text-slate-500 w-full sm:w-auto">
+          Matches tasks planned or due in the range.
+        </p>
       </div>
 
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">

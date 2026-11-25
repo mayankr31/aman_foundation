@@ -84,9 +84,15 @@ function buildConfigData(item, { creating = false } = {}) {
 
   const quotas = [
     ["annualQuota", "Annual quota"],
+    ["quarterlyQuota", "Quarterly quota"],
   ];
   for (const [field, label] of quotas) {
     if (item[field] === undefined) continue;
+    // Quarterly quotas are optional: an empty value means "no quarterly cap".
+    if (item[field] === null || item[field] === "") {
+      data[field] = field === "quarterlyQuota" ? null : 0;
+      continue;
+    }
     const result = quotaValue(item[field], label);
     if (result.error) return result;
     data[field] = result.value;
@@ -104,9 +110,12 @@ function buildConfigData(item, { creating = false } = {}) {
     ) {
       return { error: "Select a valid quota period." };
     }
-    data.quotaPeriod = item.quotaPeriod;
+    data.quotaPeriod =
+      item.quotaPeriod === QUOTA_PERIODS.FINANCIAL_YEAR
+        ? QUOTA_PERIODS.CALENDAR_YEAR
+        : item.quotaPeriod;
   } else if (creating) {
-    data.quotaPeriod = QUOTA_PERIODS.FINANCIAL_YEAR;
+    data.quotaPeriod = QUOTA_PERIODS.CALENDAR_YEAR;
   }
 
   const intFields = [

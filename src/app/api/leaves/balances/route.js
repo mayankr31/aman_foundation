@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { getSubordinateUserIds } from "@/lib/hierarchy";
-import { getFinancialYearStart, getLeaveSummariesForUsers } from "@/lib/leaves";
+import { getCalendarYearStart, getLeaveSummariesForUsers } from "@/lib/leaves";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +19,12 @@ function pickTypeSummary(type) {
     paid: type.paid,
     quotaPeriod: type.quotaPeriod,
     entitlement: type.entitlement,
+    quarterlyQuota: type.quarterlyQuota ?? null,
     used: type.used,
     pending: type.pending,
     remaining: type.remaining,
     available: type.available,
+    quarters: type.quarters || [],
     eligible: type.eligible ?? null,
   };
 }
@@ -37,8 +39,8 @@ export async function GET(req) {
     }
 
     const { searchParams } = new URL(req.url);
-    const fyParam = searchParams.get("fy");
-    const fyStart = fyParam && /^\d{4}$/.test(fyParam) ? Number(fyParam) : getFinancialYearStart();
+    const yearParam = searchParams.get("year") || searchParams.get("fy");
+    const year = yearParam && /^\d{4}$/.test(yearParam) ? Number(yearParam) : getCalendarYearStart();
 
     const where = { status: "ACTIVE" };
     if (!UNRESTRICTED_ROLES.includes(user.role?.name)) {
@@ -62,7 +64,7 @@ export async function GET(req) {
 
     const batch = await getLeaveSummariesForUsers(
       users.map((entry) => entry.id),
-      fyStart
+      year
     );
 
     const rows = users.map((entry) => {
@@ -92,8 +94,8 @@ export async function GET(req) {
     return NextResponse.json({
       success: true,
       data: {
-        fyStart: batch.fyStart,
-        fyLabel: batch.fyLabel,
+        year: batch.year,
+        yearLabel: batch.yearLabel,
         columns: batch.columns,
         rows,
       },

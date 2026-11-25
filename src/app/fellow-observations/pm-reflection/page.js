@@ -77,7 +77,7 @@ export default function FellowPmReflectionPage() {
 
   const handleExport = async () => {
     if (!rows.length) {
-      alert("No records to export.");
+      toastError("No records to export.");
       return;
     }
     setExporting(true);
@@ -144,7 +144,7 @@ export default function FellowPmReflectionPage() {
       XLSX.writeFile(workbook, `pm_reflection_${new Date().toISOString().split("T")[0]}.xlsx`);
     } catch (err) {
       console.error("Failed to export PM reflections:", err);
-      alert("Failed to export PM reflections. Please try again.");
+      toastError("Failed to export PM reflections. Please try again.");
     } finally {
       setExporting(false);
     }

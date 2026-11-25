@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useState, useEffect, useMemo, use } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import { formatDate } from "@/lib/date";
 import { formatWorkHours } from "@/lib/time";
 import { SHIFT_LABEL, computeAttendanceMetrics } from "@/lib/attendanceMetrics";
@@ -44,6 +45,7 @@ const statusColors = {
 export default function UserAttendanceDetails({ params }) {
   const { userId } = use(params);
   const { token } = useAuth();
+  const toast = useToast();
   
   const [userData, setUserData] = useState(null);
   const [attendanceData, setAttendanceData] = useState([]);
@@ -377,10 +379,12 @@ export default function UserAttendanceDetails({ params }) {
 
         doc.save(`attendance_${userData?.name}_${year}-${month+1}.pdf`);
       }).catch(err => {
-        alert('PDF export requires additional libraries. Run: npm install jspdf jspdf-autotable');
+        console.error("Attendance PDF export failed:", err);
+        toast.error("Failed to export attendance PDF. Please try again.");
       });
     }).catch(err => {
-      alert('PDF export requires additional libraries. Run: npm install jspdf jspdf-autotable');
+      console.error("Attendance PDF export failed:", err);
+      toast.error("Failed to export attendance PDF. Please try again.");
     });
   };
 

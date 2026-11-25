@@ -207,7 +207,11 @@ export default function ReimbursementsPage() {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div
+        className="space-y-4"
+        data-list-page-param="page"
+        data-list-detail-prefix="/reimbursements/new/"
+      >
         {filteredClaims.length === 0 ? (
           <div className="bg-surface-container-lowest rounded-xl p-12 text-center border border-outline-variant/10">
             <span className="material-symbols-outlined text-5xl text-slate-300 mb-4 block">receipt_long</span>
@@ -259,6 +263,7 @@ export default function ReimbursementsPage() {
                 {canWrite && claim.status === "PENDING" && (
                   <Link
                     href={`/reimbursements/new?id=${claim.id}`}
+                    data-list-item-key={claim.id}
                     className="px-3 py-1.5 rounded-full border border-outline-variant text-on-surface text-xs font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5"
                   >
                     <span className="material-symbols-outlined text-[16px]">edit</span>

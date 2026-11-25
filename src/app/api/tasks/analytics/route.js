@@ -70,6 +70,7 @@ export async function GET(req) {
         plannedDate: true,
         deadline: true,
         completionDate: true,
+        timeSlot: true,
         assignee: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
       },
       orderBy: { createdAt: "desc" },
@@ -132,10 +133,18 @@ export async function GET(req) {
             role: task.assignee?.role?.name || null,
             total: 0,
             completed: 0,
+            tasks: [],
           };
         }
         todayByAssignee[key].total += 1;
         if (task.status === "Completed") todayByAssignee[key].completed += 1;
+        todayByAssignee[key].tasks.push({
+          id: task.id,
+          title: task.title,
+          status: task.status,
+          priority: task.priority,
+          timeSlot: task.timeSlot,
+        });
       }
 
       if (task.status === "Completed") counts.completed += 1;
@@ -166,7 +175,11 @@ export async function GET(req) {
       const completedKey = keyForDate(task.completionDate);
       if (completedKey) completedByDay[completedKey] = (completedByDay[completedKey] || 0) + 1;
       const dueKey = keyForDate(task.deadline);
-      if (dueKey) dueByDay[dueKey] = (dueByDay[dueKey] || 0) + 1;
+      if (dueKey) {
+        if (!dueByDay[dueKey]) dueByDay[dueKey] = { total: 0, incomplete: 0 };
+        dueByDay[dueKey].total += 1;
+        if (isOpen) dueByDay[dueKey].incomplete += 1;
+      }
     }
 
     // 30-day trend series (oldest first).
@@ -179,7 +192,7 @@ export async function GET(req) {
         date: key,
         assigned: assignedByDay[key] || 0,
         completed: completedByDay[key] || 0,
-        due: dueByDay[key] || 0,
+        due: dueByDay[key]?.total || 0,
       });
     }
 
@@ -196,6 +209,8 @@ export async function GET(req) {
         completionRate: row.total ? Math.round((row.completed / row.total) * 100) : 0,
       }))
       .sort((a, b) => b.total - a.total);
+
+    const todayCalendar = dueByDay[today] ? { [today]: dueByDay[today] } : {};
 
     return NextResponse.json({
       success: true,
@@ -217,6 +232,7 @@ export async function GET(req) {
           byStatus: todayByStatus,
           byPriority: todayByPriority,
           assignees: todayAssignees,
+          calendar: todayCalendar,
         },
         scope: {
           isAdmin: user.role.name === "ADMIN",

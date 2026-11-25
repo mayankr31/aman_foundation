@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useToast } from "@/context/ToastContext";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import { validateInteger } from "@/lib/validation";
 
@@ -49,6 +50,7 @@ export default function AssessmentTemplatesModal({
   onChanged,
   includeSel = true,
 }) {
+  const toast = useToast();
   const [templates, setTemplates] = useState({
     flnCategories: [],
     selQuestions: [],
@@ -138,12 +140,12 @@ export default function AssessmentTemplatesModal({
 
     if (editor.type === "fln-question") {
       if (!editor.questionText.trim()) {
-        alert("Question text is required.");
+        toast.error("Question text is required.");
         return;
       }
       const marksError = validateInteger(editor.marks, { required: true, min: 1, max: 1000 });
       if (marksError) {
-        alert(marksError);
+        toast.error(marksError);
         return;
       }
     }
@@ -205,15 +207,16 @@ export default function AssessmentTemplatesModal({
       });
       const json = await res.json();
       if (!json.success) {
-        alert(json.error || "Failed to save template");
+        toast.error(json.error || "Failed to save template");
         return;
       }
       await loadTemplates();
       if (onChanged) await onChanged();
       setEditor(null);
+      toast.success("Template saved");
     } catch (err) {
       console.error("Failed to save template:", err);
-      alert("Failed to save template");
+      toast.error("Failed to save template");
     } finally {
       setSaving(false);
     }

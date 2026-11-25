@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { canAccessUser } from "@/lib/hierarchy";
-import { getFinancialYearStart, getUserLeaveSummary } from "@/lib/leaves";
+import { getCalendarYearStart, getUserLeaveSummary } from "@/lib/leaves";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +16,8 @@ export async function GET(req) {
 
     const { searchParams } = new URL(req.url);
     const requestedUserId = searchParams.get("userId") || user.id;
-    const fyParam = searchParams.get("fy");
-    const fyStart = fyParam && /^\d{4}$/.test(fyParam) ? Number(fyParam) : getFinancialYearStart();
+    const yearParam = searchParams.get("year") || searchParams.get("fy");
+    const year = yearParam && /^\d{4}$/.test(yearParam) ? Number(yearParam) : getCalendarYearStart();
 
     if (requestedUserId !== user.id) {
       const allowed = await canAccessUser(user, requestedUserId, { allowSelf: true });
@@ -26,7 +26,7 @@ export async function GET(req) {
       }
     }
 
-    const summary = await getUserLeaveSummary(requestedUserId, fyStart);
+    const summary = await getUserLeaveSummary(requestedUserId, year);
     return NextResponse.json({ success: true, data: summary });
   } catch (error) {
     console.error("Leave summary error:", error);

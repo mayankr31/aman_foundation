@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Suspense, useState, useEffect, Fragment } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate, formatDateTime } from "@/lib/date";
@@ -44,6 +46,8 @@ export default function DisasterRelief() {
 
 function DisasterReliefContent() {
   const { token, isInitializing, canDeleteRecords } = useAuth();
+  const toast = useToast();
+  const confirm = useConfirm();
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -133,9 +137,9 @@ function DisasterReliefContent() {
   const [showDistributionModal, setShowDistributionModal] = useState(false);
   const [distributionForm, setDistributionForm] = useState(emptyDistributionForm);
 
-  const { pageItems: pagedProviders, currentPage: providersPage, setCurrentPage: setProvidersPage } = usePagination(providers, 10);
-  const { pageItems: pagedResourceNeeds, currentPage: resourceNeedsPage, setCurrentPage: setResourceNeedsPage } = usePagination(resourceNeeds, 10);
-  const { pageItems: pagedDistributions, currentPage: distributionsPage, setCurrentPage: setDistributionsPage } = usePagination(distributions, 10);
+  const { pageItems: pagedProviders, currentPage: providersPage, setCurrentPage: setProvidersPage } = usePagination(providers, 10, { pageParam: "providersPage" });
+  const { pageItems: pagedResourceNeeds, currentPage: resourceNeedsPage, setCurrentPage: setResourceNeedsPage } = usePagination(resourceNeeds, 10, { pageParam: "resourceNeedsPage" });
+  const { pageItems: pagedDistributions, currentPage: distributionsPage, setCurrentPage: setDistributionsPage } = usePagination(distributions, 10, { pageParam: "distributionsPage" });
 
   const loadData = async () => {
     try {
@@ -208,7 +212,7 @@ function DisasterReliefContent() {
     if (!broadcastMsg) return;
 
     // Dummy functionality as requested
-    alert(`Dummy Broadcast Alert sent!\nSeverity: ${broadcastSeverity}\nMessage: ${broadcastMsg}`);
+    toast.info(`Broadcast alert queued (demo). Severity: ${broadcastSeverity}. Message: ${broadcastMsg}`);
     setBroadcastMsg("");
     setShowBroadcastModal(false);
   };
@@ -218,7 +222,7 @@ function DisasterReliefContent() {
     if (!ledgerResourceNeedId) return;
     const quantityError = validateAmount(ledgerQuantity, { required: true, min: 0.01 });
     if (quantityError) {
-      alert(quantityError);
+      toast.error(quantityError);
       return;
     }
     
@@ -248,12 +252,13 @@ function DisasterReliefContent() {
         setLedgerQuantity("");
         setLedgerNotes("");
         loadData();
+        toast.success("Transaction logged");
       } else {
-        alert(json.error || "Failed to log transaction");
+        toast.error(json.error || "Failed to log transaction");
       }
     } catch (err) {
       console.error(err);
-      alert("Error logging transaction");
+      toast.error("Error logging transaction");
     }
   };
 
@@ -267,7 +272,7 @@ function DisasterReliefContent() {
       validateAmount(calamityForm.propertyLossEstimate, { min: 0 }),
     ]);
     if (validationMessage) {
-      alert(validationMessage);
+      toast.error(validationMessage);
       return;
     }
     try {
@@ -287,12 +292,13 @@ function DisasterReliefContent() {
       if (json.success) {
         closeCalamityModal();
         loadData();
+        toast.success(isEditing ? "Calamity updated" : "Calamity added");
       } else {
-        alert(json.error || (isEditing ? "Failed to update calamity" : "Failed to add calamity"));
+        toast.error(json.error || (isEditing ? "Failed to update calamity" : "Failed to add calamity"));
       }
     } catch (err) {
       console.error(err);
-      alert(editingCalamityId ? "Error updating calamity" : "Error adding calamity");
+      toast.error(editingCalamityId ? "Error updating calamity" : "Error adding calamity");
     }
   };
 
@@ -304,7 +310,7 @@ function DisasterReliefContent() {
       validateInteger(resourceNeedForm.transactionsCount, { min: 0 }),
     ]);
     if (validationMessage) {
-      alert(validationMessage);
+      toast.error(validationMessage);
       return;
     }
     try {
@@ -321,19 +327,20 @@ function DisasterReliefContent() {
         setShowResourceNeedModal(false);
         setResourceNeedForm({ incidentId: "", itemName: "", unit: "units", quantityNeeded: "", quantityReceived: "", transactionsCount: "" });
         loadData();
+        toast.success("Resource need added");
       } else {
-        alert(json.error || "Failed to add resource need");
+        toast.error(json.error || "Failed to add resource need");
       }
     } catch (err) {
       console.error(err);
-      alert("Error adding resource need");
+      toast.error("Error adding resource need");
     }
   };
 
   const handleAddProvider = async (e) => {
     e.preventDefault();
     if (!providerForm.name?.trim()) {
-      alert("Responder / organization name is required.");
+      toast.error("Responder / organization name is required.");
       return;
     }
     try {
@@ -350,12 +357,13 @@ function DisasterReliefContent() {
         setShowProviderModal(false);
         setProviderForm({ name: "", capabilityType: "", contactDetails: "", status: "Active" });
         loadData();
+        toast.success("Help provider added");
       } else {
-        alert(json.error || "Failed to add help provider");
+        toast.error(json.error || "Failed to add help provider");
       }
     } catch (err) {
       console.error(err);
-      alert("Error adding help provider");
+      toast.error("Error adding help provider");
     }
   };
 
@@ -381,7 +389,7 @@ function DisasterReliefContent() {
     e.preventDefault();
     const validItems = distributionForm.items.filter((it) => it.resourceNeedId && it.quantity);
     if (!distributionForm.incidentId || !distributionForm.name || validItems.length === 0) {
-      alert("Please select a calamity, enter the recipient name and add at least one aid item.");
+      toast.error("Please select a calamity, enter the recipient name and add at least one aid item.");
       return;
     }
     const validationMessage = firstError([
@@ -392,7 +400,7 @@ function DisasterReliefContent() {
       ...validItems.map((item) => validateAmount(item.quantity, { required: true, min: 0.01 })),
     ]);
     if (validationMessage) {
-      alert(validationMessage);
+      toast.error(validationMessage);
       return;
     }
 
@@ -421,17 +429,24 @@ function DisasterReliefContent() {
         setShowDistributionModal(false);
         setDistributionForm(emptyDistributionForm);
         loadData();
+        toast.success("Distribution logged");
       } else {
-        alert(json.error || "Failed to log distribution");
+        toast.error(json.error || "Failed to log distribution");
       }
     } catch (err) {
       console.error(err);
-      alert("Error logging distribution");
+      toast.error("Error logging distribution");
     }
   };
 
   const handleDeleteDistribution = async (id) => {
-    if (!confirm("Delete this distribution? Stock will be restored.")) return;
+    const confirmed = await confirm({
+      title: "Delete Distribution",
+      message: "Delete this distribution? Stock will be restored.",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/disaster-relief/distributions/${id}`, {
         method: "DELETE",
@@ -441,17 +456,24 @@ function DisasterReliefContent() {
       if (json.success) {
         setExpandedDistribution(null);
         loadData();
+        toast.success("Distribution deleted");
       } else {
-        alert(json.error || "Failed to delete distribution");
+        toast.error(json.error || "Failed to delete distribution");
       }
     } catch (err) {
       console.error(err);
-      alert("Error deleting distribution");
+      toast.error("Error deleting distribution");
     }
   };
 
   const handleDeleteIncident = async (id) => {
-    if (!confirm("Delete this calamity? This cannot be undone.")) return;
+    const confirmed = await confirm({
+      title: "Delete Calamity",
+      message: "Delete this calamity? This cannot be undone.",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/disaster-relief/incidents/${id}`, {
         method: "DELETE",
@@ -460,17 +482,24 @@ function DisasterReliefContent() {
       const json = await res.json();
       if (json.success) {
         loadData();
+        toast.success("Calamity deleted");
       } else {
-        alert(json.error || "Failed to delete calamity");
+        toast.error(json.error || "Failed to delete calamity");
       }
     } catch (err) {
       console.error(err);
-      alert("Error deleting calamity");
+      toast.error("Error deleting calamity");
     }
   };
 
   const handleDeleteProvider = async (id) => {
-    if (!confirm("Delete this help provider? This cannot be undone.")) return;
+    const confirmed = await confirm({
+      title: "Delete Help Provider",
+      message: "Delete this help provider? This cannot be undone.",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/disaster-relief/help-providers/${id}`, {
         method: "DELETE",
@@ -479,12 +508,13 @@ function DisasterReliefContent() {
       const json = await res.json();
       if (json.success) {
         loadData();
+        toast.success("Help provider deleted");
       } else {
-        alert(json.error || "Failed to delete help provider");
+        toast.error(json.error || "Failed to delete help provider");
       }
     } catch (err) {
       console.error(err);
-      alert("Error deleting help provider");
+      toast.error("Error deleting help provider");
     }
   };
 

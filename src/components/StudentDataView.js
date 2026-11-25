@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useToast } from "@/context/ToastContext";
 import { sortSubjectOptions } from "@/data/assessmentOptions";
 
 const LEVEL_FIXUPS = {
@@ -50,6 +51,7 @@ export default function StudentDataView({
   canEditNotes,
   source = "school",
 }) {
+  const toast = useToast();
   const scope = schoolId
     ? {
         type: "school",
@@ -138,7 +140,7 @@ export default function StudentDataView({
       setEditingNote(null);
     } catch (err) {
       console.error("Failed to save note:", err);
-      alert(err.message || "Failed to save note");
+      toast.error(err.message || "Failed to save note");
     } finally {
       setSavingKey(null);
     }
@@ -178,7 +180,7 @@ export default function StudentDataView({
         .filter((group) => group.levels.length > 0);
 
       if (!groups.length) {
-        alert("Nothing to export for this session.");
+        toast.info("Nothing to export for this session.");
         return;
       }
 
@@ -264,7 +266,7 @@ export default function StudentDataView({
       XLSX.writeFile(workbook, `${suffix}student_data_${scopeSlug}_${report.session || date}.xlsx`);
     } catch (err) {
       console.error("Failed to export student data:", err);
-      alert("Failed to export student data. Please try again.");
+      toast.error("Failed to export student data. Please try again.");
     } finally {
       setExporting(false);
     }
@@ -284,7 +286,7 @@ export default function StudentDataView({
 
       const data = json.data;
       if (!data.rows.length) {
-        alert("No assessments to export for this session.");
+        toast.info("No assessments to export for this session.");
         return;
       }
 
@@ -359,7 +361,7 @@ export default function StudentDataView({
       XLSX.writeFile(workbook, `${suffix}student_assessments_${scopeSlug}_${data.session || date}.xlsx`);
     } catch (err) {
       console.error("Failed to export assessment data:", err);
-      alert("Failed to export assessment data. Please try again.");
+      toast.error("Failed to export assessment data. Please try again.");
     } finally {
       setExportingAssessments(false);
     }

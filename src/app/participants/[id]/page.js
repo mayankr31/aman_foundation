@@ -9,6 +9,7 @@ import PhotoLightbox from "@/components/PhotoLightbox";
 import PhotoSourceModal from "@/components/PhotoSourceModal";
 import SelfieCaptureModal from "@/components/attendance/SelfieCaptureModal";
 import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import { computeCapacityScore, computeCapacityTotalScore, getCapacityMaxScore } from "@/lib/capacityDictionaries";
 import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiaryTabs";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
@@ -148,6 +149,7 @@ function BeneficiaryProfileDetailContent() {
     : BENEFICIARY_TABS.filter(({ slug }) => slug !== "id-proofs-bank-details");
   const { getTypeConfig } = useLivelihoodTypes(token, { enabled: canBrowseDirectory });
   const toast = useToast();
+  const confirm = useConfirm();
   const activeTab = labelFromSlug(searchParams.get("tab")) || "Program History";
   const [beneficiary, setBeneficiary] = useState(null);
   const canEditParticipant = canWrite && beneficiary?.editable !== false;
@@ -435,7 +437,7 @@ function BeneficiaryProfileDetailContent() {
         toast.success(`Resilience score calculated and saved as ${resilienceScoreComputed}.`);
         loadBeneficiaryDetail();
       } else {
-        alert(json.error || "Failed to save resilience score");
+        toast.error(json.error || "Failed to save resilience score");
       }
     } catch (err) {
       console.error("Calculate resilience error:", err);
@@ -615,11 +617,13 @@ function BeneficiaryProfileDetailContent() {
 
         setShowEditModal(false);
         loadBeneficiaryDetail();
+        toast.success("Profile updated");
       } else {
-        alert(json.error || "Failed to update profile");
+        toast.error(json.error || "Failed to update profile");
       }
     } catch (err) {
       console.error("Update profile error:", err);
+      toast.error("Failed to update profile");
     }
   };
 
@@ -636,11 +640,13 @@ function BeneficiaryProfileDetailContent() {
       const json = await res.json();
       if (json.success) {
         loadBeneficiaryDetail();
+        toast.success("Migration status updated");
       } else {
-        alert(json.error || "Failed to update migration status");
+        toast.error(json.error || "Failed to update migration status");
       }
     } catch (err) {
       console.error("Update migration error:", err);
+      toast.error("Failed to update migration status");
     } finally {
       setShowConfirmMigrate(false);
     }
@@ -657,10 +663,11 @@ function BeneficiaryProfileDetailContent() {
         toast.success("Participant deleted successfully.");
         window.location.href = "/participants";
       } else {
-        alert(json.error || "Failed to delete participant");
+        toast.error(json.error || "Failed to delete participant");
       }
     } catch (err) {
       console.error("Delete beneficiary error:", err);
+      toast.error("Failed to delete participant");
     } finally {
       setShowConfirmDelete(false);
     }
@@ -703,16 +710,24 @@ function BeneficiaryProfileDetailContent() {
       if (json.success) {
         handleCloseMigrationForm();
         loadBeneficiaryDetail();
+        toast.success(editMigrationId ? "Migration record updated" : "Migration record added");
       } else {
-        alert(json.error || "Failed to save migration record");
+        toast.error(json.error || "Failed to save migration record");
       }
     } catch (err) {
       console.error("Migration save error:", err);
+      toast.error("Failed to save migration record");
     }
   };
 
   const handleDeleteMigration = async (recordId) => {
-    if (!confirm("Are you sure you want to delete this migration record?")) return;
+    const confirmed = await confirm({
+      title: "Delete Migration Record",
+      message: "Are you sure you want to delete this migration record?",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
       const res = await fetch(`/api/beneficiaries/${id}/migrations`, {
@@ -723,11 +738,13 @@ function BeneficiaryProfileDetailContent() {
       const json = await res.json();
       if (json.success) {
         loadBeneficiaryDetail();
+        toast.success("Migration record deleted");
       } else {
-        alert(json.error || "Failed to delete migration record");
+        toast.error(json.error || "Failed to delete migration record");
       }
     } catch (err) {
       console.error("Delete migration error:", err);
+      toast.error("Failed to delete migration record");
     }
   };
 
@@ -823,7 +840,13 @@ function BeneficiaryProfileDetailContent() {
   };
 
   const handleDeleteIncome = async (recordId) => {
-    if (!confirm("Are you sure you want to delete this income record?")) return;
+    const confirmed = await confirm({
+      title: "Delete Income Record",
+      message: "Are you sure you want to delete this income record?",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
       const res = await fetch(`/api/beneficiaries/${id}/income`, {
@@ -836,15 +859,22 @@ function BeneficiaryProfileDetailContent() {
         loadBeneficiaryDetail();
         toast.success("Income record deleted.");
       } else {
-        alert(json.error || "Failed to delete income record");
+        toast.error(json.error || "Failed to delete income record");
       }
     } catch (err) {
       console.error("Delete income error:", err);
+      toast.error("Failed to delete income record");
     }
   };
 
   const handleDeleteSurveyRecord = async (surveyType, surveyId) => {
-    if (!confirm(`Are you sure you want to delete this ${surveyType} survey?`)) return;
+    const confirmed = await confirm({
+      title: "Delete Survey",
+      message: `Are you sure you want to delete this ${surveyType} survey?`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
       const res = await fetch(
@@ -856,15 +886,22 @@ function BeneficiaryProfileDetailContent() {
         loadBeneficiaryDetail();
         toast.success("Survey deleted.");
       } else {
-        alert(json.error || "Failed to delete survey");
+        toast.error(json.error || "Failed to delete survey");
       }
     } catch (err) {
       console.error("Delete survey error:", err);
+      toast.error("Failed to delete survey");
     }
   };
 
   const handleDeleteSolutionPlan = async (planId) => {
-    if (!confirm("Are you sure you want to delete this solution plan?")) return;
+    const confirmed = await confirm({
+      title: "Delete Solution Plan",
+      message: "Are you sure you want to delete this solution plan?",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
       const res = await fetch(`/api/beneficiaries/${id}/solution-plans/${planId}`, {
@@ -876,10 +913,11 @@ function BeneficiaryProfileDetailContent() {
         loadBeneficiaryDetail();
         toast.success("Solution plan deleted.");
       } else {
-        alert(json.error || "Failed to delete solution plan");
+        toast.error(json.error || "Failed to delete solution plan");
       }
     } catch (err) {
       console.error("Delete solution plan error:", err);
+      toast.error("Failed to delete solution plan");
     }
   };
 
@@ -912,16 +950,24 @@ function BeneficiaryProfileDetailContent() {
       const json = await res.json();
       if (json.success) {
         loadBeneficiaryDetail();
+        toast.success("Student linked");
       } else {
-        alert(json.error || "Failed to link student");
+        toast.error(json.error || "Failed to link student");
       }
     } catch (err) {
       console.error("Link student error:", err);
+      toast.error("Failed to link student");
     }
   };
 
   const handleUnlinkStudent = async (studentId) => {
-    if (!confirm("Are you sure you want to unlink this student?")) return;
+    const confirmed = await confirm({
+      title: "Unlink Student",
+      message: "Are you sure you want to unlink this student?",
+      confirmText: "Unlink",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
       const res = await fetch(`/api/students/${studentId}`, {
@@ -932,11 +978,13 @@ function BeneficiaryProfileDetailContent() {
       const json = await res.json();
       if (json.success) {
         loadBeneficiaryDetail();
+        toast.success("Student unlinked");
       } else {
-        alert(json.error || "Failed to unlink student");
+        toast.error(json.error || "Failed to unlink student");
       }
     } catch (err) {
       console.error("Unlink student error:", err);
+      toast.error("Failed to unlink student");
     }
   };
 

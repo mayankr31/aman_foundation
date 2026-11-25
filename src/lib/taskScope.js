@@ -1,19 +1,26 @@
-import { getSubordinateUserIds } from "@/lib/hierarchy";
+import { getSameManagerUserIds, getSubordinateUserIds } from "@/lib/hierarchy";
 import { isProgramStaff, getManagedTeamUserIds } from "@/lib/scope";
 import { istDayEnd, istDayStart } from "@/lib/time";
 
 /**
  * Users whose tasks a person may see in team views / analytics.
  * - ADMIN: null (no restriction)
- * - Users with explicit Reports To children: self + whole subtree
- * - Program roles with no configured reports: legacy managed-team fallback
+ * - Everyone with a reporting line: self + reporting subtree + peers who share
+ *   the same manager + that manager. A team is defined by the manager people
+ *   report to, so teammates can see each other's tasks.
+ * - Program roles with no configured reporting line: legacy managed-team fallback
  * - Everyone else: self only
  */
 export async function getTaskTeamUserIds(user, { includeSelf = true } = {}) {
   if (!user?.id) return includeSelf ? [] : [];
   if (user.role?.name === "ADMIN") return null;
 
-  const ids = await getSubordinateUserIds(user.id, { includeSelf });
+  const [subtree, sameManager] = await Promise.all([
+    getSubordinateUserIds(user.id, { includeSelf }),
+    getSameManagerUserIds(user.id, { includeSelf, includeManager: true }),
+  ]);
+
+  const ids = [...new Set([...subtree, ...sameManager])];
   if (ids.length > (includeSelf ? 1 : 0)) return ids;
 
   if (isProgramStaff(user)) {

@@ -144,7 +144,7 @@ export default function FellowPerformancePage() {
 
   const handleExport = async () => {
     if (!filteredRecords.length) {
-      alert("No records to export.");
+      toastError("No records to export.");
       return;
     }
     setExporting(true);
@@ -183,7 +183,7 @@ export default function FellowPerformancePage() {
       XLSX.writeFile(workbook, `fellow_performance_export_${new Date().toISOString().split("T")[0]}.xlsx`);
     } catch (err) {
       console.error("Failed to export fellow performance records:", err);
-      alert("Failed to export fellow performance records. Please try again.");
+      toastError("Failed to export fellow performance records. Please try again.");
     } finally {
       setExporting(false);
     }

@@ -41,6 +41,39 @@ export async function getSubordinateUserIds(managerId, { includeSelf = false, ac
   return [...result];
 }
 
+/**
+ * Returns the user's peers (people who report to the same manager), optionally
+ * including the user and their manager. Used by team-scoped task views so a
+ * team is defined by its shared reporting manager.
+ */
+export async function getSameManagerUserIds(
+  userId,
+  { includeSelf = true, includeManager = false, activeOnly = true } = {}
+) {
+  if (!userId) return [];
+
+  const current = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { managerId: true },
+  });
+
+  const result = new Set(includeSelf ? [userId] : []);
+  if (!current?.managerId) return [...result];
+
+  if (includeManager) result.add(current.managerId);
+
+  const peers = await prisma.user.findMany({
+    where: {
+      managerId: current.managerId,
+      ...(activeOnly ? { status: "ACTIVE" } : {}),
+    },
+    select: { id: true },
+  });
+
+  for (const peer of peers) result.add(peer.id);
+  return [...result];
+}
+
 /** Returns the Reports To chain above a user (nearest manager first). */
 export async function getAncestorUserIds(userId) {
   if (!userId) return [];

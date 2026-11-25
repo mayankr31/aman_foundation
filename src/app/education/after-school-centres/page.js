@@ -7,6 +7,7 @@ import { useToast } from "@/context/ToastContext";
 import { extractMapEmbedUrl, isValidMapEmbedUrl } from "@/lib/mapUrl";
 import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
+import usePagination from "@/lib/usePagination";
 function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
   const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
   const handleChange = (event) => {
@@ -55,7 +56,6 @@ export default function AfterSchoolCentresModule() {
   const [deleting, setDeleting] = useState(false);
  
   // Form states
-  const [currentPage, setCurrentPage] = useState(1);
   const initialAddForm = {
     name: "",
     coordinatorName: "",
@@ -90,7 +90,7 @@ export default function AfterSchoolCentresModule() {
   const handleAddCentre = async (e) => {
     e.preventDefault();
     if (!addForm.name || !addForm.location) {
-      alert("Centre Name and Location are required.");
+      toast.error("Centre Name and Location are required.");
       return;
     }
 
@@ -112,12 +112,13 @@ export default function AfterSchoolCentresModule() {
         if (loadJson.success) setCentres(loadJson.data);
         setAddForm(initialAddForm);
         setShowAddModal(false);
+        toast.success("After school centre added successfully");
       } else {
-        alert(json.error || "Failed to add centre");
+        toast.error(json.error || "Failed to add centre");
       }
     } catch (err) {
       console.error("Failed to add centre:", err);
-      alert("Failed to add centre. Please try again.");
+      toast.error("Failed to add centre. Please try again.");
     }
   };
 
@@ -137,7 +138,7 @@ export default function AfterSchoolCentresModule() {
       setDeleteTarget(null);
       toast.success("After school centre deleted successfully");
     } catch (err) {
-      alert(err.message || "Failed to delete centre");
+      toast.error(err.message || "Failed to delete centre");
     } finally {
       setDeleting(false);
     }
@@ -145,7 +146,7 @@ export default function AfterSchoolCentresModule() {
 
   const handleExport = async () => {
     if (centres.length === 0) {
-      alert("No centre records to export.");
+      toast.info("No centre records to export.");
       return;
     }
 
@@ -174,7 +175,7 @@ export default function AfterSchoolCentresModule() {
       XLSX.writeFile(workbook, `after_school_centres_export_${date}.xlsx`);
     } catch (err) {
       console.error("Failed to export centres:", err);
-      alert("Failed to export centres. Please try again.");
+      toast.error("Failed to export centres. Please try again.");
     }
   };
 
@@ -190,16 +191,12 @@ export default function AfterSchoolCentresModule() {
     return matchesSearch && matchesLocation;
   });
 
-  const ITEMS_PER_PAGE = 9;
-  const totalPages = Math.ceil(filteredCentres.length / ITEMS_PER_PAGE);
-  const paginatedCentres = filteredCentres.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedLocation]);
+  const {
+    pageItems: paginatedCentres,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredCentres, 9, { pageParam: "page" });
 
   return (
     <div className="p-6 md:p-10 pb-24 max-w-[1600px] mx-auto w-full">
@@ -275,7 +272,7 @@ export default function AfterSchoolCentresModule() {
             placeholder="Search centres..."
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
           />
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -313,7 +310,7 @@ export default function AfterSchoolCentresModule() {
             </span>
             <select
               value={selectedLocation}
-              onChange={(e) => setSelectedLocation(e.target.value)}
+              onChange={(e) => { setSelectedLocation(e.target.value); setCurrentPage(1); }}
               className="w-full pl-11 pr-10 py-2.5 bg-surface-container rounded-full border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary text-xs font-label uppercase tracking-widest text-on-surface appearance-none cursor-pointer transition-shadow"
             >
               {["All Locations", ...Array.from(new Set(centres.map(c => c.location ? c.location.split(",")[0].trim() : "Unknown Location")))].map((loc) => (
@@ -327,7 +324,11 @@ export default function AfterSchoolCentresModule() {
             </span>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          data-list-page-param="page"
+          data-list-detail-prefix="/education/after-school-centres/"
+        >
           {paginatedCentres.map((c, index) => (
             <div
               key={c.id || index}
@@ -335,6 +336,7 @@ export default function AfterSchoolCentresModule() {
             >
               <Link
                 href={`/education/after-school-centres/${c.id}`}
+                data-list-item-key={c.id}
                 className="flex flex-col flex-1 cursor-pointer"
               >
               <div className="flex items-start justify-between mb-6">

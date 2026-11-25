@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import {
   QUESTION_TYPES,
   formatQuestionLabel,
@@ -452,6 +453,7 @@ function ConditionEditor({ question, draft, onChange }) {
 
 export default function SurveyTemplateEditor({ initialTemplate, token, onCancel, onSaved }) {
   const toast = useToast();
+  const confirm = useConfirm();
   const [draft, setDraft] = useState(() => clone(initialTemplate));
   const [activeTab, setActiveTab] = useState("questions");
   const [expandedQuestion, setExpandedQuestion] = useState(null);
@@ -516,10 +518,14 @@ export default function SurveyTemplateEditor({ initialTemplate, token, onCancel,
     setExpandedQuestion(question.id);
   };
 
-  const deleteQuestion = (question) => {
-    if (!window.confirm("Delete this question? Existing answers will be kept under “Removed questions”.")) {
-      return;
-    }
+  const deleteQuestion = async (question) => {
+    const confirmed = await confirm({
+      title: "Delete Question",
+      message: "Delete this question? Existing answers will be kept under “Removed questions”.",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
 
     // Questions whose entire visibility depends on the deleted question are
     // archived with it, otherwise they would suddenly become always-visible.
@@ -607,13 +613,19 @@ export default function SurveyTemplateEditor({ initialTemplate, token, onCancel,
     return count;
   };
 
-  const deleteOptionSet = (set) => {
+  const deleteOptionSet = async (set) => {
     const usage = optionSetUsage(set.id);
     if (usage > 0) {
       toast.error(`“${set.name}” is used by ${usage} question${usage === 1 ? "" : "s"}. Change those first.`);
       return;
     }
-    if (!window.confirm(`Delete option set “${set.name}”?`)) return;
+    const confirmed = await confirm({
+      title: "Delete Option Set",
+      message: `Delete option set “${set.name}”?`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     patchDraft({ optionSets: draft.optionSets.filter((item) => item.id !== set.id) });
   };
 

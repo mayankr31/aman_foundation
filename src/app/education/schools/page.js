@@ -7,6 +7,7 @@ import { useToast } from "@/context/ToastContext";
 import { extractMapEmbedUrl, isValidMapEmbedUrl } from "@/lib/mapUrl";
 import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
+import usePagination from "@/lib/usePagination";
 function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
   const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
   const handleChange = (event) => {
@@ -55,7 +56,6 @@ export default function SchoolsModule() {
   const [deleting, setDeleting] = useState(false);
  
   // Form states
-  const [currentPage, setCurrentPage] = useState(1);
   const initialAddForm = {
     name: "",
     principalName: "",
@@ -91,7 +91,7 @@ export default function SchoolsModule() {
   const handleAddSchool = async (e) => {
     e.preventDefault();
     if (!addForm.name || !addForm.location) {
-      alert("School Name and Location are required.");
+      toast.error("School Name and Location are required.");
       return;
     }
  
@@ -113,12 +113,13 @@ export default function SchoolsModule() {
         if (loadJson.success) setSchools(loadJson.data);
         setAddForm(initialAddForm);
         setShowAddModal(false);
+        toast.success("School added successfully");
       } else {
-        alert(json.error || "Failed to add school");
+        toast.error(json.error || "Failed to add school");
       }
     } catch (err) {
       console.error("Failed to add school:", err);
-      alert("Failed to add school. Please try again.");
+      toast.error("Failed to add school. Please try again.");
     }
   };
 
@@ -138,7 +139,7 @@ export default function SchoolsModule() {
       setDeleteTarget(null);
       toast.success("School deleted successfully");
     } catch (err) {
-      alert(err.message || "Failed to delete school");
+      toast.error(err.message || "Failed to delete school");
     } finally {
       setDeleting(false);
     }
@@ -146,7 +147,7 @@ export default function SchoolsModule() {
 
   const handleExport = async () => {
     if (schools.length === 0) {
-      alert("No school records to export.");
+      toast.info("No school records to export.");
       return;
     }
 
@@ -176,7 +177,7 @@ export default function SchoolsModule() {
       XLSX.writeFile(workbook, `schools_export_${date}.xlsx`);
     } catch (err) {
       console.error("Failed to export schools:", err);
-      alert("Failed to export schools. Please try again.");
+      toast.error("Failed to export schools. Please try again.");
     }
   };
 
@@ -192,16 +193,12 @@ export default function SchoolsModule() {
     return matchesSearch && matchesLocation;
   });
 
-  const ITEMS_PER_PAGE = 9;
-  const totalPages = Math.ceil(filteredSchools.length / ITEMS_PER_PAGE);
-  const paginatedSchools = filteredSchools.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedLocation]);
+  const {
+    pageItems: paginatedSchools,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredSchools, 9, { pageParam: "page" });
 
   return (
     <div className="p-6 md:p-10 pb-24 max-w-[1600px] mx-auto w-full">
@@ -277,7 +274,7 @@ export default function SchoolsModule() {
             placeholder="Search schools..."
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
           />
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -315,7 +312,7 @@ export default function SchoolsModule() {
             </span>
             <select
               value={selectedLocation}
-              onChange={(e) => setSelectedLocation(e.target.value)}
+              onChange={(e) => { setSelectedLocation(e.target.value); setCurrentPage(1); }}
               className="w-full pl-11 pr-10 py-2.5 bg-surface-container rounded-full border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary text-xs font-label uppercase tracking-widest text-on-surface appearance-none cursor-pointer transition-shadow"
             >
               {["All Locations", ...Array.from(new Set(schools.map(s => s.location ? s.location.split(",")[0].trim() : "Unknown Location")))].map((loc) => (
@@ -329,7 +326,11 @@ export default function SchoolsModule() {
             </span>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          data-list-page-param="page"
+          data-list-detail-prefix="/education/schools/"
+        >
           {paginatedSchools.map((s, index) => (
             <div
               key={s.id || index}
@@ -337,6 +338,7 @@ export default function SchoolsModule() {
             >
               <Link
                 href={`/education/schools/${s.id}`}
+                data-list-item-key={s.id}
                 className="flex flex-col flex-1 cursor-pointer"
               >
               <div className="flex items-start justify-between mb-6">

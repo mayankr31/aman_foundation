@@ -3,18 +3,20 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 
 export default function GoatRearing() {
   const { token } = useAuth();
+  const toast = useToast();
   const [timeframe, setTimeframe] = useState("1 Year");
   const [livestockList, setLivestockList] = useState([]);
   const [beneficiaryCount, setBeneficiaryCount] = useState(1248);
   const [totalGoats, setTotalGoats] = useState(3740);
   const [goatBeneficiaries, setGoatBeneficiaries] = useState([]);
   const [goatRearingPrograms, setGoatRearingPrograms] = useState([]);
-  const { pageItems: pagedGoatPrograms, currentPage, setCurrentPage } = usePagination(goatRearingPrograms, 9);
+  const { pageItems: pagedGoatPrograms, currentPage, setCurrentPage } = usePagination(goatRearingPrograms, 9, { pageParam: "page" });
   const [allBens, setAllBens] = useState([]);
   const [avgRoi, setAvgRoi] = useState(145);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -132,7 +134,7 @@ export default function GoatRearing() {
         });
         const json = await res.json();
         if (!json.success) {
-          alert(json.error || "Failed to create new participant");
+          toast.error(json.error || "Failed to create new participant");
           return;
         }
         benId = json.data.id;
@@ -203,8 +205,9 @@ export default function GoatRearing() {
         });
 
         setRefreshTrigger(prev => prev + 1);
+        toast.success("Participant enrolled in goat rearing");
       } else {
-        alert(detailJson.error || "Failed to save goat rearing details");
+        toast.error(detailJson.error || "Failed to save goat rearing details");
       }
     } catch (err) {
       console.error("Enrolling beneficiary error:", err);
@@ -247,8 +250,9 @@ export default function GoatRearing() {
         setNewProgramDesc("");
         setShowAddProgramModal(false);
         setRefreshTrigger(prev => prev + 1);
+        toast.success("Goat rearing program added");
       } else {
-        alert(json.error || "Failed to create goat program");
+        toast.error(json.error || "Failed to create goat program");
       }
     } catch (err) {
       console.error("Adding goat program error:", err);
@@ -333,8 +337,9 @@ export default function GoatRearing() {
       if (json.success) {
         setShowEditAssignModal(false);
         setRefreshTrigger(prev => prev + 1);
+        toast.success("Goat rearing assignment updated");
       } else {
-        alert(json.error || "Failed to update goat rearing assignment");
+        toast.error(json.error || "Failed to update goat rearing assignment");
       }
     } catch (err) {
       console.error("Updating goat rearing assignment error:", err);
@@ -522,7 +527,11 @@ export default function GoatRearing() {
               Active schemes focused on distributing livestock assets and enhancing family livelihoods.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans">
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans"
+            data-list-page-param="page"
+            data-list-detail-prefix="/livelihood/goat-rearing/"
+          >
             {pagedGoatPrograms.map((prog) => {
               const participants = goatBeneficiaries.filter(b => b.goatRearingDetails?.some(d => d.goatRearingProgramId === prog.id));
               const goats = participants.reduce((sum, b) => {
@@ -530,7 +539,7 @@ export default function GoatRearing() {
                 return sum + progDetails.reduce((s, d) => s + (d.goatsAssigned || 0), 0);
               }, 0);
               return (
-                <Link href={`/livelihood/goat-rearing/${prog.id}`} key={prog.id} className="p-5 border border-surface-container-high rounded-xl bg-surface-container-low/20 space-y-4 hover:bg-surface-container-low transition-colors block no-underline text-left">
+                <Link href={`/livelihood/goat-rearing/${prog.id}`} key={prog.id} data-list-item-key={prog.id} className="p-5 border border-surface-container-high rounded-xl bg-surface-container-low/20 space-y-4 hover:bg-surface-container-low transition-colors block no-underline text-left">
                   <div>
                     <span className="px-2.5 py-0.5 rounded text-[9px] bg-secondary-container/20 text-secondary uppercase tracking-wider font-bold">
                       Active Program

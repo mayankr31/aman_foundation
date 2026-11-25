@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import { extractMapEmbedUrl, getSafeMapEmbedUrl, isValidMapEmbedUrl } from "@/lib/mapUrl";
 import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
@@ -69,11 +70,12 @@ export default function AfterSchoolCentreProfileDetail() {
   const router = useRouter();
   const { token, isInitializing, user, can } = useAuth();
   const toast = useToast();
+  const confirm = useConfirm();
   const [centre, setCentre] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showDeleteCentre, setShowDeleteCentre] = useState(false);
-  const { pageItems: pagedEnrolledStudents, currentPage: studentsPage, setCurrentPage: setStudentsPage } = usePagination(centre?.students || [], 10);
+  const { pageItems: pagedEnrolledStudents, currentPage: studentsPage, setCurrentPage: setStudentsPage } = usePagination(centre?.students || [], 10, { pageParam: "studentsPage" });
   const [modal, setModal] = useState(null); // 'edit' | 'students' | 'fellows' | 'programs' | 'attendance' | 'managers'
 
   // For assignment modals
@@ -235,7 +237,7 @@ export default function AfterSchoolCentreProfileDetail() {
       const res = await fetch(`/api/after-school-centres/${id}`, { method: "PATCH", headers: authHeaders(), body: JSON.stringify(editForm) });
       const json = await res.json();
       if (json.success) { await loadCentre(); setModal(null); toast.success("Profile saved"); }
-      else { toast.error(json.error || "Failed to save"); alert(json.error || "Failed to save"); }
+      else toast.error(json.error || "Failed to save");
     } finally { setSaving(false); }
   }
 
@@ -261,23 +263,39 @@ export default function AfterSchoolCentreProfileDetail() {
 
   async function handleAssignStudent(studentId) {
     await fetch(`/api/after-school-centres/${id}/students`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ studentId }) });
+    toast.success("Student assigned to centre");
     await loadCentre();
   }
 
   async function handleRemoveStudent(studentId) {
-    if (!confirm("Remove this student from the centre?")) return;
+    const confirmed = await confirm({
+      title: "Remove Student",
+      message: "Remove this student from the centre?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/after-school-centres/${id}/students`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ studentId }) });
+    toast.success("Student removed from centre");
     await loadCentre();
   }
 
   async function handleAssignFellow(fellowId) {
     await fetch(`/api/after-school-centres/${id}/fellows`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ fellowId }) });
+    toast.success("Fellow assigned to centre");
     await loadCentre();
   }
 
   async function handleRemoveFellow(fellowId) {
-    if (!confirm("Remove this fellow from the centre?")) return;
+    const confirmed = await confirm({
+      title: "Remove Fellow",
+      message: "Remove this fellow from the centre?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/after-school-centres/${id}/fellows`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ fellowId }) });
+    toast.success("Fellow removed from centre");
     await loadCentre();
   }
 
@@ -285,11 +303,18 @@ export default function AfterSchoolCentreProfileDetail() {
     const res = await fetch(`/api/after-school-centres/${id}/program-managers`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ userId }) });
     const json = await res.json();
     if (!json.success) toast.error(json.error || "Failed to assign staff");
+    else toast.success("Staff member assigned");
     await loadCentre();
   }
 
   async function handleRemoveManager(userId) {
-    if (!confirm("Remove this staff member from the centre?")) return;
+    const confirmed = await confirm({
+      title: "Remove Staff Member",
+      message: "Remove this staff member from the centre?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     const res = await fetch(`/api/after-school-centres/${id}/program-managers`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ userId }) });
     const json = await res.json();
     if (!json.success) toast.error(json.error || "Failed to remove staff");
@@ -298,12 +323,20 @@ export default function AfterSchoolCentreProfileDetail() {
 
   async function handleAssignProgram(programId) {
     await fetch(`/api/after-school-centres/${id}/programs`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ programId }) });
+    toast.success("Program added to centre");
     await loadCentre();
   }
 
   async function handleRemoveProgram(programId) {
-    if (!confirm("Remove this program from the centre?")) return;
+    const confirmed = await confirm({
+      title: "Remove Program",
+      message: "Remove this program from the centre?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/after-school-centres/${id}/programs`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ programId }) });
+    toast.success("Program removed from centre");
     await loadCentre();
   }
 
@@ -625,7 +658,11 @@ export default function AfterSchoolCentreProfileDetail() {
               <p className="text-center py-8 text-on-surface-variant font-sans text-sm">No students enrolled. Click "Manage Students" to assign.</p>
             ) : (
               <>
-              <div className="max-h-[55vh] overflow-auto pr-1">
+              <div
+                className="max-h-[55vh] overflow-auto pr-1"
+                data-list-page-param="studentsPage"
+                data-list-detail-prefix="/education/after-school-students/"
+              >
                 <table className="mobile-card-table w-full min-w-[720px] table-fixed text-left font-sans text-sm">
                   <thead>
                     <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
@@ -641,6 +678,7 @@ export default function AfterSchoolCentreProfileDetail() {
                     {pagedEnrolledStudents.map(s => (
                       <tr
                         key={s.id}
+                        data-list-item-key={s.id}
                         onClick={() => router.push(`/education/after-school-students/${s.id}`)}
                         className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer"
                       >

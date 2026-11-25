@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DateInput from "@/components/ui/DateInput";
 import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import { getISTDateKey } from "@/lib/time";
 
 const TYPE_LABELS = {
@@ -39,6 +40,7 @@ function formatHolidayDate(dateKey) {
 
 export default function HolidayManagerModal({ open, onClose, canManage, token }) {
   const toast = useToast();
+  const confirm = useConfirm();
   const [year, setYear] = useState(() => new Date().getFullYear());
   const [holidays, setHolidays] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -143,9 +145,13 @@ export default function HolidayManagerModal({ open, onClose, canManage, token })
 
   const handleDelete = async (holiday) => {
     if (!canManage) return;
-    if (!window.confirm(`Delete "${holiday.name}" on ${formatHolidayDate(holiday.dateKey)}?`)) {
-      return;
-    }
+    const confirmed = await confirm({
+      title: "Delete Holiday",
+      message: `Delete "${holiday.name}" on ${formatHolidayDate(holiday.dateKey)}?`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/holidays/${holiday.id}`, {
         method: "DELETE",

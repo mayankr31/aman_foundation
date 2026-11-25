@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useConfirm } from "@/context/ConfirmContext";
 import { formatDate } from "@/lib/date";
 import { formatRoleLabel, isProgramStaffRole } from "@/lib/roles";
 import Pagination from "@/components/ui/Pagination";
@@ -25,6 +26,7 @@ import {
 
 export default function AssetsPage() {
   const { token, user, can, canDeleteRecords } = useAuth();
+  const confirm = useConfirm();
   const canWrite = can("assets", "WRITE");
   const isUnrestricted = user?.roleName === "ADMIN" || user?.roleName === "HR";
   const canSeeTeam = canWrite || isProgramStaffRole(user?.roleName);
@@ -128,7 +130,13 @@ export default function AssetsPage() {
   const handleSaved = () => refresh();
 
   const handleDeleteAsset = async (asset) => {
-    if (!window.confirm(`Delete ${asset.name} (${asset.assetCode})? This cannot be undone.`)) return;
+    const confirmed = await confirm({
+      title: "Delete Asset",
+      message: `Delete ${asset.name} (${asset.assetCode})? This cannot be undone.`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/assets/${asset.id}`, {
         method: "DELETE",

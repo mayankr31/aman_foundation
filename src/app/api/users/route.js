@@ -89,6 +89,7 @@ export async function GET(req) {
         department: true,
         employeeId: true,
         inactiveSince: true,
+        dateOfJoining: true,
         dateOfLeaving: true,
         avatar: true,
         createdById: true,

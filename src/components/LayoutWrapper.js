@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/useAuth";
 import { getPageForPath, isParticipantProfilePath } from "@/lib/routePermissions";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import ListReturnManager from "./ListReturnManager";
 import { Loader2 } from "lucide-react";
 
 export default function LayoutWrapper({ children }) {
@@ -54,8 +55,14 @@ export default function LayoutWrapper({ children }) {
 
   // Any full-screen overlay (modal, drawer, lightbox, full-page form) uses
   // `fixed inset-0`. While one exists, lock scrolling on the page behind it.
+  // Remember the scroll position when an overlay opens and restore it when the
+  // overlay closes without a route change, so closing a detail modal does not
+  // leave mobile users back at the top of the list.
   useEffect(() => {
     let frame = null;
+    let hadOverlay = false;
+    let savedScrollY = null;
+    let savedPath = null;
 
     const syncScrollLock = () => {
       frame = null;
@@ -63,8 +70,33 @@ export default function LayoutWrapper({ children }) {
         const style = window.getComputedStyle(element);
         return style.display !== "none" && style.visibility !== "hidden";
       });
-      document.body.classList.toggle("modal-open", hasOverlay);
-      document.documentElement.classList.toggle("modal-open", hasOverlay);
+
+      if (hasOverlay && !hadOverlay) {
+        savedScrollY = window.scrollY;
+        savedPath = window.location.pathname;
+      }
+
+      if (hasOverlay) {
+        document.body.classList.add("modal-open");
+        document.documentElement.classList.add("modal-open");
+        hadOverlay = true;
+        return;
+      }
+
+      const shouldRestore = hadOverlay && savedScrollY != null && savedPath === window.location.pathname;
+      const restoreTo = savedScrollY;
+      hadOverlay = false;
+      savedScrollY = null;
+      savedPath = null;
+
+      document.body.classList.remove("modal-open");
+      document.documentElement.classList.remove("modal-open");
+
+      if (shouldRestore) {
+        window.requestAnimationFrame(() => {
+          window.scrollTo({ top: restoreTo, left: 0, behavior: "auto" });
+        });
+      }
     };
 
     const scheduleSync = () => {
@@ -130,6 +162,7 @@ export default function LayoutWrapper({ children }) {
       >
         <Header onMenuToggle={() => setSidebarOpen(true)} />
         <main className="flex-grow flex flex-col bg-surface justify-between">
+          <ListReturnManager />
           <div className="flex-grow">{children}</div>
           <footer className="pwa-footer-safe flex flex-col md:flex-row justify-between items-center py-8 md:py-12 px-4 sm:px-8 gap-4 md:gap-6 bg-slate-50 dark:bg-slate-950 w-full border-t border-slate-200 dark:border-slate-800 shrink-0 font-sans">
             <div className="text-center md:text-left max-w-full">

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import LivelihoodTypesModal from "@/components/LivelihoodTypesModal";
 import EditProgramModal from "@/components/EditProgramModal";
@@ -11,12 +12,13 @@ import usePagination from "@/lib/usePagination";
 
 export default function FarmPrograms() {
   const { token, canDeleteRecords, can } = useAuth();
+  const toast = useToast();
   const { getTypeConfig, getTypesByCategory, refresh: refreshTypes } = useLivelihoodTypes(token);
   const [programs, setPrograms] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showTypesModal, setShowTypesModal] = useState(false);
-  const { pageItems: pagedPrograms, currentPage, setCurrentPage } = usePagination(programs, 9);
+  const { pageItems: pagedPrograms, currentPage, setCurrentPage } = usePagination(programs, 9, { pageParam: "page" });
 
   // Add program modal
   const [showAddModal, setShowAddModal] = useState(false);
@@ -69,11 +71,13 @@ export default function FarmPrograms() {
         setNewName(""); setNewDesc(""); setNewType(""); setNewTarget("");
         setShowAddModal(false);
         setRefreshTrigger((p) => p + 1);
+        toast.success("Program added");
       } else {
-        alert(json.error || "Failed to create program");
+        toast.error(json.error || "Failed to create program");
       }
     } catch (err) {
       console.error("Add program error:", err);
+      toast.error("Failed to create program");
     }
   };
 
@@ -86,11 +90,13 @@ export default function FarmPrograms() {
       if (json.success) {
         setDeleteId(null); setDeleteName("");
         setRefreshTrigger((p) => p + 1);
+        toast.success("Program deleted");
       } else {
-        alert(json.error || "Failed to delete program");
+        toast.error(json.error || "Failed to delete program");
       }
     } catch (err) {
       console.error("Delete program error:", err);
+      toast.error("Failed to delete program");
     }
   };
 
@@ -155,7 +161,11 @@ export default function FarmPrograms() {
         ) : programs.length === 0 ? (
           <p className="text-sm text-on-surface-variant text-center py-8 italic">No farm programs yet. Click &ldquo;Add Program&rdquo; to create one.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            data-list-page-param="page"
+            data-list-detail-prefix="/livelihood/programs/"
+          >
             {pagedPrograms.map((prog) => {
               const config = getTypeConfig(prog.type);
               return (
@@ -180,7 +190,7 @@ export default function FarmPrograms() {
                       )}
                     </div>
                   )}
-                  <Link href={`/livelihood/programs/${prog.id}`} className="no-underline text-left block">
+                  <Link href={`/livelihood/programs/${prog.id}`} data-list-item-key={prog.id} className="no-underline text-left block">
                     <span className="px-2.5 py-0.5 rounded text-[9px] bg-primary/10 text-primary uppercase tracking-wider font-bold">
                       {config?.label || prog.type}
                     </span>

@@ -14,12 +14,15 @@ import {
   POLICY_FLAGS,
   QUOTA_PERIODS,
   daysInclusive,
-  getFinancialYearStart,
+  formatQuarterKey,
   getMaxEndDateForMonths,
   getPolicyWarnings,
   parseDateOnly,
   parseLegacyLeaveRange,
+  splitDaysByQuarter,
 } from "@/lib/leavePolicy";
+
+const NO_SELF_APPLY_ROLES = ["ADMIN", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"];
 
 function formatStoredDates(value) {
   return String(value || "").replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, (match) => formatDate(match));
@@ -308,16 +311,31 @@ export default function LeaveApplication() {
       return;
     }
     const parsedStart = parseDateOnly(start);
-    const requestedFyStart = parsedStart ? getFinancialYearStart(parsedStart) : null;
+    const requestedYear = parsedStart ? parsedStart.getUTCFullYear() : null;
     if (
       selectedType &&
       selectedType.available != null &&
-      requestedFyStart === summary?.fyStart &&
+      requestedYear === summary?.year &&
       [QUOTA_PERIODS.FINANCIAL_YEAR, QUOTA_PERIODS.CALENDAR_YEAR].includes(selectedConfig.quotaPeriod) &&
       days > Number(selectedType.available)
     ) {
       triggerToast(`Only ${selectedType.available} day(s) of ${selectedConfig.name} are available.`);
       return;
+    }
+    if (!editingLeave && selectedType?.quarters?.length && requestedYear === summary?.year) {
+      const requestedQuarterSplit = splitDaysByQuarter(parseDateOnly(start), parseDateOnly(end));
+      for (const [quarterKey, requestedQty] of Object.entries(requestedQuarterSplit)) {
+        const [quarterYear, rawQuarter] = quarterKey.split("-");
+        if (Number(quarterYear) !== summary?.year) continue;
+        const quarterData = selectedType.quarters[Number(String(rawQuarter).replace("Q", "")) - 1];
+        if (!quarterData || quarterData.available == null) continue;
+        if (requestedQty > quarterData.available) {
+          triggerToast(
+            `Only ${quarterData.available} day(s) of ${selectedConfig.name} are available in ${formatQuarterKey(quarterKey)}.`
+          );
+          return;
+        }
+      }
     }
 
     setIsSubmitting(true);
@@ -371,7 +389,7 @@ export default function LeaveApplication() {
           <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">Self Service</p>
           <h2 className="page-title text-on-surface">Leave Application</h2>
         </div>
-        {canWrite && (
+        {canWrite && !NO_SELF_APPLY_ROLES.includes(currentUser?.roleName) && (
           <button
             onClick={openApplyForm}
             className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full font-semibold transition-colors flex items-center gap-2 text-sm shadow-md cursor-pointer w-fit"

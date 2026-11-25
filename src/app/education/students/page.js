@@ -12,6 +12,7 @@ import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/ind
 import DateInput from "@/components/ui/DateInput";
 import Avatar from "@/components/ui/Avatar";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
+import usePagination from "@/lib/usePagination";
 
 const EMPTY_STUDENT_FORM = {
   name: "",
@@ -97,7 +98,6 @@ export default function StudentsModule() {
   const [schoolFilter, setSchoolFilter] = useState("All Schools");
   const [migratedFilter, setMigratedFilter] = useState("All");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [students, setStudents] = useState([]);
   const [schools, setSchools] = useState([]);
@@ -146,7 +146,7 @@ export default function StudentsModule() {
     e.preventDefault();
     if (submitLockRef.current) return;
     if (!newStudentForm.name || !newStudentForm.schoolId) {
-      alert("Full Name and Partner School are required.");
+      toast.error("Full Name and Partner School are required.");
       return;
     }
 
@@ -188,11 +188,13 @@ export default function StudentsModule() {
         setNewStudentForm(EMPTY_STUDENT_FORM);
         setNewStudentPhoto(null);
         setShowAddModal(false);
+        toast.success("Student added successfully");
       } else {
-        alert(json.error || "Failed to add student");
+        toast.error(json.error || "Failed to add student");
       }
     } catch (err) {
       console.error("Failed to add student:", err);
+      toast.error("Failed to add student. Please try again.");
     } finally {
       submitLockRef.current = false;
       setIsSubmitting(false);
@@ -215,7 +217,7 @@ export default function StudentsModule() {
       setDeleteTarget(null);
       toast.success("Student deleted successfully");
     } catch (err) {
-      alert(err.message || "Failed to delete student");
+      toast.error(err.message || "Failed to delete student");
     } finally {
       setDeleting(false);
     }
@@ -223,7 +225,7 @@ export default function StudentsModule() {
 
   const handleExport = async () => {
     if (filteredStudents.length === 0) {
-      alert("No student records to export.");
+      toast.info("No student records to export.");
       return;
     }
 
@@ -262,7 +264,7 @@ export default function StudentsModule() {
       XLSX.writeFile(workbook, `students_export_${date}.xlsx`);
     } catch (err) {
       console.error("Failed to export students:", err);
-      alert("Failed to export students. Please try again.");
+      toast.error("Failed to export students. Please try again.");
     }
   };
 
@@ -321,12 +323,12 @@ export default function StudentsModule() {
     return matchesSearch && matchesGrade && matchesPerformance && matchesSchool && matchesMigrated;
   });
 
-  const ITEMS_PER_PAGE = 10;
-  const totalPages = Math.ceil(filteredStudents.length / ITEMS_PER_PAGE);
-  const paginatedStudents = filteredStudents.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  const {
+    pageItems: paginatedStudents,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredStudents, 10, { pageParam: "page" });
 
   return (
     <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -457,7 +459,11 @@ export default function StudentsModule() {
       </div>
 
       {/* Student Data Container */}
-      <div className="bg-surface-container-lowest rounded-xl overflow-hidden pt-4 pb-2 shadow-[0_8px_24px_rgba(25,28,29,0.04)]">
+      <div
+        className="bg-surface-container-lowest rounded-xl overflow-hidden pt-4 pb-2 shadow-[0_8px_24px_rgba(25,28,29,0.04)]"
+        data-list-page-param="page"
+        data-list-detail-prefix="/education/students/"
+      >
         <div className="w-full overflow-x-auto">
           <table className="mobile-card-table w-full text-left border-collapse min-w-[800px] table-fixed font-sans">
             <thead>
@@ -480,6 +486,7 @@ export default function StudentsModule() {
                 return (
                   <tr
                     key={s.id}
+                    data-list-item-key={s.id}
                     onClick={() => router.push(profileHref)}
                     className={`group hover:bg-surface-container-low/50 transition-colors cursor-pointer ${
                       index > 0 ? "border-t border-surface-container-low" : ""
@@ -569,8 +576,8 @@ export default function StudentsModule() {
         {totalPages > 1 && (
           <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-surface-container-low mt-2 font-sans">
             <span className="text-xs text-on-surface-variant text-center sm:text-left">
-              Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
-              {Math.min(currentPage * ITEMS_PER_PAGE, filteredStudents.length)} of{" "}
+              Showing {(currentPage - 1) * 10 + 1} to{" "}
+              {Math.min(currentPage * 10, filteredStudents.length)} of{" "}
               {filteredStudents.length} entries
             </span>
             <div className="flex flex-wrap gap-2 items-center justify-center">

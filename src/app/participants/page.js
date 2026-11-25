@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 import Avatar from "@/components/ui/Avatar";
 import AddBeneficiaryModal from "@/components/AddBeneficiaryModal";
 
@@ -18,7 +19,6 @@ export default function BeneficiaryMasterDirectory() {
   const [programFilter, setProgramFilter] = useState("All Programs");
   const [locationFilter, setLocationFilter] = useState("All Locations");
   const [migratedFilter, setMigratedFilter] = useState("All");
-  const [currentPage, setCurrentPage] = useState(1);
 
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
@@ -113,13 +113,11 @@ export default function BeneficiaryMasterDirectory() {
     return matchesSearch && matchesTier && matchesProgram && matchesLocation && matchesMigrated;
   });
 
-  const ITEMS_PER_PAGE = 10;
-  const totalPages = Math.max(1, Math.ceil(filteredBeneficiaries.length / ITEMS_PER_PAGE));
-  const safePage = Math.min(currentPage, totalPages);
-  const paginatedBeneficiaries = filteredBeneficiaries.slice(
-    (safePage - 1) * ITEMS_PER_PAGE,
-    safePage * ITEMS_PER_PAGE
-  );
+  const {
+    pageItems: paginatedBeneficiaries,
+    currentPage,
+    setCurrentPage,
+  } = usePagination(filteredBeneficiaries, 10, { pageParam: "page" });
 
   return (
     <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -250,7 +248,11 @@ export default function BeneficiaryMasterDirectory() {
       </div>
 
       {/* Directory Table */}
-      <div className="bg-surface-container-lowest rounded-xl overflow-hidden pt-4 pb-2 shadow-[0_8px_24px_rgba(25,28,29,0.04)] border border-outline-variant/10">
+      <div
+        className="bg-surface-container-lowest rounded-xl overflow-hidden pt-4 pb-2 shadow-[0_8px_24px_rgba(25,28,29,0.04)] border border-outline-variant/10"
+        data-list-page-param="page"
+        data-list-detail-prefix="/participants/"
+      >
         <div className="w-full overflow-x-auto">
           <table className="mobile-card-table w-full text-left border-collapse min-w-[800px] table-fixed font-sans">
             <thead>
@@ -267,6 +269,7 @@ export default function BeneficiaryMasterDirectory() {
               {paginatedBeneficiaries.map((b, index) => (
                 <tr
                   key={b.id}
+                  data-list-item-key={b.id}
                   onClick={() => router.push(`/participants/${encodeURIComponent(b.id)}`)}
                   className={`hover:bg-surface-container-low/50 transition-colors cursor-pointer ${
                     index > 0 ? "border-t border-surface-container-low" : ""
@@ -343,7 +346,7 @@ export default function BeneficiaryMasterDirectory() {
             </tbody>
           </table>
         </div>
-        <Pagination currentPage={safePage} totalItems={filteredBeneficiaries.length} itemsPerPage={ITEMS_PER_PAGE} onPageChange={setCurrentPage} />
+        <Pagination currentPage={currentPage} totalItems={filteredBeneficiaries.length} itemsPerPage={10} onPageChange={setCurrentPage} />
       </div>
 
       {/* Add Participant Modal */}

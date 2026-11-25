@@ -10,10 +10,16 @@ export const QUOTA_PERIODS = {
 };
 
 export const QUOTA_PERIOD_OPTIONS = [
-  { value: QUOTA_PERIODS.FINANCIAL_YEAR, label: "Per financial year" },
   { value: QUOTA_PERIODS.CALENDAR_YEAR, label: "Per calendar year" },
   { value: QUOTA_PERIODS.PER_EVENT, label: "Per event" },
   { value: QUOTA_PERIODS.UNLIMITED, label: "Unlimited with approval" },
+];
+
+export const CALENDAR_QUARTERS = [
+  { quarter: 1, label: "Q1", months: "Jan – Mar" },
+  { quarter: 2, label: "Q2", months: "Apr – Jun" },
+  { quarter: 3, label: "Q3", months: "Jul – Sep" },
+  { quarter: 4, label: "Q4", months: "Oct – Dec" },
 ];
 
 export const POLICY_FLAGS = {
@@ -87,6 +93,15 @@ export function getMaxEndDateForMonths(startDate, months) {
   return startDate.getUTCDate() === lastDayOfStartMonth ? target : addDays(target, -1);
 }
 
+/** Leaves are accounted per calendar year (1 January – 31 December). */
+export function getCalendarYearStart(date = new Date()) {
+  return date.getUTCFullYear();
+}
+
+export function getCalendarQuarter(date) {
+  return Math.floor(date.getUTCMonth() / 3) + 1;
+}
+
 export function getFinancialYearStart(date = new Date()) {
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth(); // 0-based
@@ -114,37 +129,55 @@ export function getServiceDays(dateOfJoining, asOf) {
   return Math.floor((upto.getTime() - joined.getTime()) / 86400000);
 }
 
-export function periodKeyForDate(date, quotaPeriod) {
-  if (quotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR) {
-    return `CY-${date.getUTCFullYear()}`;
-  }
-  return `FY-${getFinancialYearStart(date)}`;
+export function periodKeyForDate(date) {
+  return `CY-${date.getUTCFullYear()}`;
 }
 
-export function periodRangeForKey(periodKey, quotaPeriod) {
+export function periodRangeForKey(periodKey) {
+  const [, rawYear] = String(periodKey).split("-");
+  return getCalendarYearRange(Number(rawYear));
+}
+
+export function formatPeriodKey(periodKey) {
   const [prefix, rawYear] = String(periodKey).split("-");
-  const year = Number(rawYear);
-  if (quotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR || prefix === "CY") {
-    return getCalendarYearRange(year);
-  }
-  return getFinancialYearRange(year);
+  return prefix === "CY" || prefix === "FY" ? String(rawYear) : String(periodKey);
 }
 
-export function formatPeriodKey(periodKey, quotaPeriod) {
-  const [prefix, rawYear] = String(periodKey).split("-");
-  const year = Number(rawYear);
-  if (quotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR || prefix === "CY") {
-    return String(year);
-  }
-  return `FY ${year}-${String(year + 1).slice(-2)}`;
+/** Quarter key such as "2026-Q2", used for quarterly quota checks. */
+export function quarterKeyForDate(date) {
+  return `${date.getUTCFullYear()}-Q${getCalendarQuarter(date)}`;
 }
 
-/** Returns { [periodKey]: dayCount } for annual/calendar-year quota periods. */
-export function splitDaysByPeriod(startDate, endDate, quotaPeriod) {
+export function formatQuarterKey(quarterKey) {
+  const [year, quarter] = String(quarterKey).split("-");
+  return `${quarter} ${year}`;
+}
+
+export function getCalendarQuarterRange(year, quarter) {
+  const startMonth = (Number(quarter) - 1) * 3;
+  return {
+    start: new Date(Date.UTC(year, startMonth, 1)),
+    end: new Date(Date.UTC(year, startMonth + 3, 0)),
+  };
+}
+
+/** Returns { [periodKey]: dayCount } split by calendar year. */
+export function splitDaysByPeriod(startDate, endDate) {
   const result = {};
   if (!startDate || !endDate || endDate < startDate) return result;
   for (let cursor = new Date(startDate); cursor <= endDate; cursor = addDays(cursor, 1)) {
-    const key = periodKeyForDate(cursor, quotaPeriod);
+    const key = periodKeyForDate(cursor);
+    result[key] = (result[key] || 0) + 1;
+  }
+  return result;
+}
+
+/** Returns { [quarterKey]: dayCount } split by calendar quarter (e.g. "2026-Q2"). */
+export function splitDaysByQuarter(startDate, endDate) {
+  const result = {};
+  if (!startDate || !endDate || endDate < startDate) return result;
+  for (let cursor = new Date(startDate); cursor <= endDate; cursor = addDays(cursor, 1)) {
+    const key = quarterKeyForDate(cursor);
     result[key] = (result[key] || 0) + 1;
   }
   return result;
@@ -164,8 +197,6 @@ export function formatMonths(value) {
 
 export function formatQuotaPeriod(quotaPeriod) {
   switch (quotaPeriod) {
-    case QUOTA_PERIODS.CALENDAR_YEAR:
-      return "calendar year";
     case QUOTA_PERIODS.PER_EVENT:
       return "event";
     case QUOTA_PERIODS.UNLIMITED:
@@ -173,7 +204,7 @@ export function formatQuotaPeriod(quotaPeriod) {
     case QUOTA_PERIODS.CREDIT:
       return "compensatory credit";
     default:
-      return "financial year";
+      return "calendar year";
   }
 }
 
@@ -185,8 +216,7 @@ export function getEntitlementLabel(config) {
     if (config.maxConsecutiveMonths) return `${formatMonths(config.maxConsecutiveMonths)} per event`;
     return `${formatDays(config.annualQuota)} day${Number(config.annualQuota) === 1 ? "" : "s"} per event`;
   }
-  const period = config.quotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR ? "calendar year" : "financial year";
-  return `${formatDays(config.annualQuota)} day${Number(config.annualQuota) === 1 ? "" : "s"} per ${period}`;
+  return `${formatDays(config.annualQuota)} day${Number(config.annualQuota) === 1 ? "" : "s"} per calendar year`;
 }
 
 export function getPolicyWarnings(config, { days = 0, paidLeaveAvailable = 0 } = {}) {

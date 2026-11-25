@@ -509,16 +509,6 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
 
         {/* Bottom utility links */}
         <div className="mt-auto border-t border-slate-100 dark:border-slate-800 pt-4 flex flex-col gap-2 shrink-0">
-          <a
-            className={`flex items-center gap-3 py-3 px-4 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-full transition-all font-medium ${
-              collapsed ? "md:justify-center md:px-0" : ""
-            }`}
-            href="#"
-            title="Help"
-          >
-            <span className="material-symbols-outlined">help</span>
-            <span className={labelClass}>Help</span>
-          </a>
           <button
             onClick={() => {
               logout();

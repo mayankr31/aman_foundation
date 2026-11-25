@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import { extractMapEmbedUrl, getSafeMapEmbedUrl, isValidMapEmbedUrl } from "@/lib/mapUrl";
 import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
@@ -71,6 +72,7 @@ export default function SchoolProfileDetail() {
   const router = useRouter();
   const { token, isInitializing, user, can } = useAuth();
   const toast = useToast();
+  const confirm = useConfirm();
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const photoInputRef = useRef(null);
@@ -78,7 +80,7 @@ export default function SchoolProfileDetail() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showDeleteSchool, setShowDeleteSchool] = useState(false);
-  const { pageItems: pagedEnrolledStudents, currentPage: studentsPage, setCurrentPage: setStudentsPage } = usePagination(school?.students || [], 10);
+  const { pageItems: pagedEnrolledStudents, currentPage: studentsPage, setCurrentPage: setStudentsPage } = usePagination(school?.students || [], 10, { pageParam: "studentsPage" });
   const [modal, setModal] = useState(null); // 'edit' | 'students' | 'fellows' | 'programs' | 'attendance' | 'managers'
 
   // For assignment modals
@@ -241,7 +243,7 @@ export default function SchoolProfileDetail() {
       const res = await fetch(`/api/schools/${id}`, { method: "PATCH", headers: authHeaders(), body: JSON.stringify(editForm) });
       const json = await res.json();
       if (json.success) { await loadSchool(); setModal(null); toast.success("Profile saved"); }
-      else { toast.error(json.error || "Failed to save"); alert(json.error || "Failed to save"); }
+      else toast.error(json.error || "Failed to save");
     } finally { setSaving(false); }
   }
 
@@ -291,23 +293,39 @@ export default function SchoolProfileDetail() {
 
   async function handleAssignStudent(studentId) {
     await fetch(`/api/schools/${id}/students`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ studentId }) });
+    toast.success("Student assigned to school");
     await loadSchool();
   }
 
   async function handleRemoveStudent(studentId) {
-    if (!confirm("Remove this student from the school?")) return;
+    const confirmed = await confirm({
+      title: "Remove Student",
+      message: "Remove this student from the school?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/schools/${id}/students`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ studentId }) });
+    toast.success("Student removed from school");
     await loadSchool();
   }
 
   async function handleAssignFellow(fellowId) {
     await fetch(`/api/schools/${id}/fellows`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ fellowId }) });
+    toast.success("Fellow assigned to school");
     await loadSchool();
   }
 
   async function handleRemoveFellow(fellowId) {
-    if (!confirm("Remove this fellow from the school?")) return;
+    const confirmed = await confirm({
+      title: "Remove Fellow",
+      message: "Remove this fellow from the school?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/schools/${id}/fellows`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ fellowId }) });
+    toast.success("Fellow removed from school");
     await loadSchool();
   }
 
@@ -315,11 +333,18 @@ export default function SchoolProfileDetail() {
     const res = await fetch(`/api/schools/${id}/program-managers`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ userId }) });
     const json = await res.json();
     if (!json.success) toast.error(json.error || "Failed to assign staff");
+    else toast.success("Staff member assigned");
     await loadSchool();
   }
 
   async function handleRemoveManager(userId) {
-    if (!confirm("Remove this staff member from the school?")) return;
+    const confirmed = await confirm({
+      title: "Remove Staff Member",
+      message: "Remove this staff member from the school?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     const res = await fetch(`/api/schools/${id}/program-managers`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ userId }) });
     const json = await res.json();
     if (!json.success) toast.error(json.error || "Failed to remove staff");
@@ -328,12 +353,20 @@ export default function SchoolProfileDetail() {
 
   async function handleAssignProgram(programId) {
     await fetch(`/api/schools/${id}/programs`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ programId }) });
+    toast.success("Program added to school");
     await loadSchool();
   }
 
   async function handleRemoveProgram(programId) {
-    if (!confirm("Remove this program from the school?")) return;
+    const confirmed = await confirm({
+      title: "Remove Program",
+      message: "Remove this program from the school?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await fetch(`/api/schools/${id}/programs`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ programId }) });
+    toast.success("Program removed from school");
     await loadSchool();
   }
 
@@ -665,7 +698,11 @@ export default function SchoolProfileDetail() {
               <p className="text-center py-8 text-on-surface-variant font-sans text-sm">No students enrolled. Click "Manage Students" to assign.</p>
             ) : (
               <>
-              <div className="max-h-[55vh] overflow-auto pr-1">
+              <div
+                className="max-h-[55vh] overflow-auto pr-1"
+                data-list-page-param="studentsPage"
+                data-list-detail-prefix="/education/students/"
+              >
                 <table className="mobile-card-table w-full min-w-[720px] table-fixed text-left font-sans text-sm">
                   <thead>
                     <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
@@ -681,6 +718,7 @@ export default function SchoolProfileDetail() {
                     {pagedEnrolledStudents.map(s => (
                       <tr
                         key={s.id}
+                        data-list-item-key={s.id}
                         onClick={() => router.push(`/education/students/${s.id}`)}
                         className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer"
                       >

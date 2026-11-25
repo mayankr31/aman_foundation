@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { getISTDateKey } from "@/lib/time";
 
 const STATUS_COLORS = {
   Pending: "#f59e0b",
@@ -26,6 +27,18 @@ const STATUS_BADGE = {
   Blocked: "bg-rose-100 text-rose-800",
   Cancelled: "bg-slate-200 text-slate-600",
 };
+
+const STATUS_DOT = {
+  Pending: "bg-amber-500",
+  "In Progress": "bg-blue-500",
+  Completed: "bg-emerald-500",
+  Blocked: "bg-rose-500",
+  Cancelled: "bg-slate-400",
+};
+
+function isIncompleteStatus(status) {
+  return status !== "Completed" && status !== "Cancelled";
+}
 
 const PRIORITY_BADGE = {
   Low: "bg-slate-100 text-slate-700",
@@ -194,6 +207,130 @@ function TrendChart({ trend }) {
   );
 }
 
+function TodayBarChart({ counts, date }) {
+  const total = counts?.total || 0;
+  const completed = counts?.completed || 0;
+  const pending = counts?.pending || 0;
+  const completionRate = total ? Math.round((completed / total) * 100) : 0;
+
+  const width = 600;
+  const height = 200;
+  const paddingX = 48;
+  const paddingTop = 28;
+  const baseline = height - 42;
+  const chartHeight = baseline - paddingTop;
+  const max = Math.max(1, total, completed);
+  const barWidth = 96;
+  const gap = 64;
+  const center = width / 2;
+  const bars = [
+    { label: "Assigned", value: total, color: "#3b82f6", x: center - gap / 2 - barWidth },
+    { label: "Completed", value: completed, color: "#10b981", x: center + gap / 2 },
+  ];
+
+  return (
+    <div>
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+          Today · {formatDayLabel(date)}
+        </p>
+        <span className="text-[10px] font-bold text-amber-700">{pending} pending</span>
+      </div>
+      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-48" role="img" aria-label="Assigned vs completed tasks for today">
+        {[0, 0.25, 0.5, 0.75, 1].map((fraction) => {
+          const y = baseline - fraction * chartHeight;
+          return (
+            <line
+              key={fraction}
+              x1={paddingX}
+              x2={width - paddingX}
+              y1={y}
+              y2={y}
+              stroke="currentColor"
+              className="text-slate-200 dark:text-slate-800"
+              strokeWidth="1"
+            />
+          );
+        })}
+        <line
+          x1={paddingX}
+          x2={width - paddingX}
+          y1={baseline}
+          y2={baseline}
+          stroke="currentColor"
+          className="text-slate-300 dark:text-slate-700"
+          strokeWidth="1.5"
+        />
+        {bars.map((bar) => {
+          const barHeight = (bar.value / max) * chartHeight;
+          const y = baseline - barHeight;
+          return (
+            <g key={bar.label}>
+              <rect
+                x={bar.x}
+                y={y}
+                width={barWidth}
+                height={Math.max(barHeight, bar.value > 0 ? 2 : 0)}
+                rx="6"
+                fill={bar.color}
+              />
+              <text
+                x={bar.x + barWidth / 2}
+                y={Math.max(y - 8, paddingTop - 4)}
+                textAnchor="middle"
+                className="fill-slate-800 dark:fill-white"
+                fontSize="16"
+                fontWeight="700"
+              >
+                {bar.value}
+              </text>
+              <text
+                x={bar.x + barWidth / 2}
+                y={baseline + 24}
+                textAnchor="middle"
+                className="fill-slate-500"
+                fontSize="12"
+                fontWeight="600"
+              >
+                {bar.label}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+      <p className="text-[10px] text-slate-500">
+        {total ? `${completionRate}% of today's tasks are completed.` : "No tasks planned or due today."}
+      </p>
+    </div>
+  );
+}
+
+function TodayTaskList({ tasks = [] }) {
+  if (!tasks.length) {
+    return <p className="text-[11px] text-slate-500">No tasks</p>;
+  }
+
+  return (
+    <div className="space-y-1">
+      {tasks.map((task) => (
+        <div key={task.id} className="flex items-start gap-1.5 min-w-0">
+          <span className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full ${STATUS_DOT[task.status] || "bg-slate-400"}`} />
+          <p className={`min-w-0 flex-1 text-[11px] leading-snug break-words ${
+            task.status === "Completed"
+              ? "line-through text-slate-400"
+              : "text-slate-700 dark:text-slate-200"
+          }`}>
+            {task.title}
+          </p>
+          <span className={`shrink-0 text-[8px] font-bold uppercase px-1 py-0.5 rounded ${STATUS_BADGE[task.status] || "bg-slate-100 text-slate-700"}`}>
+            {task.status}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function formatDayLabel(dateKey) {
   if (!dateKey) return "";
   const date = new Date(`${dateKey}T12:00:00+05:30`);
@@ -207,16 +344,21 @@ function formatDayLabel(dateKey) {
   });
 }
 
-function CalendarHeatmap({ calendar }) {
+function CalendarHeatmap({ calendar, showingToday = false }) {
   const { token } = useAuth();
-  const [monthDate, setMonthDate] = useState(() => {
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), 1);
-  });
+  const now = new Date();
+  const todayKey = getISTDateKey(now);
+  const [monthDate, setMonthDate] = useState(() => new Date(now.getFullYear(), now.getMonth(), 1));
   const [selectedDate, setSelectedDate] = useState(null);
   const [dayTasks, setDayTasks] = useState([]);
   const [dayLoading, setDayLoading] = useState(false);
   const [dayError, setDayError] = useState("");
+
+  useEffect(() => {
+    if (!showingToday) return;
+    const current = new Date();
+    setMonthDate(new Date(current.getFullYear(), current.getMonth(), 1));
+  }, [showingToday]);
 
   const openDay = async (dateKey) => {
     if (!token) return;
@@ -244,8 +386,6 @@ function CalendarHeatmap({ calendar }) {
     setDayError("");
   };
 
-  const today = new Date();
-  const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   const year = monthDate.getFullYear();
   const month = monthDate.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
@@ -253,13 +393,17 @@ function CalendarHeatmap({ calendar }) {
   const values = [];
   for (let day = 1; day <= daysInMonth; day += 1) {
     const key = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    values.push({ day, key, value: calendar[key] || 0 });
+    const entry = calendar?.[key];
+    const total = typeof entry === "number" ? entry : entry?.total || 0;
+    const incomplete = typeof entry === "number" ? 0 : entry?.incomplete || 0;
+    values.push({ day, key, total, incomplete });
   }
-  const max = Math.max(1, ...values.map((item) => item.value));
+  const max = Math.max(1, ...values.map((item) => item.total));
+  const dayIncompleteCount = dayTasks.filter((task) => isIncompleteStatus(task.status)).length;
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3 gap-2">
         <button
           type="button"
           onClick={() => setMonthDate(new Date(year, month - 1, 1))}
@@ -290,40 +434,60 @@ function CalendarHeatmap({ calendar }) {
           <div key={`empty-${index}`} className="aspect-square rounded-lg bg-transparent" />
         ))}
         {values.map((item) => {
-          const intensity = item.value === 0 ? 0.04 : 0.15 + (item.value / max) * 0.75;
+          const intensity = item.total === 0 ? 0.04 : 0.15 + (item.total / max) * 0.75;
+          const hasIncomplete = item.incomplete > 0;
+          const color = hasIncomplete ? "217, 119, 6" : "26, 122, 94";
           return (
             <button
               key={item.key}
               type="button"
-              onClick={() => item.value > 0 && openDay(item.key)}
-              disabled={item.value === 0}
-              title={`${item.day} ${monthDate.toLocaleString("default", { month: "short" })} ${year}: ${item.value} deadline${item.value === 1 ? "" : "s"}`}
+              onClick={() => item.total > 0 && openDay(item.key)}
+              disabled={item.total === 0}
+              title={`${item.day} ${monthDate.toLocaleString("default", { month: "short" })} ${year}: ${item.total} deadline${item.total === 1 ? "" : "s"}${hasIncomplete ? ` · ${item.incomplete} incomplete` : ""}`}
               className={`aspect-square rounded-lg p-1 flex flex-col justify-between border transition-transform text-left ${
-                item.value > 0 ? "cursor-pointer hover:scale-[1.04]" : "cursor-default"
+                item.total > 0 ? "cursor-pointer hover:scale-[1.04]" : "cursor-default"
               } ${
                 item.key === todayKey
                   ? "border-emerald-500 ring-1 ring-emerald-500/40"
                   : "border-transparent"
               }`}
-              style={{ backgroundColor: `rgba(26, 122, 94, ${intensity})` }}
+              style={{ backgroundColor: `rgba(${color}, ${intensity})` }}
             >
               <span className="text-[9px] font-bold text-slate-700 dark:text-slate-200 leading-none">{item.day}</span>
-              {item.value > 0 && (
-                <span className="self-end text-[9px] font-black text-white bg-emerald-700/80 rounded px-1 leading-tight">
-                  {item.value}
+              {item.total > 0 && (
+                <span className={`self-end text-[9px] font-black text-white rounded px-1 leading-tight ${hasIncomplete ? "bg-amber-600/80" : "bg-emerald-700/80"}`}>
+                  {item.total}
                 </span>
               )}
             </button>
           );
         })}
       </div>
-      <div className="flex items-center justify-end gap-1.5 mt-3 text-[9px] text-slate-500">
-        <span>Less</span>
-        {[0.04, 0.2, 0.4, 0.6, 0.9].map((alpha) => (
-          <span key={alpha} className="w-3 h-3 rounded-sm" style={{ backgroundColor: `rgba(26, 122, 94, ${alpha})` }} />
-        ))}
-        <span>More</span>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[9px] text-slate-500">
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="flex items-center gap-1">
+            <span className="h-2.5 w-2.5 rounded-sm bg-emerald-700/80" />
+            Completed only
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="h-2.5 w-2.5 rounded-sm bg-amber-600/80" />
+            Incomplete
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span>Less</span>
+          {[0.04, 0.2, 0.4, 0.6, 0.9].map((alpha) => (
+            <span key={alpha} className="w-3 h-3 rounded-sm" style={{ backgroundColor: `rgba(26, 122, 94, ${alpha})` }} />
+          ))}
+          <span>More</span>
+        </div>
       </div>
+
+      {showingToday && !values.some((item) => item.total > 0) && (
+        <p className="mt-2 text-center text-[10px] text-slate-500">
+          No tasks have a deadline today.
+        </p>
+      )}
 
       {selectedDate && (
         <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/60 p-4">
@@ -331,7 +495,12 @@ function CalendarHeatmap({ calendar }) {
             <div className="flex items-start justify-between gap-3 mb-4">
               <div className="min-w-0">
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">Tasks due</h4>
-                <p className="text-xs text-slate-500 mt-0.5">{formatDayLabel(selectedDate)}</p>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  {formatDayLabel(selectedDate)}
+                  {dayTasks.length > 0
+                    ? ` · ${dayTasks.length - dayIncompleteCount} completed, ${dayIncompleteCount} incomplete`
+                    : ""}
+                </p>
               </div>
               <button
                 type="button"
@@ -356,7 +525,11 @@ function CalendarHeatmap({ calendar }) {
                 {dayTasks.map((task) => (
                   <div
                     key={task.id}
-                    className="rounded-xl border border-slate-200 dark:border-slate-800 p-3"
+                    className={`rounded-xl border p-3 ${
+                      isIncompleteStatus(task.status)
+                        ? "border-amber-200 bg-amber-50/60 dark:border-amber-900/40 dark:bg-amber-900/10"
+                        : "border-slate-200 dark:border-slate-800"
+                    }`}
                   >
                     <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 break-words">
                       {task.title}
@@ -502,12 +675,29 @@ export default function TaskAnalytics() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Assigned vs Completed</h3>
-              <TrendChart trend={data.trend} />
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Assigned vs Completed</h3>
+                <span className="text-[10px] font-bold uppercase tracking-wide rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-slate-600 dark:text-slate-300">
+                  {showingToday ? `Today · ${formatDayLabel(data.today?.date)}` : "All time · last 30 days"}
+                </span>
+              </div>
+              {showingToday ? (
+                <TodayBarChart counts={data.today?.counts} date={data.today?.date} />
+              ) : (
+                <TrendChart trend={data.trend} />
+              )}
             </section>
             <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Deadline Calendar</h3>
-              <CalendarHeatmap calendar={data.calendar} />
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Deadline Calendar</h3>
+                <span className="text-[10px] font-bold uppercase tracking-wide rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-slate-600 dark:text-slate-300">
+                  {showingToday ? "Today" : "All time"}
+                </span>
+              </div>
+              <CalendarHeatmap
+                calendar={showingToday ? data.today?.calendar : data.calendar}
+                showingToday={showingToday}
+              />
             </section>
             <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -588,7 +778,6 @@ export default function TaskAnalytics() {
                     <th className="py-2 px-3">Total</th>
                     <th className="py-2 px-3">Completed</th>
                     <th className="py-2 px-3">Overdue</th>
-                    <th className="py-2 pl-3">Completion</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -597,16 +786,16 @@ export default function TaskAnalytics() {
                       <td className="py-3 pr-4 font-bold text-slate-800 dark:text-slate-100">{row.name}</td>
                       <td className="py-3 px-3 text-slate-500">{row.role?.replaceAll("_", " ") || "—"}</td>
                       <td className="py-3 px-3 text-slate-600 dark:text-slate-300">{row.total}</td>
-                      <td className="py-3 px-3 text-emerald-600 font-semibold">{row.completed}</td>
-                      <td className="py-3 px-3 text-rose-600 font-semibold">{row.overdue}</td>
-                      <td className="py-3 pl-3">
+                      <td className="py-3 px-3">
                         <div className="flex items-center gap-2">
-                          <div className="h-1.5 w-24 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                          <div className="h-1.5 w-20 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                             <div className="h-full bg-emerald-500" style={{ width: `${row.completionRate}%` }} />
                           </div>
+                          <span className="text-emerald-600 font-semibold">{row.completed} / {row.total}</span>
                           <span className="text-[10px] font-bold text-slate-500">{row.completionRate}%</span>
                         </div>
                       </td>
+                      <td className="py-3 px-3 text-rose-600 font-semibold">{row.overdue}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -627,37 +816,72 @@ export default function TaskAnalytics() {
             {!data.today?.assignees?.length ? (
               <p className="py-8 text-center text-sm text-slate-500">No tasks planned or due today.</p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead>
-                    <tr className="text-[10px] uppercase tracking-widest text-slate-500 border-b border-slate-200 dark:border-slate-800">
-                      <th className="py-2 pr-4">Name</th>
-                      <th className="py-2 px-3">Role</th>
-                      <th className="py-2 px-3">Today&apos;s Tasks</th>
-                      <th className="py-2 px-3">Completed</th>
-                      <th className="py-2 pl-3">Completion</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.today.assignees.map((row) => (
-                      <tr key={row.id || row.name} className="border-b border-slate-100 dark:border-slate-800 last:border-none">
-                        <td className="py-3 pr-4 font-bold text-slate-800 dark:text-slate-100">{row.name}</td>
-                        <td className="py-3 px-3 text-slate-500">{row.role?.replaceAll("_", " ") || "—"}</td>
-                        <td className="py-3 px-3 text-slate-600 dark:text-slate-300">{row.total}</td>
-                        <td className="py-3 px-3 text-emerald-600 font-semibold">{row.completed}</td>
-                        <td className="py-3 pl-3">
-                          <div className="flex items-center gap-2">
-                            <div className="h-1.5 w-24 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                              <div className="h-full bg-emerald-500" style={{ width: `${row.completionRate}%` }} />
-                            </div>
-                            <span className="text-[10px] font-bold text-slate-500">{row.completionRate}%</span>
-                          </div>
-                        </td>
+              <>
+                {/* Mobile / tablet cards */}
+                <div className="lg:hidden space-y-3">
+                  {data.today.assignees.map((row) => (
+                    <div key={row.id || row.name} className="rounded-xl border border-slate-200 dark:border-slate-800 p-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-slate-800 dark:text-slate-100 break-words">{row.name}</p>
+                          <p className="text-[10px] text-slate-500">{row.role?.replaceAll("_", " ") || "—"}</p>
+                        </div>
+                        <span className="text-xs font-bold text-emerald-600 shrink-0">{row.completionRate}%</span>
+                      </div>
+                      <div className="mt-3">
+                        <TodayTaskList tasks={row.tasks} />
+                      </div>
+                      <div className="mt-3 grid grid-cols-2 gap-2 text-center">
+                        <div className="rounded-lg bg-slate-50 dark:bg-slate-800/60 py-2">
+                          <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Tasks</p>
+                          <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{row.total}</p>
+                        </div>
+                        <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/20 py-2">
+                          <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-600">Completed</p>
+                          <p className="text-sm font-bold text-emerald-700 dark:text-emerald-400">{row.completed} / {row.total}</p>
+                        </div>
+                      </div>
+                      <div className="h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden mt-3">
+                        <div className="h-full bg-emerald-500" style={{ width: `${row.completionRate}%` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop table */}
+                <div className="hidden lg:block overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead>
+                      <tr className="text-[10px] uppercase tracking-widest text-slate-500 border-b border-slate-200 dark:border-slate-800">
+                        <th className="py-2 pr-4">Name</th>
+                        <th className="py-2 px-3">Role</th>
+                        <th className="py-2 px-3">Today&apos;s Tasks</th>
+                        <th className="py-2 px-3">Completed</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {data.today.assignees.map((row) => (
+                        <tr key={row.id || row.name} className="border-b border-slate-100 dark:border-slate-800 last:border-none">
+                          <td className="py-3 pr-4 font-bold text-slate-800 dark:text-slate-100">{row.name}</td>
+                          <td className="py-3 px-3 text-slate-500">{row.role?.replaceAll("_", " ") || "—"}</td>
+                          <td className="py-3 px-3 max-w-md">
+                            <TodayTaskList tasks={row.tasks} />
+                          </td>
+                          <td className="py-3 px-3">
+                            <div className="flex items-center gap-2">
+                              <div className="h-1.5 w-20 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                                <div className="h-full bg-emerald-500" style={{ width: `${row.completionRate}%` }} />
+                              </div>
+                              <span className="text-emerald-600 font-semibold">{row.completed} / {row.total}</span>
+                              <span className="text-[10px] font-bold text-slate-500">{row.completionRate}%</span>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
           </section>
           )}

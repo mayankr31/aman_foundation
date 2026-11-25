@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { ToastProvider } from "@/context/ToastContext";
+import { ConfirmProvider } from "@/context/ConfirmContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { PwaProvider } from "@/components/pwa/PwaProvider";
 import { FilePreviewProvider } from "@/components/files/FilePreviewProvider";
@@ -59,13 +60,15 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-full flex bg-surface text-on-surface">
         <ToastProvider>
-          <AuthProvider>
-            <PwaProvider>
-              <FilePreviewProvider>
-                <LayoutWrapper>{children}</LayoutWrapper>
-              </FilePreviewProvider>
-            </PwaProvider>
-          </AuthProvider>
+          <ConfirmProvider>
+            <AuthProvider>
+              <PwaProvider>
+                <FilePreviewProvider>
+                  <LayoutWrapper>{children}</LayoutWrapper>
+                </FilePreviewProvider>
+              </PwaProvider>
+            </AuthProvider>
+          </ConfirmProvider>
         </ToastProvider>
       </body>
     </html>

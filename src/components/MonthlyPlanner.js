@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import { formatDate } from "@/lib/date";
 import { canDeleteTaskRecord } from "@/lib/taskPermissions";
 
@@ -12,6 +14,8 @@ export default function MonthlyPlanner({
   canEdit = true,
 }) {
   const { token, user } = useAuth();
+  const toast = useToast();
+  const confirm = useConfirm();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -161,7 +165,13 @@ export default function MonthlyPlanner({
 
   const handleDeleteTask = async (taskId, e) => {
     e.stopPropagation();
-    if (!confirm("Are you sure you want to delete this task?")) return;
+    const confirmed = await confirm({
+      title: "Delete Task",
+      message: "Are you sure you want to delete this task?",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/tasks/${taskId}`, {
         method: "DELETE",
@@ -169,9 +179,13 @@ export default function MonthlyPlanner({
       });
       if (res.ok) {
         setTasks(tasks.filter(t => t.id !== taskId));
+        toast.success("Task deleted");
+      } else {
+        toast.error("Failed to delete task");
       }
     } catch (err) {
       console.error(err);
+      toast.error("Failed to delete task");
     }
   };
 

@@ -48,6 +48,11 @@ export async function GET(req) {
     const daily = searchParams.get("daily") === "1";
     const date = searchParams.get("date");
     const month = searchParams.get("month");
+    const from = searchParams.get("from");
+    const to = searchParams.get("to");
+
+    const teamIds = await getTaskTeamUserIds(user, { includeSelf: true });
+    const hasTeam = Array.isArray(teamIds) ? teamIds.length > 1 : true;
 
     const where = {};
 
@@ -58,7 +63,6 @@ export async function GET(req) {
     } else if (view === "assigned-by-me") {
       where.assignedById = user.id;
     } else if (view === "team") {
-      const teamIds = await getTaskTeamUserIds(user, { includeSelf: true });
       if (Array.isArray(teamIds)) {
         where.assigneeId = { in: teamIds };
       }
@@ -98,6 +102,16 @@ export async function GET(req) {
         { plannedDate: { gte: istDayStart(firstKey), lte: istDayEnd(lastKey) } },
         { deadline: { gte: istDayStart(firstKey), lte: istDayEnd(lastKey) } },
       ];
+    } else if (from || to) {
+      const range = {};
+      if (from && /^\d{4}-\d{2}-\d{2}$/.test(from)) range.gte = istDayStart(from);
+      if (to && /^\d{4}-\d{2}-\d{2}$/.test(to)) range.lte = istDayEnd(to);
+      if (Object.keys(range).length) {
+        where.OR = [
+          { plannedDate: range },
+          { deadline: range },
+        ];
+      }
     }
 
     const tasks = await prisma.task.findMany({
@@ -106,7 +120,7 @@ export async function GET(req) {
       orderBy: [{ status: "asc" }, { deadline: "asc" }, { plannedDate: "asc" }, { createdAt: "desc" }],
     });
 
-    return NextResponse.json({ success: true, data: tasks });
+    return NextResponse.json({ success: true, data: tasks, meta: { hasTeam } });
   } catch (error) {
     console.error("Fetch tasks error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

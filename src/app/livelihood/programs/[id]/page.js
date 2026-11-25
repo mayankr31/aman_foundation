@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import Pagination from "@/components/ui/Pagination";
 import DateInput from "@/components/ui/DateInput";
@@ -17,6 +19,8 @@ export default function ProgramDetail() {
   const { id } = useParams();
   const router = useRouter();
   const { token, user, canDeleteRecords } = useAuth();
+  const toast = useToast();
+  const confirm = useConfirm();
   const { getTypeConfig } = useLivelihoodTypes(token);
   const isAdmin = user?.roleName === "ADMIN";
 
@@ -117,12 +121,13 @@ export default function ProgramDetail() {
         setShowEnrollModal(false);
         setSelectedBenId(""); setEnrollNotes(""); setEnrollAttrs({});
         setRefreshTrigger((p) => p + 1);
-        alert("Participant enrolled successfully");
+        toast.success("Participant enrolled successfully");
       } else {
-        alert(json.error || "Failed to enroll participant");
+        toast.error(json.error || "Failed to enroll participant");
       }
     } catch (err) {
       console.error("Enroll error:", err);
+      toast.error("Failed to enroll participant");
     }
   };
 
@@ -140,12 +145,13 @@ export default function ProgramDetail() {
       if (json.success) {
         setShowEditModal(false);
         setRefreshTrigger((p) => p + 1);
-        alert("Assignment updated");
+        toast.success("Assignment updated");
       } else {
-        alert(json.error || "Failed to update assignment");
+        toast.error(json.error || "Failed to update assignment");
       }
     } catch (err) {
       console.error("Edit assignment error:", err);
+      toast.error("Failed to update assignment");
     }
   };
 
@@ -158,12 +164,13 @@ export default function ProgramDetail() {
       if (json.success) {
         setDeleteAssignId(null); setDeleteAssignName("");
         setRefreshTrigger((p) => p + 1);
-        alert("Assignment removed");
+        toast.success("Assignment removed");
       } else {
-        alert(json.error || "Failed to remove assignment");
+        toast.error(json.error || "Failed to remove assignment");
       }
     } catch (err) {
       console.error("Delete assignment error:", err);
+      toast.error("Failed to remove assignment");
     }
   };
 
@@ -173,12 +180,14 @@ export default function ProgramDetail() {
       const res = await fetch(`/api/livelihood/programs/${id}`, { method: "DELETE", headers });
       const json = await res.json();
       if (json.success) {
+        toast.success("Program deleted");
         router.push(program.category === "FARM" ? "/livelihood/farm" : "/livelihood/non-farm");
       } else {
-        alert(json.error || "Failed to delete program");
+        toast.error(json.error || "Failed to delete program");
       }
     } catch (err) {
       console.error("Delete program error:", err);
+      toast.error("Failed to delete program");
     }
   };
 
@@ -200,7 +209,8 @@ export default function ProgramDetail() {
       const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
       const res = await fetch(`/api/livelihood/programs/${id}/program-managers`, { method: "POST", headers, body: JSON.stringify({ userId }) });
       const json = await res.json();
-      if (!json.success) alert(json.error || "Failed to assign staff");
+      if (!json.success) toast.error(json.error || "Failed to assign staff");
+      else toast.success("Staff member assigned");
       setRefreshTrigger((p) => p + 1);
     } catch (err) {
       console.error("Assign program manager error:", err);
@@ -208,12 +218,19 @@ export default function ProgramDetail() {
   };
 
   const handleRemoveManager = async (userId) => {
-    if (!confirm("Remove this staff member from the program?")) return;
+    const confirmed = await confirm({
+      title: "Remove Staff Member",
+      message: "Remove this staff member from the program?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
       const res = await fetch(`/api/livelihood/programs/${id}/program-managers`, { method: "DELETE", headers, body: JSON.stringify({ userId }) });
       const json = await res.json();
-      if (!json.success) alert(json.error || "Failed to remove staff");
+      if (!json.success) toast.error(json.error || "Failed to remove staff");
+      else toast.success("Staff member removed");
       setRefreshTrigger((p) => p + 1);
     } catch (err) {
       console.error("Remove program manager error:", err);
@@ -238,7 +255,8 @@ export default function ProgramDetail() {
       const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
       const res = await fetch(`/api/livelihood/programs/${id}/fellows`, { method: "POST", headers, body: JSON.stringify({ fellowId }) });
       const json = await res.json();
-      if (!json.success) alert(json.error || "Failed to assign Fellow");
+      if (!json.success) toast.error(json.error || "Failed to assign Fellow");
+      else toast.success("Fellow assigned");
       setRefreshTrigger((p) => p + 1);
     } catch (err) {
       console.error("Assign fellow error:", err);
@@ -246,12 +264,19 @@ export default function ProgramDetail() {
   };
 
   const handleRemoveFellow = async (fellowId) => {
-    if (!confirm("Remove this Fellow from the program?")) return;
+    const confirmed = await confirm({
+      title: "Remove Fellow",
+      message: "Remove this Fellow from the program?",
+      confirmText: "Remove",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
       const res = await fetch(`/api/livelihood/programs/${id}/fellows`, { method: "DELETE", headers, body: JSON.stringify({ fellowId }) });
       const json = await res.json();
-      if (!json.success) alert(json.error || "Failed to remove Fellow");
+      if (!json.success) toast.error(json.error || "Failed to remove Fellow");
+      else toast.success("Fellow removed");
       setRefreshTrigger((p) => p + 1);
     } catch (err) {
       console.error("Remove fellow error:", err);
@@ -278,12 +303,13 @@ export default function ProgramDetail() {
         setShowEventModal(false);
         setEventType(""); setEventQuantity(""); setEventNotes(""); setEventRecordedBy(""); setEventPhoto(null);
         setRefreshTrigger((p) => p + 1);
-        alert("Event logged");
+        toast.success("Event logged");
       } else {
-        alert(json.error || "Failed to log event");
+        toast.error(json.error || "Failed to log event");
       }
     } catch (err) {
       console.error("Log event error:", err);
+      toast.error("Failed to log event");
     }
   };
 
@@ -307,29 +333,37 @@ export default function ProgramDetail() {
       if (json.success) {
         setShowEditEventModal(false);
         setRefreshTrigger((p) => p + 1);
-        alert("Event updated");
+        toast.success("Event updated");
       } else {
-        alert(json.error || "Failed to update event");
+        toast.error(json.error || "Failed to update event");
       }
     } catch (err) {
       console.error("Edit event error:", err);
+      toast.error("Failed to update event");
     }
   };
 
   const handleDeleteEvent = async (eventId) => {
-    if (!confirm("Delete this event?")) return;
+    const confirmed = await confirm({
+      title: "Delete Event",
+      message: "Delete this event?",
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
       const res = await fetch(`/api/livelihood/events/${eventId}`, { method: "DELETE", headers });
       const json = await res.json();
       if (json.success) {
         setRefreshTrigger((p) => p + 1);
-        alert("Event deleted");
+        toast.success("Event deleted");
       } else {
-        alert(json.error || "Failed to delete event");
+        toast.error(json.error || "Failed to delete event");
       }
     } catch (err) {
       console.error("Delete event error:", err);
+      toast.error("Failed to delete event");
     }
   };
 
@@ -380,7 +414,7 @@ export default function ProgramDetail() {
 
   // KPI aggregates
   const assignments = program?.assignments || [];
-  const { pageItems: pagedAssignments, currentPage, setCurrentPage } = usePagination(assignments, 10);
+  const { pageItems: pagedAssignments, currentPage, setCurrentPage } = usePagination(assignments, 10, { pageParam: "assignmentsPage" });
   const getSum = (key) => assignments.reduce((s, a) => s + (Number(a.attributes?.[key]) || 0), 0);
   const getAvg = (key) => {
     const vals = assignments.map((a) => Number(a.attributes?.[key])).filter((v) => !isNaN(v));
@@ -594,7 +628,11 @@ export default function ProgramDetail() {
         <div className="p-6 border-b border-outline-variant/10">
           <h3 className="text-lg font-bold text-on-surface">Enrolled Participants</h3>
         </div>
-        <div className="max-h-[55vh] overflow-auto pr-1">
+        <div
+          className="max-h-[55vh] overflow-auto pr-1"
+          data-list-page-param="assignmentsPage"
+          data-list-detail-prefix="/participants/"
+        >
           <table className="mobile-card-table w-full min-w-[760px] table-fixed text-sm font-sans">
             <thead className="bg-surface-container-low text-xs uppercase tracking-wider text-on-surface-variant text-left font-bold">
               <tr>
@@ -620,7 +658,7 @@ export default function ProgramDetail() {
                   const rowNumber = (currentPage - 1) * 10 + idx + 1;
                   const isExpanded = expandedAssignId === assign.id;
                   return (
-                    <><tr key={assign.id} className={`hover:bg-surface-container-low transition-colors ${idx % 2 === 0 ? "bg-white dark:bg-slate-900" : "bg-surface-container-lowest"}`}>
+                    <><tr key={assign.id} data-list-item-key={assign.id} className={`hover:bg-surface-container-low transition-colors ${idx % 2 === 0 ? "bg-white dark:bg-slate-900" : "bg-surface-container-lowest"}`}>
                       <td data-label="#" className="px-4 py-3 font-mono text-xs text-slate-400">{rowNumber}</td>
                       <td data-label="" className="px-6 py-3">
                         <div className="flex items-center gap-3 min-w-0">

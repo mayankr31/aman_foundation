@@ -4,6 +4,8 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
+import { useConfirm } from "@/context/ConfirmContext";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
@@ -12,14 +14,16 @@ import OnLeaveToday from "@/components/OnLeaveToday";
 import LeaveDetailsModal from "@/components/LeaveDetailsModal";
 import HolidayManagerModal from "@/components/holidays/HolidayManagerModal";
 import {
+  CALENDAR_QUARTERS,
   POLICY_FLAGS,
   QUOTA_PERIODS,
   QUOTA_PERIOD_OPTIONS,
-  getFinancialYearStart,
+  getCalendarYearStart,
   getPolicyFlagLabel,
 } from "@/lib/leavePolicy";
 
 const POLICY_ADMIN_ROLES = ["ADMIN", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"];
+const NO_SELF_APPLY_ROLES = ["ADMIN", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"];
 const PERIOD_LOCKED_KEYS = ["COMP_OFF", "MATERNITY", "PATERNITY", "BEREAVEMENT", "LWP"];
 
 function formatStoredDates(value) {
@@ -30,8 +34,9 @@ function emptyPolicyType() {
   return {
     name: "",
     code: "",
-    quotaPeriod: QUOTA_PERIODS.FINANCIAL_YEAR,
+    quotaPeriod: QUOTA_PERIODS.CALENDAR_YEAR,
     annualQuota: "",
+    quarterlyQuota: "",
     maxConsecutiveDays: "",
     maxConsecutiveMonths: "",
     minServiceDays: "",
@@ -63,6 +68,7 @@ function configPayload(config) {
     code: config.code || "",
     policyNote: config.policyNote || "",
     annualQuota: toQuotaNumber(config.annualQuota),
+    quarterlyQuota: toNullableNumber(config.quarterlyQuota),
     quotaPeriod: config.quotaPeriod,
     maxConsecutiveDays: toNullableNumber(config.maxConsecutiveDays),
     maxConsecutiveMonths: toNullableNumber(config.maxConsecutiveMonths),
@@ -78,12 +84,11 @@ function configPayload(config) {
 
 export default function LeaveWorkflow() {
   const { token, user: currentUser, can } = useAuth();
+  const toast = useToast();
+  const confirm = useConfirm();
   const canWrite = can("leaves", "WRITE");
   const [leaves, setLeaves] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
 
   const [rejectingLeaveId, setRejectingLeaveId] = useState(null);
   const [rejectionReasonText, setRejectionReasonText] = useState("");
@@ -100,19 +105,16 @@ export default function LeaveWorkflow() {
   const [showHolidays, setShowHolidays] = useState(false);
   const [showBalances, setShowBalances] = useState(false);
 
-  const currentFyStart = getFinancialYearStart();
-  const fiscalYearOptions = [currentFyStart, currentFyStart - 1, currentFyStart - 2];
-  const [balanceFyStart, setBalanceFyStart] = useState(currentFyStart);
+  const currentYear = getCalendarYearStart();
+  const yearOptions = [currentYear, currentYear - 1, currentYear - 2];
+  const [balanceYear, setBalanceYear] = useState(currentYear);
+  const [balanceQuarter, setBalanceQuarter] = useState(0);
   const [balances, setBalances] = useState(null);
   const [balancesLoading, setBalancesLoading] = useState(false);
   const [balancesError, setBalancesError] = useState("");
   const [balanceSearch, setBalanceSearch] = useState("");
 
-  const triggerToast = (msg) => {
-    setToastMessage(msg);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 4000);
-  };
+  const triggerToast = (msg, type = "success") => toast[type](msg);
 
   const canReview = (POLICY_ADMIN_ROLES.includes(currentUser?.roleName) || currentUser?.roleName === "ADMIN" || currentUser?.roleName === "HR" || isProgramStaffRole(currentUser?.roleName));
   const canManagePolicy = POLICY_ADMIN_ROLES.includes(currentUser?.roleName);
@@ -141,7 +143,7 @@ export default function LeaveWorkflow() {
         setLeaves(data.data || []);
       }
     } catch (err) {
-      triggerToast("Error fetching leaves");
+      triggerToast("Error fetching leaves", "error");
     } finally {
       setIsLoading(false);
     }
@@ -154,18 +156,17 @@ export default function LeaveWorkflow() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
-  const fetchBalances = async (fy) => {
+  const fetchBalances = async (year) => {
     setBalancesLoading(true);
     setBalancesError("");
     try {
-      const res = await fetch(`/api/leaves/balances?fy=${fy}`, {
+      const res = await fetch(`/api/leaves/balances?year=${year}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Unable to load leave balances");
       setBalances(data.data || null);
     } catch (err) {
-      console.error(err);
       setBalancesError(err.message || "Unable to load leave balances");
     } finally {
       setBalancesLoading(false);
@@ -174,10 +175,10 @@ export default function LeaveWorkflow() {
 
   useEffect(() => {
     if (token && canReview && showBalances) {
-      fetchBalances(balanceFyStart);
+      fetchBalances(balanceYear);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, canReview, showBalances, balanceFyStart]);
+  }, [token, canReview, showBalances, balanceYear]);
 
   const fetchPolicy = async () => {
     try {
@@ -186,8 +187,9 @@ export default function LeaveWorkflow() {
       });
       const data = await res.json();
       if (res.ok) setPolicyConfigs(data.data || []);
+      else triggerToast(data.error || "Failed to load leave policy", "error");
     } catch (err) {
-      console.error(err);
+      triggerToast(err.message || "Failed to load leave policy", "error");
     }
   };
 
@@ -210,6 +212,7 @@ export default function LeaveWorkflow() {
     if (!String(config.name || "").trim()) return true;
     const nonNegativeFields = [
       config.annualQuota,
+      config.quarterlyQuota,
       config.minServiceDays,
       config.medicalCertificateAfterDays,
     ];
@@ -242,7 +245,7 @@ export default function LeaveWorkflow() {
 
   const savePolicy = async () => {
     if (policyHasErrors) {
-      triggerToast("Please correct the highlighted policy values.");
+      triggerToast("Please correct the highlighted policy values.", "error");
       return;
     }
     setSavingPolicy(true);
@@ -260,7 +263,7 @@ export default function LeaveWorkflow() {
       setShowPolicy(false);
     } catch (err) {
       setPolicyError(err.message || "Failed to save policy");
-      triggerToast(err.message || "Failed to save policy");
+      triggerToast(err.message || "Failed to save policy", "error");
     } finally {
       setSavingPolicy(false);
     }
@@ -287,7 +290,7 @@ export default function LeaveWorkflow() {
       triggerToast("Leave type added");
     } catch (err) {
       setPolicyError(err.message || "Failed to create leave type");
-      triggerToast(err.message || "Failed to create leave type");
+      triggerToast(err.message || "Failed to create leave type", "error");
     } finally {
       setCreatingType(false);
     }
@@ -295,7 +298,13 @@ export default function LeaveWorkflow() {
 
   const deleteLeaveType = async (config) => {
     if (config.isSystem) return;
-    if (!window.confirm(`Delete "${config.name}"? Types with existing requests can only be deactivated.`)) return;
+    const confirmed = await confirm({
+      title: "Delete Leave Type",
+      message: `Delete "${config.name}"? Types with existing requests can only be deactivated.`,
+      confirmText: "Delete",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     try {
       const res = await fetch(`/api/leaves/config?key=${encodeURIComponent(config.key)}`, {
         method: "DELETE",
@@ -306,7 +315,7 @@ export default function LeaveWorkflow() {
       setPolicyConfigs((prev) => prev.filter((item) => item.key !== config.key));
       triggerToast("Leave type deleted");
     } catch (err) {
-      triggerToast(err.message || "Failed to delete leave type");
+      triggerToast(err.message || "Failed to delete leave type", "error");
     }
   };
 
@@ -328,10 +337,10 @@ export default function LeaveWorkflow() {
         fetchLeaves();
       } else {
         const errorData = await res.json();
-        triggerToast(errorData.error || "Failed to update leave");
+        triggerToast(errorData.error || "Failed to update leave", "error");
       }
     } catch (err) {
-      triggerToast("Error updating leave");
+      triggerToast("Error updating leave", "error");
     }
   };
 
@@ -342,7 +351,7 @@ export default function LeaveWorkflow() {
 
   const submitRejection = async () => {
     if (!rejectionReasonText.trim()) {
-      triggerToast("Rejection reason is required.");
+      triggerToast("Rejection reason is required.", "error");
       return;
     }
     setIsSubmittingRejection(true);
@@ -429,24 +438,44 @@ export default function LeaveWorkflow() {
                 className="w-full sm:w-52 px-3 py-1.5 text-xs rounded-full border border-outline-variant bg-transparent focus:outline-none focus:border-primary"
               />
               <select
-                value={balanceFyStart}
-                onChange={(event) => setBalanceFyStart(Number(event.target.value))}
+                value={balanceYear}
+                onChange={(event) => setBalanceYear(Number(event.target.value))}
                 className="px-3 py-1.5 text-xs font-bold rounded-full border border-outline-variant bg-transparent focus:outline-none focus:border-primary"
+                aria-label="Leave balance year"
               >
-                {fiscalYearOptions.map((fy) => (
-                  <option key={fy} value={fy}>
-                    FY {fy}-{String(fy + 1).slice(-2)}
+                {yearOptions.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={balanceQuarter}
+                onChange={(event) => setBalanceQuarter(Number(event.target.value))}
+                className="px-3 py-1.5 text-xs font-bold rounded-full border border-outline-variant bg-transparent focus:outline-none focus:border-primary"
+                aria-label="Leave balance quarter"
+              >
+                <option value={0}>Full year</option>
+                {CALENDAR_QUARTERS.map((quarter) => (
+                  <option key={quarter.quarter} value={quarter.quarter}>
+                    {quarter.label} ({quarter.months})
                   </option>
                 ))}
               </select>
             </div>
+
+          {balanceQuarter > 0 && (
+            <p className="text-[10px] text-on-surface-variant text-right mb-2">
+              Showing Q{balanceQuarter} usage. “Left” is the full-year balance.
+            </p>
+          )}
 
           {balancesError && (
             <div className="flex items-center justify-between gap-3 bg-rose-50 text-rose-700 text-xs px-3 py-2 rounded-lg mb-3">
               <span>{balancesError}</span>
               <button
                 type="button"
-                onClick={() => fetchBalances(balanceFyStart)}
+                onClick={() => fetchBalances(balanceYear)}
                 className="font-bold underline"
               >
                 Retry
@@ -493,8 +522,11 @@ export default function LeaveWorkflow() {
                       {balanceColumns.map((column) => {
                         const type = row.types[column.key];
                         const available = type?.available;
-                        const used = type?.used || 0;
-                        const pending = type?.pending || 0;
+                        const quarterData = balanceQuarter
+                          ? type?.quarters?.[balanceQuarter - 1]
+                          : null;
+                        const used = quarterData ? quarterData.used : type?.used || 0;
+                        const pending = quarterData ? quarterData.pending : type?.pending || 0;
                         return (
                           <td key={column.key} data-label={column.name} className="py-4 px-4 align-top">
                             {available == null ? (
@@ -507,6 +539,28 @@ export default function LeaveWorkflow() {
                                 <span className="text-[10px] text-on-surface-variant">
                                   {used} taken{pending > 0 ? ` · ${pending} pending` : ""}
                                 </span>
+                              </div>
+                            )}
+                            {Array.isArray(type?.quarters) && type.quarters.length > 0 && (
+                              <div className="mt-1.5 flex flex-wrap gap-1">
+                                {type.quarters.map((quarter) => (
+                                  <span
+                                    key={quarter.quarter}
+                                    className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${
+                                      balanceQuarter === quarter.quarter
+                                        ? "bg-primary/10 text-primary"
+                                        : "bg-surface-container text-on-surface-variant"
+                                    }`}
+                                    title={
+                                      quarter.quota != null
+                                        ? `${quarter.available} of ${quarter.quota} day(s) left in ${quarter.label}`
+                                        : undefined
+                                    }
+                                  >
+                                    {quarter.label} {quarter.used}
+                                    {quarter.quota != null ? `/${quarter.quota}` : ""}
+                                  </span>
+                                ))}
                               </div>
                             )}
                           </td>
@@ -545,7 +599,7 @@ export default function LeaveWorkflow() {
         <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
           <h3 className="font-headline font-bold text-xl text-on-surface">Leave Requests</h3>
           <div className="flex flex-wrap items-center gap-2">
-            {canWrite && (
+            {canWrite && !NO_SELF_APPLY_ROLES.includes(currentUser?.roleName) && (
               <Link
                 href="/hr/leaves/apply"
                 className="text-xs font-bold bg-primary text-white border border-primary px-3 py-1.5 rounded-full hover:bg-primary-container transition-colors"
@@ -798,7 +852,7 @@ export default function LeaveWorkflow() {
                     </select>
                   </label>
                   <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
-                    Entitlement (days)
+                    Entitlement (days / year)
                     <input
                       type="number"
                       min="0"
@@ -808,6 +862,20 @@ export default function LeaveWorkflow() {
                       className="mt-1 w-full px-3 py-2 border border-outline-variant/40 rounded-lg bg-transparent text-sm font-normal normal-case tracking-normal text-on-surface"
                     />
                   </label>
+                  {newPolicyType.quotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR && (
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                      Quarterly quota (days)
+                      <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={newPolicyType.quarterlyQuota}
+                        onChange={(event) => setNewPolicyType((prev) => ({ ...prev, quarterlyQuota: event.target.value }))}
+                        placeholder="Optional per-quarter cap"
+                        className="mt-1 w-full px-3 py-2 border border-outline-variant/40 rounded-lg bg-transparent text-sm font-normal normal-case tracking-normal text-on-surface"
+                      />
+                    </label>
+                  )}
                   <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                     Max consecutive days
                     <input
@@ -940,7 +1008,9 @@ export default function LeaveWorkflow() {
                         </select>
                       )}
                     </label>
-                    {renderNumberInput(config, index, "annualQuota", "Entitlement (days)")}
+                    {renderNumberInput(config, index, "annualQuota", "Entitlement (days / year)")}
+                    {config.quotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR &&
+                      renderNumberInput(config, index, "quarterlyQuota", "Quarterly quota (days)")}
                     {renderNumberInput(config, index, "maxConsecutiveDays", "Max consecutive days", { min: 1 })}
                     {renderNumberInput(config, index, "maxConsecutiveMonths", "Max consecutive months", { min: 1 })}
                     {renderNumberInput(config, index, "minServiceDays", "Min service days")}
@@ -982,13 +1052,6 @@ export default function LeaveWorkflow() {
 
       {viewingLeave && (
         <LeaveDetailsModal leave={viewingLeave} onClose={() => setViewingLeave(null)} />
-      )}
-
-      {showToast && (
-        <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-6 sm:right-6 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">
-          <span className="material-symbols-outlined text-emerald-400 text-lg shrink-0">info</span>
-          <span>{toastMessage}</span>
-        </div>
       )}
 
       {rejectingLeaveId && (
