@@ -1,7 +1,7 @@
 "use client";
  
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { extractMapEmbedUrl, isValidMapEmbedUrl } from "@/lib/mapUrl";
@@ -193,6 +193,13 @@ export default function SchoolsModule() {
     return matchesSearch && matchesLocation;
   });
 
+  const locationOptions = useMemo(() => {
+    const values = schools
+      .map((school) => (school.location || "").split(",")[0].trim())
+      .filter(Boolean);
+    return [...new Set(values)].sort((a, b) => a.localeCompare(b));
+  }, [schools]);
+
   const {
     pageItems: paginatedSchools,
     currentPage,
@@ -315,10 +322,9 @@ export default function SchoolsModule() {
               onChange={(e) => { setSelectedLocation(e.target.value); setCurrentPage(1); }}
               className="w-full pl-11 pr-10 py-2.5 bg-surface-container rounded-full border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary text-xs font-label uppercase tracking-widest text-on-surface appearance-none cursor-pointer transition-shadow"
             >
-              {["All Locations", ...Array.from(new Set(schools.map(s => s.location ? s.location.split(",")[0].trim() : "Unknown Location")))].map((loc) => (
-                <option key={loc} value={loc === "All Locations" ? "All" : loc}>
-                  {loc}
-                </option>
+              <option value="All">All Locations</option>
+              {locationOptions.map((loc) => (
+                <option key={loc} value={loc}>{loc}</option>
               ))}
             </select>
             <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">

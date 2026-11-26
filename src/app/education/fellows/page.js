@@ -1,12 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
 import Avatar from "@/components/ui/Avatar";
 import usePagination from "@/lib/usePagination";
+
+function districtOf(fellow) {
+  return (fellow.location || fellow.address || "").trim();
+}
 
 export default function FellowsModule() {
   const { token, user } = useAuth();
@@ -43,13 +47,18 @@ export default function FellowsModule() {
     };
   }, [fetchFellowsData]);
 
-  const districts = ["All", ...new Set(fellows.map((f) => f.location || f.address))];
+  const districts = useMemo(() => {
+    const values = [...new Set(fellows.map(districtOf).filter(Boolean))].sort((a, b) =>
+      a.localeCompare(b)
+    );
+    return ["All", ...values];
+  }, [fellows]);
 
   const filteredFellows = fellows.filter(
     (f) =>
       (f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (f.location && f.location.toLowerCase().includes(searchQuery.toLowerCase()))) &&
-      (selectedDistrict === "All" || f.location === selectedDistrict)
+      (selectedDistrict === "All" || districtOf(f) === selectedDistrict)
   );
 
   const handleExport = async () => {

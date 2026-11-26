@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
@@ -39,6 +39,8 @@ const EMPTY_STUDENT_FORM = {
   motherMobile: "",
   enrolmentDate: "",
 };
+
+const GRADE_GROUP_ORDER = ["Primary", "Middle", "Secondary", "Senior Secondary"];
 
 function normalizeGradeGroup(value) {
   const base = (value || "").split(" (")[0].trim();
@@ -289,6 +291,13 @@ export default function AfterSchoolStudentsModule() {
     }
   };
 
+  const gradeOptions = useMemo(() => {
+    const found = students
+      .map((student) => normalizeGradeGroup(student.gradeGroup))
+      .filter(Boolean);
+    return ["All Grades", ...new Set([...GRADE_GROUP_ORDER, ...found])];
+  }, [students]);
+
   const clearFilters = () => {
     setGradeFilter("All Grades");
     setPerformanceFilter("All Performance");
@@ -435,11 +444,9 @@ export default function AfterSchoolStudentsModule() {
               onChange={(e) => { setGradeFilter(e.target.value); setCurrentPage(1); }}
               className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
             >
-              <option>All Grades</option>
-              <option>Primary</option>
-              <option>Middle</option>
-              <option>Secondary</option>
-              <option>Senior Secondary</option>
+              {gradeOptions.map((grade) => (
+                <option key={grade}>{grade}</option>
+              ))}
             </select>
             <select
               value={performanceFilter}

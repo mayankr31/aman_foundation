@@ -10,7 +10,6 @@ import usePagination from "@/lib/usePagination";
 export default function SugarcaneCultivation() {
   const { token } = useAuth();
   const toast = useToast();
-  const [searchQuery, setSearchQuery] = useState("");
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [farmers, setFarmers] = useState([]);
   const [selectedFarmer, setSelectedFarmer] = useState(null);
@@ -99,12 +98,6 @@ export default function SugarcaneCultivation() {
     }
     loadSugarcaneData();
   }, [token, refreshTrigger]);
-
-  const [selectedLocation, setSelectedLocation] = useState("All");
-  const [selectedStage, setSelectedStage] = useState("All");
-
-  const locations = ["All", ...new Set(farmers.map((f) => f.location.split(",")[0].trim()))];
-  const stages = ["All", "Planting", "Growing", "Harvesting", "Harvested"];
 
   const handleEnrollFarmer = async (e) => {
     e.preventDefault();
@@ -341,14 +334,6 @@ export default function SugarcaneCultivation() {
       console.error("Updating sugarcane assignment error:", err);
     }
   };
-
-  const filteredFarmers = farmers.filter((f) => {
-    const matchesSearch = f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          f.location.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesLocation = selectedLocation === "All" || f.location.includes(selectedLocation);
-    const matchesStage = selectedStage === "All" || f.stage === selectedStage;
-    return matchesSearch && matchesLocation && matchesStage;
-  });
 
   const unenrolledBens = allBens.filter(b =>
     !b.schemeEnrollments.some(se => se.scheme.name.toLowerCase().includes("sugarcane"))

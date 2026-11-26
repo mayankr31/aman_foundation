@@ -824,6 +824,31 @@ exports.Prisma.FellowLivelihoodProgramScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.LivelihoodProgramActivityScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  componentTypeKey: 'componentTypeKey',
+  title: 'title',
+  description: 'description',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  createdById: 'createdById',
+  completedAt: 'completedAt',
+  completedById: 'completedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LivelihoodProgramActivityCommentScalarFieldEnum = {
+  id: 'id',
+  activityId: 'activityId',
+  authorId: 'authorId',
+  text: 'text',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.DisasterIncidentScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1646,6 +1671,8 @@ exports.Prisma.ModelName = {
   BeneficiaryLivelihood: 'BeneficiaryLivelihood',
   LivelihoodEvent: 'LivelihoodEvent',
   FellowLivelihoodProgram: 'FellowLivelihoodProgram',
+  LivelihoodProgramActivity: 'LivelihoodProgramActivity',
+  LivelihoodProgramActivityComment: 'LivelihoodProgramActivityComment',
   DisasterIncident: 'DisasterIncident',
   HelpProvider: 'HelpProvider',
   ResourceItem: 'ResourceItem',

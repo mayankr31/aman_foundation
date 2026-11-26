@@ -164,6 +164,10 @@ model User {
   teamCheckIns      TeamCheckIn[] @relation("TeamCheckInOwner")
   teamCheckInEdits  TeamCheckIn[] @relation("TeamCheckInEditor")
   verificationTokens VerificationToken[]
+
+  createdLivelihoodActivities   LivelihoodProgramActivity[] @relation("LivelihoodActivityCreator")
+  completedLivelihoodActivities LivelihoodProgramActivity[] @relation("LivelihoodActivityCompleter")
+  livelihoodActivityComments   LivelihoodProgramActivityComment[]
 }
 
 /// Single-use tokens emailed for password reset links.
@@ -978,6 +982,7 @@ model LivelihoodProgram {
   components    LivelihoodProgramComponent[]
   programManagers ProgramManagerLivelihoodProgram[]
   fellows       FellowLivelihoodProgram[]
+  activities    LivelihoodProgramActivity[]
 }
 
 model LivelihoodProgramComponent {
@@ -1065,6 +1070,47 @@ model FellowLivelihoodProgram {
 
   @@unique([fellowId, programId])
   @@index([programId])
+}
+
+/// A planned monthly activity for a livelihood program. Every assigned staff
+/// member and fellow can see it, update its status and add comments.
+model LivelihoodProgramActivity {
+  id               String    @id @default(uuid())
+  programId        String
+  componentTypeKey String?
+  title            String
+  description      String?
+  startDate        DateTime
+  endDate          DateTime
+  status           String    @default("Pending") // Pending, In Progress, Completed, Blocked, Cancelled
+  createdById      String
+  completedAt      DateTime?
+  completedById    String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  program     LivelihoodProgram                @relation(fields: [programId], references: [id], onDelete: Cascade)
+  createdBy   User                             @relation("LivelihoodActivityCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  completedBy User?                            @relation("LivelihoodActivityCompleter", fields: [completedById], references: [id], onDelete: SetNull)
+  comments    LivelihoodProgramActivityComment[]
+
+  @@index([programId, startDate])
+  @@index([programId, endDate])
+  @@index([programId, status])
+}
+
+model LivelihoodProgramActivityComment {
+  id         String   @id @default(uuid())
+  activityId String
+  authorId   String
+  text       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  activity LivelihoodProgramActivity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  author   User                      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([activityId, createdAt])
 }
 
 model DisasterIncident {

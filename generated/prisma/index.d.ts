@@ -285,6 +285,17 @@ export type LivelihoodEvent = $Result.DefaultSelection<Prisma.$LivelihoodEventPa
  */
 export type FellowLivelihoodProgram = $Result.DefaultSelection<Prisma.$FellowLivelihoodProgramPayload>
 /**
+ * Model LivelihoodProgramActivity
+ * A planned monthly activity for a livelihood program. Every assigned staff
+ * member and fellow can see it, update its status and add comments.
+ */
+export type LivelihoodProgramActivity = $Result.DefaultSelection<Prisma.$LivelihoodProgramActivityPayload>
+/**
+ * Model LivelihoodProgramActivityComment
+ * 
+ */
+export type LivelihoodProgramActivityComment = $Result.DefaultSelection<Prisma.$LivelihoodProgramActivityCommentPayload>
+/**
  * Model DisasterIncident
  * 
  */
@@ -1317,6 +1328,26 @@ export class PrismaClient<
   get fellowLivelihoodProgram(): Prisma.FellowLivelihoodProgramDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.livelihoodProgramActivity`: Exposes CRUD operations for the **LivelihoodProgramActivity** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LivelihoodProgramActivities
+    * const livelihoodProgramActivities = await prisma.livelihoodProgramActivity.findMany()
+    * ```
+    */
+  get livelihoodProgramActivity(): Prisma.LivelihoodProgramActivityDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.livelihoodProgramActivityComment`: Exposes CRUD operations for the **LivelihoodProgramActivityComment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LivelihoodProgramActivityComments
+    * const livelihoodProgramActivityComments = await prisma.livelihoodProgramActivityComment.findMany()
+    * ```
+    */
+  get livelihoodProgramActivityComment(): Prisma.LivelihoodProgramActivityCommentDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.disasterIncident`: Exposes CRUD operations for the **DisasterIncident** model.
     * Example usage:
     * ```ts
@@ -2343,6 +2374,8 @@ export namespace Prisma {
     BeneficiaryLivelihood: 'BeneficiaryLivelihood',
     LivelihoodEvent: 'LivelihoodEvent',
     FellowLivelihoodProgram: 'FellowLivelihoodProgram',
+    LivelihoodProgramActivity: 'LivelihoodProgramActivity',
+    LivelihoodProgramActivityComment: 'LivelihoodProgramActivityComment',
     DisasterIncident: 'DisasterIncident',
     HelpProvider: 'HelpProvider',
     ResourceItem: 'ResourceItem',
@@ -2412,7 +2445,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "verificationToken" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodProgramComponent" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "holiday" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "surveyTemplate" | "institutionStudentDataNote"
+      modelProps: "role" | "user" | "verificationToken" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodProgramComponent" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "livelihoodProgramActivity" | "livelihoodProgramActivityComment" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "holiday" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "surveyTemplate" | "institutionStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6409,6 +6442,154 @@ export namespace Prisma {
           count: {
             args: Prisma.FellowLivelihoodProgramCountArgs<ExtArgs>
             result: $Utils.Optional<FellowLivelihoodProgramCountAggregateOutputType> | number
+          }
+        }
+      }
+      LivelihoodProgramActivity: {
+        payload: Prisma.$LivelihoodProgramActivityPayload<ExtArgs>
+        fields: Prisma.LivelihoodProgramActivityFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LivelihoodProgramActivityFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LivelihoodProgramActivityFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload>
+          }
+          findFirst: {
+            args: Prisma.LivelihoodProgramActivityFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LivelihoodProgramActivityFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload>
+          }
+          findMany: {
+            args: Prisma.LivelihoodProgramActivityFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload>[]
+          }
+          create: {
+            args: Prisma.LivelihoodProgramActivityCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload>
+          }
+          createMany: {
+            args: Prisma.LivelihoodProgramActivityCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LivelihoodProgramActivityCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload>[]
+          }
+          delete: {
+            args: Prisma.LivelihoodProgramActivityDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload>
+          }
+          update: {
+            args: Prisma.LivelihoodProgramActivityUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload>
+          }
+          deleteMany: {
+            args: Prisma.LivelihoodProgramActivityDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LivelihoodProgramActivityUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LivelihoodProgramActivityUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload>[]
+          }
+          upsert: {
+            args: Prisma.LivelihoodProgramActivityUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityPayload>
+          }
+          aggregate: {
+            args: Prisma.LivelihoodProgramActivityAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLivelihoodProgramActivity>
+          }
+          groupBy: {
+            args: Prisma.LivelihoodProgramActivityGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LivelihoodProgramActivityGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LivelihoodProgramActivityCountArgs<ExtArgs>
+            result: $Utils.Optional<LivelihoodProgramActivityCountAggregateOutputType> | number
+          }
+        }
+      }
+      LivelihoodProgramActivityComment: {
+        payload: Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>
+        fields: Prisma.LivelihoodProgramActivityCommentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LivelihoodProgramActivityCommentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LivelihoodProgramActivityCommentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload>
+          }
+          findFirst: {
+            args: Prisma.LivelihoodProgramActivityCommentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LivelihoodProgramActivityCommentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload>
+          }
+          findMany: {
+            args: Prisma.LivelihoodProgramActivityCommentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload>[]
+          }
+          create: {
+            args: Prisma.LivelihoodProgramActivityCommentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload>
+          }
+          createMany: {
+            args: Prisma.LivelihoodProgramActivityCommentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LivelihoodProgramActivityCommentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload>[]
+          }
+          delete: {
+            args: Prisma.LivelihoodProgramActivityCommentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload>
+          }
+          update: {
+            args: Prisma.LivelihoodProgramActivityCommentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload>
+          }
+          deleteMany: {
+            args: Prisma.LivelihoodProgramActivityCommentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LivelihoodProgramActivityCommentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LivelihoodProgramActivityCommentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload>[]
+          }
+          upsert: {
+            args: Prisma.LivelihoodProgramActivityCommentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramActivityCommentPayload>
+          }
+          aggregate: {
+            args: Prisma.LivelihoodProgramActivityCommentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLivelihoodProgramActivityComment>
+          }
+          groupBy: {
+            args: Prisma.LivelihoodProgramActivityCommentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LivelihoodProgramActivityCommentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LivelihoodProgramActivityCommentCountArgs<ExtArgs>
+            result: $Utils.Optional<LivelihoodProgramActivityCommentCountAggregateOutputType> | number
           }
         }
       }
@@ -10570,6 +10751,8 @@ export namespace Prisma {
     beneficiaryLivelihood?: BeneficiaryLivelihoodOmit
     livelihoodEvent?: LivelihoodEventOmit
     fellowLivelihoodProgram?: FellowLivelihoodProgramOmit
+    livelihoodProgramActivity?: LivelihoodProgramActivityOmit
+    livelihoodProgramActivityComment?: LivelihoodProgramActivityCommentOmit
     disasterIncident?: DisasterIncidentOmit
     helpProvider?: HelpProviderOmit
     resourceItem?: ResourceItemOmit
@@ -10780,6 +10963,9 @@ export namespace Prisma {
     teamCheckIns: number
     teamCheckInEdits: number
     verificationTokens: number
+    createdLivelihoodActivities: number
+    completedLivelihoodActivities: number
+    livelihoodActivityComments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10819,6 +11005,9 @@ export namespace Prisma {
     teamCheckIns?: boolean | UserCountOutputTypeCountTeamCheckInsArgs
     teamCheckInEdits?: boolean | UserCountOutputTypeCountTeamCheckInEditsArgs
     verificationTokens?: boolean | UserCountOutputTypeCountVerificationTokensArgs
+    createdLivelihoodActivities?: boolean | UserCountOutputTypeCountCreatedLivelihoodActivitiesArgs
+    completedLivelihoodActivities?: boolean | UserCountOutputTypeCountCompletedLivelihoodActivitiesArgs
+    livelihoodActivityComments?: boolean | UserCountOutputTypeCountLivelihoodActivityCommentsArgs
   }
 
   // Custom InputTypes
@@ -11082,6 +11271,27 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountVerificationTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: VerificationTokenWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedLivelihoodActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodProgramActivityWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCompletedLivelihoodActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodProgramActivityWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLivelihoodActivityCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodProgramActivityCommentWhereInput
   }
 
 
@@ -11955,6 +12165,7 @@ export namespace Prisma {
     components: number
     programManagers: number
     fellows: number
+    activities: number
   }
 
   export type LivelihoodProgramCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11962,6 +12173,7 @@ export namespace Prisma {
     components?: boolean | LivelihoodProgramCountOutputTypeCountComponentsArgs
     programManagers?: boolean | LivelihoodProgramCountOutputTypeCountProgramManagersArgs
     fellows?: boolean | LivelihoodProgramCountOutputTypeCountFellowsArgs
+    activities?: boolean | LivelihoodProgramCountOutputTypeCountActivitiesArgs
   }
 
   // Custom InputTypes
@@ -12003,6 +12215,13 @@ export namespace Prisma {
     where?: FellowLivelihoodProgramWhereInput
   }
 
+  /**
+   * LivelihoodProgramCountOutputType without action
+   */
+  export type LivelihoodProgramCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodProgramActivityWhereInput
+  }
+
 
   /**
    * Count Type BeneficiaryLivelihoodCountOutputType
@@ -12032,6 +12251,37 @@ export namespace Prisma {
    */
   export type BeneficiaryLivelihoodCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LivelihoodEventWhereInput
+  }
+
+
+  /**
+   * Count Type LivelihoodProgramActivityCountOutputType
+   */
+
+  export type LivelihoodProgramActivityCountOutputType = {
+    comments: number
+  }
+
+  export type LivelihoodProgramActivityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    comments?: boolean | LivelihoodProgramActivityCountOutputTypeCountCommentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LivelihoodProgramActivityCountOutputType without action
+   */
+  export type LivelihoodProgramActivityCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityCountOutputType
+     */
+    select?: LivelihoodProgramActivityCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LivelihoodProgramActivityCountOutputType without action
+   */
+  export type LivelihoodProgramActivityCountOutputTypeCountCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodProgramActivityCommentWhereInput
   }
 
 
@@ -14492,6 +14742,9 @@ export namespace Prisma {
     teamCheckIns?: boolean | User$teamCheckInsArgs<ExtArgs>
     teamCheckInEdits?: boolean | User$teamCheckInEditsArgs<ExtArgs>
     verificationTokens?: boolean | User$verificationTokensArgs<ExtArgs>
+    createdLivelihoodActivities?: boolean | User$createdLivelihoodActivitiesArgs<ExtArgs>
+    completedLivelihoodActivities?: boolean | User$completedLivelihoodActivitiesArgs<ExtArgs>
+    livelihoodActivityComments?: boolean | User$livelihoodActivityCommentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -14682,6 +14935,9 @@ export namespace Prisma {
     teamCheckIns?: boolean | User$teamCheckInsArgs<ExtArgs>
     teamCheckInEdits?: boolean | User$teamCheckInEditsArgs<ExtArgs>
     verificationTokens?: boolean | User$verificationTokensArgs<ExtArgs>
+    createdLivelihoodActivities?: boolean | User$createdLivelihoodActivitiesArgs<ExtArgs>
+    completedLivelihoodActivities?: boolean | User$completedLivelihoodActivitiesArgs<ExtArgs>
+    livelihoodActivityComments?: boolean | User$livelihoodActivityCommentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14739,6 +14995,9 @@ export namespace Prisma {
       teamCheckIns: Prisma.$TeamCheckInPayload<ExtArgs>[]
       teamCheckInEdits: Prisma.$TeamCheckInPayload<ExtArgs>[]
       verificationTokens: Prisma.$VerificationTokenPayload<ExtArgs>[]
+      createdLivelihoodActivities: Prisma.$LivelihoodProgramActivityPayload<ExtArgs>[]
+      completedLivelihoodActivities: Prisma.$LivelihoodProgramActivityPayload<ExtArgs>[]
+      livelihoodActivityComments: Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15219,6 +15478,9 @@ export namespace Prisma {
     teamCheckIns<T extends User$teamCheckInsArgs<ExtArgs> = {}>(args?: Subset<T, User$teamCheckInsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     teamCheckInEdits<T extends User$teamCheckInEditsArgs<ExtArgs> = {}>(args?: Subset<T, User$teamCheckInEditsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     verificationTokens<T extends User$verificationTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$verificationTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdLivelihoodActivities<T extends User$createdLivelihoodActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdLivelihoodActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    completedLivelihoodActivities<T extends User$completedLivelihoodActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$completedLivelihoodActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    livelihoodActivityComments<T extends User$livelihoodActivityCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$livelihoodActivityCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16629,6 +16891,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: VerificationTokenScalarFieldEnum | VerificationTokenScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdLivelihoodActivities
+   */
+  export type User$createdLivelihoodActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    where?: LivelihoodProgramActivityWhereInput
+    orderBy?: LivelihoodProgramActivityOrderByWithRelationInput | LivelihoodProgramActivityOrderByWithRelationInput[]
+    cursor?: LivelihoodProgramActivityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LivelihoodProgramActivityScalarFieldEnum | LivelihoodProgramActivityScalarFieldEnum[]
+  }
+
+  /**
+   * User.completedLivelihoodActivities
+   */
+  export type User$completedLivelihoodActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    where?: LivelihoodProgramActivityWhereInput
+    orderBy?: LivelihoodProgramActivityOrderByWithRelationInput | LivelihoodProgramActivityOrderByWithRelationInput[]
+    cursor?: LivelihoodProgramActivityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LivelihoodProgramActivityScalarFieldEnum | LivelihoodProgramActivityScalarFieldEnum[]
+  }
+
+  /**
+   * User.livelihoodActivityComments
+   */
+  export type User$livelihoodActivityCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    where?: LivelihoodProgramActivityCommentWhereInput
+    orderBy?: LivelihoodProgramActivityCommentOrderByWithRelationInput | LivelihoodProgramActivityCommentOrderByWithRelationInput[]
+    cursor?: LivelihoodProgramActivityCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LivelihoodProgramActivityCommentScalarFieldEnum | LivelihoodProgramActivityCommentScalarFieldEnum[]
   }
 
   /**
@@ -71001,6 +71335,7 @@ export namespace Prisma {
     components?: boolean | LivelihoodProgram$componentsArgs<ExtArgs>
     programManagers?: boolean | LivelihoodProgram$programManagersArgs<ExtArgs>
     fellows?: boolean | LivelihoodProgram$fellowsArgs<ExtArgs>
+    activities?: boolean | LivelihoodProgram$activitiesArgs<ExtArgs>
     _count?: boolean | LivelihoodProgramCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["livelihoodProgram"]>
 
@@ -71046,6 +71381,7 @@ export namespace Prisma {
     components?: boolean | LivelihoodProgram$componentsArgs<ExtArgs>
     programManagers?: boolean | LivelihoodProgram$programManagersArgs<ExtArgs>
     fellows?: boolean | LivelihoodProgram$fellowsArgs<ExtArgs>
+    activities?: boolean | LivelihoodProgram$activitiesArgs<ExtArgs>
     _count?: boolean | LivelihoodProgramCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LivelihoodProgramIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -71058,6 +71394,7 @@ export namespace Prisma {
       components: Prisma.$LivelihoodProgramComponentPayload<ExtArgs>[]
       programManagers: Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>[]
       fellows: Prisma.$FellowLivelihoodProgramPayload<ExtArgs>[]
+      activities: Prisma.$LivelihoodProgramActivityPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -71467,6 +71804,7 @@ export namespace Prisma {
     components<T extends LivelihoodProgram$componentsArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$componentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     programManagers<T extends LivelihoodProgram$programManagersArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$programManagersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fellows<T extends LivelihoodProgram$fellowsArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$fellowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    activities<T extends LivelihoodProgram$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -71991,6 +72329,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FellowLivelihoodProgramScalarFieldEnum | FellowLivelihoodProgramScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgram.activities
+   */
+  export type LivelihoodProgram$activitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    where?: LivelihoodProgramActivityWhereInput
+    orderBy?: LivelihoodProgramActivityOrderByWithRelationInput | LivelihoodProgramActivityOrderByWithRelationInput[]
+    cursor?: LivelihoodProgramActivityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LivelihoodProgramActivityScalarFieldEnum | LivelihoodProgramActivityScalarFieldEnum[]
   }
 
   /**
@@ -77653,6 +78015,2322 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LivelihoodProgramActivity
+   */
+
+  export type AggregateLivelihoodProgramActivity = {
+    _count: LivelihoodProgramActivityCountAggregateOutputType | null
+    _min: LivelihoodProgramActivityMinAggregateOutputType | null
+    _max: LivelihoodProgramActivityMaxAggregateOutputType | null
+  }
+
+  export type LivelihoodProgramActivityMinAggregateOutputType = {
+    id: string | null
+    programId: string | null
+    componentTypeKey: string | null
+    title: string | null
+    description: string | null
+    startDate: Date | null
+    endDate: Date | null
+    status: string | null
+    createdById: string | null
+    completedAt: Date | null
+    completedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LivelihoodProgramActivityMaxAggregateOutputType = {
+    id: string | null
+    programId: string | null
+    componentTypeKey: string | null
+    title: string | null
+    description: string | null
+    startDate: Date | null
+    endDate: Date | null
+    status: string | null
+    createdById: string | null
+    completedAt: Date | null
+    completedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LivelihoodProgramActivityCountAggregateOutputType = {
+    id: number
+    programId: number
+    componentTypeKey: number
+    title: number
+    description: number
+    startDate: number
+    endDate: number
+    status: number
+    createdById: number
+    completedAt: number
+    completedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LivelihoodProgramActivityMinAggregateInputType = {
+    id?: true
+    programId?: true
+    componentTypeKey?: true
+    title?: true
+    description?: true
+    startDate?: true
+    endDate?: true
+    status?: true
+    createdById?: true
+    completedAt?: true
+    completedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LivelihoodProgramActivityMaxAggregateInputType = {
+    id?: true
+    programId?: true
+    componentTypeKey?: true
+    title?: true
+    description?: true
+    startDate?: true
+    endDate?: true
+    status?: true
+    createdById?: true
+    completedAt?: true
+    completedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LivelihoodProgramActivityCountAggregateInputType = {
+    id?: true
+    programId?: true
+    componentTypeKey?: true
+    title?: true
+    description?: true
+    startDate?: true
+    endDate?: true
+    status?: true
+    createdById?: true
+    completedAt?: true
+    completedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LivelihoodProgramActivityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LivelihoodProgramActivity to aggregate.
+     */
+    where?: LivelihoodProgramActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramActivities to fetch.
+     */
+    orderBy?: LivelihoodProgramActivityOrderByWithRelationInput | LivelihoodProgramActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LivelihoodProgramActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LivelihoodProgramActivities
+    **/
+    _count?: true | LivelihoodProgramActivityCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LivelihoodProgramActivityMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LivelihoodProgramActivityMaxAggregateInputType
+  }
+
+  export type GetLivelihoodProgramActivityAggregateType<T extends LivelihoodProgramActivityAggregateArgs> = {
+        [P in keyof T & keyof AggregateLivelihoodProgramActivity]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLivelihoodProgramActivity[P]>
+      : GetScalarType<T[P], AggregateLivelihoodProgramActivity[P]>
+  }
+
+
+
+
+  export type LivelihoodProgramActivityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodProgramActivityWhereInput
+    orderBy?: LivelihoodProgramActivityOrderByWithAggregationInput | LivelihoodProgramActivityOrderByWithAggregationInput[]
+    by: LivelihoodProgramActivityScalarFieldEnum[] | LivelihoodProgramActivityScalarFieldEnum
+    having?: LivelihoodProgramActivityScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LivelihoodProgramActivityCountAggregateInputType | true
+    _min?: LivelihoodProgramActivityMinAggregateInputType
+    _max?: LivelihoodProgramActivityMaxAggregateInputType
+  }
+
+  export type LivelihoodProgramActivityGroupByOutputType = {
+    id: string
+    programId: string
+    componentTypeKey: string | null
+    title: string
+    description: string | null
+    startDate: Date
+    endDate: Date
+    status: string
+    createdById: string
+    completedAt: Date | null
+    completedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: LivelihoodProgramActivityCountAggregateOutputType | null
+    _min: LivelihoodProgramActivityMinAggregateOutputType | null
+    _max: LivelihoodProgramActivityMaxAggregateOutputType | null
+  }
+
+  type GetLivelihoodProgramActivityGroupByPayload<T extends LivelihoodProgramActivityGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LivelihoodProgramActivityGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LivelihoodProgramActivityGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LivelihoodProgramActivityGroupByOutputType[P]>
+            : GetScalarType<T[P], LivelihoodProgramActivityGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LivelihoodProgramActivitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programId?: boolean
+    componentTypeKey?: boolean
+    title?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    status?: boolean
+    createdById?: boolean
+    completedAt?: boolean
+    completedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    completedBy?: boolean | LivelihoodProgramActivity$completedByArgs<ExtArgs>
+    comments?: boolean | LivelihoodProgramActivity$commentsArgs<ExtArgs>
+    _count?: boolean | LivelihoodProgramActivityCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["livelihoodProgramActivity"]>
+
+  export type LivelihoodProgramActivitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programId?: boolean
+    componentTypeKey?: boolean
+    title?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    status?: boolean
+    createdById?: boolean
+    completedAt?: boolean
+    completedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    completedBy?: boolean | LivelihoodProgramActivity$completedByArgs<ExtArgs>
+  }, ExtArgs["result"]["livelihoodProgramActivity"]>
+
+  export type LivelihoodProgramActivitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programId?: boolean
+    componentTypeKey?: boolean
+    title?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    status?: boolean
+    createdById?: boolean
+    completedAt?: boolean
+    completedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    completedBy?: boolean | LivelihoodProgramActivity$completedByArgs<ExtArgs>
+  }, ExtArgs["result"]["livelihoodProgramActivity"]>
+
+  export type LivelihoodProgramActivitySelectScalar = {
+    id?: boolean
+    programId?: boolean
+    componentTypeKey?: boolean
+    title?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    status?: boolean
+    createdById?: boolean
+    completedAt?: boolean
+    completedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LivelihoodProgramActivityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "componentTypeKey" | "title" | "description" | "startDate" | "endDate" | "status" | "createdById" | "completedAt" | "completedById" | "createdAt" | "updatedAt", ExtArgs["result"]["livelihoodProgramActivity"]>
+  export type LivelihoodProgramActivityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    completedBy?: boolean | LivelihoodProgramActivity$completedByArgs<ExtArgs>
+    comments?: boolean | LivelihoodProgramActivity$commentsArgs<ExtArgs>
+    _count?: boolean | LivelihoodProgramActivityCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type LivelihoodProgramActivityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    completedBy?: boolean | LivelihoodProgramActivity$completedByArgs<ExtArgs>
+  }
+  export type LivelihoodProgramActivityIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    completedBy?: boolean | LivelihoodProgramActivity$completedByArgs<ExtArgs>
+  }
+
+  export type $LivelihoodProgramActivityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LivelihoodProgramActivity"
+    objects: {
+      program: Prisma.$LivelihoodProgramPayload<ExtArgs>
+      createdBy: Prisma.$UserPayload<ExtArgs>
+      completedBy: Prisma.$UserPayload<ExtArgs> | null
+      comments: Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      programId: string
+      componentTypeKey: string | null
+      title: string
+      description: string | null
+      startDate: Date
+      endDate: Date
+      status: string
+      createdById: string
+      completedAt: Date | null
+      completedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["livelihoodProgramActivity"]>
+    composites: {}
+  }
+
+  type LivelihoodProgramActivityGetPayload<S extends boolean | null | undefined | LivelihoodProgramActivityDefaultArgs> = $Result.GetResult<Prisma.$LivelihoodProgramActivityPayload, S>
+
+  type LivelihoodProgramActivityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LivelihoodProgramActivityFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LivelihoodProgramActivityCountAggregateInputType | true
+    }
+
+  export interface LivelihoodProgramActivityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LivelihoodProgramActivity'], meta: { name: 'LivelihoodProgramActivity' } }
+    /**
+     * Find zero or one LivelihoodProgramActivity that matches the filter.
+     * @param {LivelihoodProgramActivityFindUniqueArgs} args - Arguments to find a LivelihoodProgramActivity
+     * @example
+     * // Get one LivelihoodProgramActivity
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LivelihoodProgramActivityFindUniqueArgs>(args: SelectSubset<T, LivelihoodProgramActivityFindUniqueArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LivelihoodProgramActivity that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LivelihoodProgramActivityFindUniqueOrThrowArgs} args - Arguments to find a LivelihoodProgramActivity
+     * @example
+     * // Get one LivelihoodProgramActivity
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LivelihoodProgramActivityFindUniqueOrThrowArgs>(args: SelectSubset<T, LivelihoodProgramActivityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LivelihoodProgramActivity that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityFindFirstArgs} args - Arguments to find a LivelihoodProgramActivity
+     * @example
+     * // Get one LivelihoodProgramActivity
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LivelihoodProgramActivityFindFirstArgs>(args?: SelectSubset<T, LivelihoodProgramActivityFindFirstArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LivelihoodProgramActivity that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityFindFirstOrThrowArgs} args - Arguments to find a LivelihoodProgramActivity
+     * @example
+     * // Get one LivelihoodProgramActivity
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LivelihoodProgramActivityFindFirstOrThrowArgs>(args?: SelectSubset<T, LivelihoodProgramActivityFindFirstOrThrowArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LivelihoodProgramActivities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LivelihoodProgramActivities
+     * const livelihoodProgramActivities = await prisma.livelihoodProgramActivity.findMany()
+     * 
+     * // Get first 10 LivelihoodProgramActivities
+     * const livelihoodProgramActivities = await prisma.livelihoodProgramActivity.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const livelihoodProgramActivityWithIdOnly = await prisma.livelihoodProgramActivity.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LivelihoodProgramActivityFindManyArgs>(args?: SelectSubset<T, LivelihoodProgramActivityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LivelihoodProgramActivity.
+     * @param {LivelihoodProgramActivityCreateArgs} args - Arguments to create a LivelihoodProgramActivity.
+     * @example
+     * // Create one LivelihoodProgramActivity
+     * const LivelihoodProgramActivity = await prisma.livelihoodProgramActivity.create({
+     *   data: {
+     *     // ... data to create a LivelihoodProgramActivity
+     *   }
+     * })
+     * 
+     */
+    create<T extends LivelihoodProgramActivityCreateArgs>(args: SelectSubset<T, LivelihoodProgramActivityCreateArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LivelihoodProgramActivities.
+     * @param {LivelihoodProgramActivityCreateManyArgs} args - Arguments to create many LivelihoodProgramActivities.
+     * @example
+     * // Create many LivelihoodProgramActivities
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LivelihoodProgramActivityCreateManyArgs>(args?: SelectSubset<T, LivelihoodProgramActivityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LivelihoodProgramActivities and returns the data saved in the database.
+     * @param {LivelihoodProgramActivityCreateManyAndReturnArgs} args - Arguments to create many LivelihoodProgramActivities.
+     * @example
+     * // Create many LivelihoodProgramActivities
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LivelihoodProgramActivities and only return the `id`
+     * const livelihoodProgramActivityWithIdOnly = await prisma.livelihoodProgramActivity.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LivelihoodProgramActivityCreateManyAndReturnArgs>(args?: SelectSubset<T, LivelihoodProgramActivityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LivelihoodProgramActivity.
+     * @param {LivelihoodProgramActivityDeleteArgs} args - Arguments to delete one LivelihoodProgramActivity.
+     * @example
+     * // Delete one LivelihoodProgramActivity
+     * const LivelihoodProgramActivity = await prisma.livelihoodProgramActivity.delete({
+     *   where: {
+     *     // ... filter to delete one LivelihoodProgramActivity
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LivelihoodProgramActivityDeleteArgs>(args: SelectSubset<T, LivelihoodProgramActivityDeleteArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LivelihoodProgramActivity.
+     * @param {LivelihoodProgramActivityUpdateArgs} args - Arguments to update one LivelihoodProgramActivity.
+     * @example
+     * // Update one LivelihoodProgramActivity
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LivelihoodProgramActivityUpdateArgs>(args: SelectSubset<T, LivelihoodProgramActivityUpdateArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LivelihoodProgramActivities.
+     * @param {LivelihoodProgramActivityDeleteManyArgs} args - Arguments to filter LivelihoodProgramActivities to delete.
+     * @example
+     * // Delete a few LivelihoodProgramActivities
+     * const { count } = await prisma.livelihoodProgramActivity.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LivelihoodProgramActivityDeleteManyArgs>(args?: SelectSubset<T, LivelihoodProgramActivityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LivelihoodProgramActivities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LivelihoodProgramActivities
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LivelihoodProgramActivityUpdateManyArgs>(args: SelectSubset<T, LivelihoodProgramActivityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LivelihoodProgramActivities and returns the data updated in the database.
+     * @param {LivelihoodProgramActivityUpdateManyAndReturnArgs} args - Arguments to update many LivelihoodProgramActivities.
+     * @example
+     * // Update many LivelihoodProgramActivities
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LivelihoodProgramActivities and only return the `id`
+     * const livelihoodProgramActivityWithIdOnly = await prisma.livelihoodProgramActivity.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LivelihoodProgramActivityUpdateManyAndReturnArgs>(args: SelectSubset<T, LivelihoodProgramActivityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LivelihoodProgramActivity.
+     * @param {LivelihoodProgramActivityUpsertArgs} args - Arguments to update or create a LivelihoodProgramActivity.
+     * @example
+     * // Update or create a LivelihoodProgramActivity
+     * const livelihoodProgramActivity = await prisma.livelihoodProgramActivity.upsert({
+     *   create: {
+     *     // ... data to create a LivelihoodProgramActivity
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LivelihoodProgramActivity we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LivelihoodProgramActivityUpsertArgs>(args: SelectSubset<T, LivelihoodProgramActivityUpsertArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LivelihoodProgramActivities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityCountArgs} args - Arguments to filter LivelihoodProgramActivities to count.
+     * @example
+     * // Count the number of LivelihoodProgramActivities
+     * const count = await prisma.livelihoodProgramActivity.count({
+     *   where: {
+     *     // ... the filter for the LivelihoodProgramActivities we want to count
+     *   }
+     * })
+    **/
+    count<T extends LivelihoodProgramActivityCountArgs>(
+      args?: Subset<T, LivelihoodProgramActivityCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LivelihoodProgramActivityCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LivelihoodProgramActivity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LivelihoodProgramActivityAggregateArgs>(args: Subset<T, LivelihoodProgramActivityAggregateArgs>): Prisma.PrismaPromise<GetLivelihoodProgramActivityAggregateType<T>>
+
+    /**
+     * Group by LivelihoodProgramActivity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LivelihoodProgramActivityGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LivelihoodProgramActivityGroupByArgs['orderBy'] }
+        : { orderBy?: LivelihoodProgramActivityGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LivelihoodProgramActivityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLivelihoodProgramActivityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LivelihoodProgramActivity model
+   */
+  readonly fields: LivelihoodProgramActivityFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LivelihoodProgramActivity.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LivelihoodProgramActivityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    program<T extends LivelihoodProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgramDefaultArgs<ExtArgs>>): Prisma__LivelihoodProgramClient<$Result.GetResult<Prisma.$LivelihoodProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    completedBy<T extends LivelihoodProgramActivity$completedByArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgramActivity$completedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    comments<T extends LivelihoodProgramActivity$commentsArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgramActivity$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LivelihoodProgramActivity model
+   */
+  interface LivelihoodProgramActivityFieldRefs {
+    readonly id: FieldRef<"LivelihoodProgramActivity", 'String'>
+    readonly programId: FieldRef<"LivelihoodProgramActivity", 'String'>
+    readonly componentTypeKey: FieldRef<"LivelihoodProgramActivity", 'String'>
+    readonly title: FieldRef<"LivelihoodProgramActivity", 'String'>
+    readonly description: FieldRef<"LivelihoodProgramActivity", 'String'>
+    readonly startDate: FieldRef<"LivelihoodProgramActivity", 'DateTime'>
+    readonly endDate: FieldRef<"LivelihoodProgramActivity", 'DateTime'>
+    readonly status: FieldRef<"LivelihoodProgramActivity", 'String'>
+    readonly createdById: FieldRef<"LivelihoodProgramActivity", 'String'>
+    readonly completedAt: FieldRef<"LivelihoodProgramActivity", 'DateTime'>
+    readonly completedById: FieldRef<"LivelihoodProgramActivity", 'String'>
+    readonly createdAt: FieldRef<"LivelihoodProgramActivity", 'DateTime'>
+    readonly updatedAt: FieldRef<"LivelihoodProgramActivity", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LivelihoodProgramActivity findUnique
+   */
+  export type LivelihoodProgramActivityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivity to fetch.
+     */
+    where: LivelihoodProgramActivityWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramActivity findUniqueOrThrow
+   */
+  export type LivelihoodProgramActivityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivity to fetch.
+     */
+    where: LivelihoodProgramActivityWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramActivity findFirst
+   */
+  export type LivelihoodProgramActivityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivity to fetch.
+     */
+    where?: LivelihoodProgramActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramActivities to fetch.
+     */
+    orderBy?: LivelihoodProgramActivityOrderByWithRelationInput | LivelihoodProgramActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LivelihoodProgramActivities.
+     */
+    cursor?: LivelihoodProgramActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodProgramActivities.
+     */
+    distinct?: LivelihoodProgramActivityScalarFieldEnum | LivelihoodProgramActivityScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramActivity findFirstOrThrow
+   */
+  export type LivelihoodProgramActivityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivity to fetch.
+     */
+    where?: LivelihoodProgramActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramActivities to fetch.
+     */
+    orderBy?: LivelihoodProgramActivityOrderByWithRelationInput | LivelihoodProgramActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LivelihoodProgramActivities.
+     */
+    cursor?: LivelihoodProgramActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodProgramActivities.
+     */
+    distinct?: LivelihoodProgramActivityScalarFieldEnum | LivelihoodProgramActivityScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramActivity findMany
+   */
+  export type LivelihoodProgramActivityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivities to fetch.
+     */
+    where?: LivelihoodProgramActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramActivities to fetch.
+     */
+    orderBy?: LivelihoodProgramActivityOrderByWithRelationInput | LivelihoodProgramActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LivelihoodProgramActivities.
+     */
+    cursor?: LivelihoodProgramActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodProgramActivities.
+     */
+    distinct?: LivelihoodProgramActivityScalarFieldEnum | LivelihoodProgramActivityScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramActivity create
+   */
+  export type LivelihoodProgramActivityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LivelihoodProgramActivity.
+     */
+    data: XOR<LivelihoodProgramActivityCreateInput, LivelihoodProgramActivityUncheckedCreateInput>
+  }
+
+  /**
+   * LivelihoodProgramActivity createMany
+   */
+  export type LivelihoodProgramActivityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LivelihoodProgramActivities.
+     */
+    data: LivelihoodProgramActivityCreateManyInput | LivelihoodProgramActivityCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LivelihoodProgramActivity createManyAndReturn
+   */
+  export type LivelihoodProgramActivityCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * The data used to create many LivelihoodProgramActivities.
+     */
+    data: LivelihoodProgramActivityCreateManyInput | LivelihoodProgramActivityCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LivelihoodProgramActivity update
+   */
+  export type LivelihoodProgramActivityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LivelihoodProgramActivity.
+     */
+    data: XOR<LivelihoodProgramActivityUpdateInput, LivelihoodProgramActivityUncheckedUpdateInput>
+    /**
+     * Choose, which LivelihoodProgramActivity to update.
+     */
+    where: LivelihoodProgramActivityWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramActivity updateMany
+   */
+  export type LivelihoodProgramActivityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LivelihoodProgramActivities.
+     */
+    data: XOR<LivelihoodProgramActivityUpdateManyMutationInput, LivelihoodProgramActivityUncheckedUpdateManyInput>
+    /**
+     * Filter which LivelihoodProgramActivities to update
+     */
+    where?: LivelihoodProgramActivityWhereInput
+    /**
+     * Limit how many LivelihoodProgramActivities to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LivelihoodProgramActivity updateManyAndReturn
+   */
+  export type LivelihoodProgramActivityUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * The data used to update LivelihoodProgramActivities.
+     */
+    data: XOR<LivelihoodProgramActivityUpdateManyMutationInput, LivelihoodProgramActivityUncheckedUpdateManyInput>
+    /**
+     * Filter which LivelihoodProgramActivities to update
+     */
+    where?: LivelihoodProgramActivityWhereInput
+    /**
+     * Limit how many LivelihoodProgramActivities to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LivelihoodProgramActivity upsert
+   */
+  export type LivelihoodProgramActivityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LivelihoodProgramActivity to update in case it exists.
+     */
+    where: LivelihoodProgramActivityWhereUniqueInput
+    /**
+     * In case the LivelihoodProgramActivity found by the `where` argument doesn't exist, create a new LivelihoodProgramActivity with this data.
+     */
+    create: XOR<LivelihoodProgramActivityCreateInput, LivelihoodProgramActivityUncheckedCreateInput>
+    /**
+     * In case the LivelihoodProgramActivity was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LivelihoodProgramActivityUpdateInput, LivelihoodProgramActivityUncheckedUpdateInput>
+  }
+
+  /**
+   * LivelihoodProgramActivity delete
+   */
+  export type LivelihoodProgramActivityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+    /**
+     * Filter which LivelihoodProgramActivity to delete.
+     */
+    where: LivelihoodProgramActivityWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramActivity deleteMany
+   */
+  export type LivelihoodProgramActivityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LivelihoodProgramActivities to delete
+     */
+    where?: LivelihoodProgramActivityWhereInput
+    /**
+     * Limit how many LivelihoodProgramActivities to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LivelihoodProgramActivity.completedBy
+   */
+  export type LivelihoodProgramActivity$completedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * LivelihoodProgramActivity.comments
+   */
+  export type LivelihoodProgramActivity$commentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    where?: LivelihoodProgramActivityCommentWhereInput
+    orderBy?: LivelihoodProgramActivityCommentOrderByWithRelationInput | LivelihoodProgramActivityCommentOrderByWithRelationInput[]
+    cursor?: LivelihoodProgramActivityCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LivelihoodProgramActivityCommentScalarFieldEnum | LivelihoodProgramActivityCommentScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramActivity without action
+   */
+  export type LivelihoodProgramActivityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivity
+     */
+    select?: LivelihoodProgramActivitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivity
+     */
+    omit?: LivelihoodProgramActivityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LivelihoodProgramActivityComment
+   */
+
+  export type AggregateLivelihoodProgramActivityComment = {
+    _count: LivelihoodProgramActivityCommentCountAggregateOutputType | null
+    _min: LivelihoodProgramActivityCommentMinAggregateOutputType | null
+    _max: LivelihoodProgramActivityCommentMaxAggregateOutputType | null
+  }
+
+  export type LivelihoodProgramActivityCommentMinAggregateOutputType = {
+    id: string | null
+    activityId: string | null
+    authorId: string | null
+    text: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LivelihoodProgramActivityCommentMaxAggregateOutputType = {
+    id: string | null
+    activityId: string | null
+    authorId: string | null
+    text: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LivelihoodProgramActivityCommentCountAggregateOutputType = {
+    id: number
+    activityId: number
+    authorId: number
+    text: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LivelihoodProgramActivityCommentMinAggregateInputType = {
+    id?: true
+    activityId?: true
+    authorId?: true
+    text?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LivelihoodProgramActivityCommentMaxAggregateInputType = {
+    id?: true
+    activityId?: true
+    authorId?: true
+    text?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LivelihoodProgramActivityCommentCountAggregateInputType = {
+    id?: true
+    activityId?: true
+    authorId?: true
+    text?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LivelihoodProgramActivityCommentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LivelihoodProgramActivityComment to aggregate.
+     */
+    where?: LivelihoodProgramActivityCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramActivityComments to fetch.
+     */
+    orderBy?: LivelihoodProgramActivityCommentOrderByWithRelationInput | LivelihoodProgramActivityCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LivelihoodProgramActivityCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramActivityComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramActivityComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LivelihoodProgramActivityComments
+    **/
+    _count?: true | LivelihoodProgramActivityCommentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LivelihoodProgramActivityCommentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LivelihoodProgramActivityCommentMaxAggregateInputType
+  }
+
+  export type GetLivelihoodProgramActivityCommentAggregateType<T extends LivelihoodProgramActivityCommentAggregateArgs> = {
+        [P in keyof T & keyof AggregateLivelihoodProgramActivityComment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLivelihoodProgramActivityComment[P]>
+      : GetScalarType<T[P], AggregateLivelihoodProgramActivityComment[P]>
+  }
+
+
+
+
+  export type LivelihoodProgramActivityCommentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodProgramActivityCommentWhereInput
+    orderBy?: LivelihoodProgramActivityCommentOrderByWithAggregationInput | LivelihoodProgramActivityCommentOrderByWithAggregationInput[]
+    by: LivelihoodProgramActivityCommentScalarFieldEnum[] | LivelihoodProgramActivityCommentScalarFieldEnum
+    having?: LivelihoodProgramActivityCommentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LivelihoodProgramActivityCommentCountAggregateInputType | true
+    _min?: LivelihoodProgramActivityCommentMinAggregateInputType
+    _max?: LivelihoodProgramActivityCommentMaxAggregateInputType
+  }
+
+  export type LivelihoodProgramActivityCommentGroupByOutputType = {
+    id: string
+    activityId: string
+    authorId: string
+    text: string
+    createdAt: Date
+    updatedAt: Date
+    _count: LivelihoodProgramActivityCommentCountAggregateOutputType | null
+    _min: LivelihoodProgramActivityCommentMinAggregateOutputType | null
+    _max: LivelihoodProgramActivityCommentMaxAggregateOutputType | null
+  }
+
+  type GetLivelihoodProgramActivityCommentGroupByPayload<T extends LivelihoodProgramActivityCommentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LivelihoodProgramActivityCommentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LivelihoodProgramActivityCommentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LivelihoodProgramActivityCommentGroupByOutputType[P]>
+            : GetScalarType<T[P], LivelihoodProgramActivityCommentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LivelihoodProgramActivityCommentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    activityId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    activity?: boolean | LivelihoodProgramActivityDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["livelihoodProgramActivityComment"]>
+
+  export type LivelihoodProgramActivityCommentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    activityId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    activity?: boolean | LivelihoodProgramActivityDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["livelihoodProgramActivityComment"]>
+
+  export type LivelihoodProgramActivityCommentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    activityId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    activity?: boolean | LivelihoodProgramActivityDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["livelihoodProgramActivityComment"]>
+
+  export type LivelihoodProgramActivityCommentSelectScalar = {
+    id?: boolean
+    activityId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LivelihoodProgramActivityCommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "activityId" | "authorId" | "text" | "createdAt" | "updatedAt", ExtArgs["result"]["livelihoodProgramActivityComment"]>
+  export type LivelihoodProgramActivityCommentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    activity?: boolean | LivelihoodProgramActivityDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type LivelihoodProgramActivityCommentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    activity?: boolean | LivelihoodProgramActivityDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type LivelihoodProgramActivityCommentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    activity?: boolean | LivelihoodProgramActivityDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $LivelihoodProgramActivityCommentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LivelihoodProgramActivityComment"
+    objects: {
+      activity: Prisma.$LivelihoodProgramActivityPayload<ExtArgs>
+      author: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      activityId: string
+      authorId: string
+      text: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["livelihoodProgramActivityComment"]>
+    composites: {}
+  }
+
+  type LivelihoodProgramActivityCommentGetPayload<S extends boolean | null | undefined | LivelihoodProgramActivityCommentDefaultArgs> = $Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload, S>
+
+  type LivelihoodProgramActivityCommentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LivelihoodProgramActivityCommentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LivelihoodProgramActivityCommentCountAggregateInputType | true
+    }
+
+  export interface LivelihoodProgramActivityCommentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LivelihoodProgramActivityComment'], meta: { name: 'LivelihoodProgramActivityComment' } }
+    /**
+     * Find zero or one LivelihoodProgramActivityComment that matches the filter.
+     * @param {LivelihoodProgramActivityCommentFindUniqueArgs} args - Arguments to find a LivelihoodProgramActivityComment
+     * @example
+     * // Get one LivelihoodProgramActivityComment
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LivelihoodProgramActivityCommentFindUniqueArgs>(args: SelectSubset<T, LivelihoodProgramActivityCommentFindUniqueArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityCommentClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LivelihoodProgramActivityComment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LivelihoodProgramActivityCommentFindUniqueOrThrowArgs} args - Arguments to find a LivelihoodProgramActivityComment
+     * @example
+     * // Get one LivelihoodProgramActivityComment
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LivelihoodProgramActivityCommentFindUniqueOrThrowArgs>(args: SelectSubset<T, LivelihoodProgramActivityCommentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityCommentClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LivelihoodProgramActivityComment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityCommentFindFirstArgs} args - Arguments to find a LivelihoodProgramActivityComment
+     * @example
+     * // Get one LivelihoodProgramActivityComment
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LivelihoodProgramActivityCommentFindFirstArgs>(args?: SelectSubset<T, LivelihoodProgramActivityCommentFindFirstArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityCommentClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LivelihoodProgramActivityComment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityCommentFindFirstOrThrowArgs} args - Arguments to find a LivelihoodProgramActivityComment
+     * @example
+     * // Get one LivelihoodProgramActivityComment
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LivelihoodProgramActivityCommentFindFirstOrThrowArgs>(args?: SelectSubset<T, LivelihoodProgramActivityCommentFindFirstOrThrowArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityCommentClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LivelihoodProgramActivityComments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityCommentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LivelihoodProgramActivityComments
+     * const livelihoodProgramActivityComments = await prisma.livelihoodProgramActivityComment.findMany()
+     * 
+     * // Get first 10 LivelihoodProgramActivityComments
+     * const livelihoodProgramActivityComments = await prisma.livelihoodProgramActivityComment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const livelihoodProgramActivityCommentWithIdOnly = await prisma.livelihoodProgramActivityComment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LivelihoodProgramActivityCommentFindManyArgs>(args?: SelectSubset<T, LivelihoodProgramActivityCommentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LivelihoodProgramActivityComment.
+     * @param {LivelihoodProgramActivityCommentCreateArgs} args - Arguments to create a LivelihoodProgramActivityComment.
+     * @example
+     * // Create one LivelihoodProgramActivityComment
+     * const LivelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.create({
+     *   data: {
+     *     // ... data to create a LivelihoodProgramActivityComment
+     *   }
+     * })
+     * 
+     */
+    create<T extends LivelihoodProgramActivityCommentCreateArgs>(args: SelectSubset<T, LivelihoodProgramActivityCommentCreateArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityCommentClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LivelihoodProgramActivityComments.
+     * @param {LivelihoodProgramActivityCommentCreateManyArgs} args - Arguments to create many LivelihoodProgramActivityComments.
+     * @example
+     * // Create many LivelihoodProgramActivityComments
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LivelihoodProgramActivityCommentCreateManyArgs>(args?: SelectSubset<T, LivelihoodProgramActivityCommentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LivelihoodProgramActivityComments and returns the data saved in the database.
+     * @param {LivelihoodProgramActivityCommentCreateManyAndReturnArgs} args - Arguments to create many LivelihoodProgramActivityComments.
+     * @example
+     * // Create many LivelihoodProgramActivityComments
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LivelihoodProgramActivityComments and only return the `id`
+     * const livelihoodProgramActivityCommentWithIdOnly = await prisma.livelihoodProgramActivityComment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LivelihoodProgramActivityCommentCreateManyAndReturnArgs>(args?: SelectSubset<T, LivelihoodProgramActivityCommentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LivelihoodProgramActivityComment.
+     * @param {LivelihoodProgramActivityCommentDeleteArgs} args - Arguments to delete one LivelihoodProgramActivityComment.
+     * @example
+     * // Delete one LivelihoodProgramActivityComment
+     * const LivelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.delete({
+     *   where: {
+     *     // ... filter to delete one LivelihoodProgramActivityComment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LivelihoodProgramActivityCommentDeleteArgs>(args: SelectSubset<T, LivelihoodProgramActivityCommentDeleteArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityCommentClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LivelihoodProgramActivityComment.
+     * @param {LivelihoodProgramActivityCommentUpdateArgs} args - Arguments to update one LivelihoodProgramActivityComment.
+     * @example
+     * // Update one LivelihoodProgramActivityComment
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LivelihoodProgramActivityCommentUpdateArgs>(args: SelectSubset<T, LivelihoodProgramActivityCommentUpdateArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityCommentClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LivelihoodProgramActivityComments.
+     * @param {LivelihoodProgramActivityCommentDeleteManyArgs} args - Arguments to filter LivelihoodProgramActivityComments to delete.
+     * @example
+     * // Delete a few LivelihoodProgramActivityComments
+     * const { count } = await prisma.livelihoodProgramActivityComment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LivelihoodProgramActivityCommentDeleteManyArgs>(args?: SelectSubset<T, LivelihoodProgramActivityCommentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LivelihoodProgramActivityComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityCommentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LivelihoodProgramActivityComments
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LivelihoodProgramActivityCommentUpdateManyArgs>(args: SelectSubset<T, LivelihoodProgramActivityCommentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LivelihoodProgramActivityComments and returns the data updated in the database.
+     * @param {LivelihoodProgramActivityCommentUpdateManyAndReturnArgs} args - Arguments to update many LivelihoodProgramActivityComments.
+     * @example
+     * // Update many LivelihoodProgramActivityComments
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LivelihoodProgramActivityComments and only return the `id`
+     * const livelihoodProgramActivityCommentWithIdOnly = await prisma.livelihoodProgramActivityComment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LivelihoodProgramActivityCommentUpdateManyAndReturnArgs>(args: SelectSubset<T, LivelihoodProgramActivityCommentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LivelihoodProgramActivityComment.
+     * @param {LivelihoodProgramActivityCommentUpsertArgs} args - Arguments to update or create a LivelihoodProgramActivityComment.
+     * @example
+     * // Update or create a LivelihoodProgramActivityComment
+     * const livelihoodProgramActivityComment = await prisma.livelihoodProgramActivityComment.upsert({
+     *   create: {
+     *     // ... data to create a LivelihoodProgramActivityComment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LivelihoodProgramActivityComment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LivelihoodProgramActivityCommentUpsertArgs>(args: SelectSubset<T, LivelihoodProgramActivityCommentUpsertArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityCommentClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityCommentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LivelihoodProgramActivityComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityCommentCountArgs} args - Arguments to filter LivelihoodProgramActivityComments to count.
+     * @example
+     * // Count the number of LivelihoodProgramActivityComments
+     * const count = await prisma.livelihoodProgramActivityComment.count({
+     *   where: {
+     *     // ... the filter for the LivelihoodProgramActivityComments we want to count
+     *   }
+     * })
+    **/
+    count<T extends LivelihoodProgramActivityCommentCountArgs>(
+      args?: Subset<T, LivelihoodProgramActivityCommentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LivelihoodProgramActivityCommentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LivelihoodProgramActivityComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityCommentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LivelihoodProgramActivityCommentAggregateArgs>(args: Subset<T, LivelihoodProgramActivityCommentAggregateArgs>): Prisma.PrismaPromise<GetLivelihoodProgramActivityCommentAggregateType<T>>
+
+    /**
+     * Group by LivelihoodProgramActivityComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramActivityCommentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LivelihoodProgramActivityCommentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LivelihoodProgramActivityCommentGroupByArgs['orderBy'] }
+        : { orderBy?: LivelihoodProgramActivityCommentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LivelihoodProgramActivityCommentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLivelihoodProgramActivityCommentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LivelihoodProgramActivityComment model
+   */
+  readonly fields: LivelihoodProgramActivityCommentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LivelihoodProgramActivityComment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LivelihoodProgramActivityCommentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    activity<T extends LivelihoodProgramActivityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgramActivityDefaultArgs<ExtArgs>>): Prisma__LivelihoodProgramActivityClient<$Result.GetResult<Prisma.$LivelihoodProgramActivityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LivelihoodProgramActivityComment model
+   */
+  interface LivelihoodProgramActivityCommentFieldRefs {
+    readonly id: FieldRef<"LivelihoodProgramActivityComment", 'String'>
+    readonly activityId: FieldRef<"LivelihoodProgramActivityComment", 'String'>
+    readonly authorId: FieldRef<"LivelihoodProgramActivityComment", 'String'>
+    readonly text: FieldRef<"LivelihoodProgramActivityComment", 'String'>
+    readonly createdAt: FieldRef<"LivelihoodProgramActivityComment", 'DateTime'>
+    readonly updatedAt: FieldRef<"LivelihoodProgramActivityComment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LivelihoodProgramActivityComment findUnique
+   */
+  export type LivelihoodProgramActivityCommentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivityComment to fetch.
+     */
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramActivityComment findUniqueOrThrow
+   */
+  export type LivelihoodProgramActivityCommentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivityComment to fetch.
+     */
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramActivityComment findFirst
+   */
+  export type LivelihoodProgramActivityCommentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivityComment to fetch.
+     */
+    where?: LivelihoodProgramActivityCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramActivityComments to fetch.
+     */
+    orderBy?: LivelihoodProgramActivityCommentOrderByWithRelationInput | LivelihoodProgramActivityCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LivelihoodProgramActivityComments.
+     */
+    cursor?: LivelihoodProgramActivityCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramActivityComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramActivityComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodProgramActivityComments.
+     */
+    distinct?: LivelihoodProgramActivityCommentScalarFieldEnum | LivelihoodProgramActivityCommentScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramActivityComment findFirstOrThrow
+   */
+  export type LivelihoodProgramActivityCommentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivityComment to fetch.
+     */
+    where?: LivelihoodProgramActivityCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramActivityComments to fetch.
+     */
+    orderBy?: LivelihoodProgramActivityCommentOrderByWithRelationInput | LivelihoodProgramActivityCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LivelihoodProgramActivityComments.
+     */
+    cursor?: LivelihoodProgramActivityCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramActivityComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramActivityComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodProgramActivityComments.
+     */
+    distinct?: LivelihoodProgramActivityCommentScalarFieldEnum | LivelihoodProgramActivityCommentScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramActivityComment findMany
+   */
+  export type LivelihoodProgramActivityCommentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramActivityComments to fetch.
+     */
+    where?: LivelihoodProgramActivityCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramActivityComments to fetch.
+     */
+    orderBy?: LivelihoodProgramActivityCommentOrderByWithRelationInput | LivelihoodProgramActivityCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LivelihoodProgramActivityComments.
+     */
+    cursor?: LivelihoodProgramActivityCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramActivityComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramActivityComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodProgramActivityComments.
+     */
+    distinct?: LivelihoodProgramActivityCommentScalarFieldEnum | LivelihoodProgramActivityCommentScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramActivityComment create
+   */
+  export type LivelihoodProgramActivityCommentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LivelihoodProgramActivityComment.
+     */
+    data: XOR<LivelihoodProgramActivityCommentCreateInput, LivelihoodProgramActivityCommentUncheckedCreateInput>
+  }
+
+  /**
+   * LivelihoodProgramActivityComment createMany
+   */
+  export type LivelihoodProgramActivityCommentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LivelihoodProgramActivityComments.
+     */
+    data: LivelihoodProgramActivityCommentCreateManyInput | LivelihoodProgramActivityCommentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LivelihoodProgramActivityComment createManyAndReturn
+   */
+  export type LivelihoodProgramActivityCommentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * The data used to create many LivelihoodProgramActivityComments.
+     */
+    data: LivelihoodProgramActivityCommentCreateManyInput | LivelihoodProgramActivityCommentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LivelihoodProgramActivityComment update
+   */
+  export type LivelihoodProgramActivityCommentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LivelihoodProgramActivityComment.
+     */
+    data: XOR<LivelihoodProgramActivityCommentUpdateInput, LivelihoodProgramActivityCommentUncheckedUpdateInput>
+    /**
+     * Choose, which LivelihoodProgramActivityComment to update.
+     */
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramActivityComment updateMany
+   */
+  export type LivelihoodProgramActivityCommentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LivelihoodProgramActivityComments.
+     */
+    data: XOR<LivelihoodProgramActivityCommentUpdateManyMutationInput, LivelihoodProgramActivityCommentUncheckedUpdateManyInput>
+    /**
+     * Filter which LivelihoodProgramActivityComments to update
+     */
+    where?: LivelihoodProgramActivityCommentWhereInput
+    /**
+     * Limit how many LivelihoodProgramActivityComments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LivelihoodProgramActivityComment updateManyAndReturn
+   */
+  export type LivelihoodProgramActivityCommentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * The data used to update LivelihoodProgramActivityComments.
+     */
+    data: XOR<LivelihoodProgramActivityCommentUpdateManyMutationInput, LivelihoodProgramActivityCommentUncheckedUpdateManyInput>
+    /**
+     * Filter which LivelihoodProgramActivityComments to update
+     */
+    where?: LivelihoodProgramActivityCommentWhereInput
+    /**
+     * Limit how many LivelihoodProgramActivityComments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LivelihoodProgramActivityComment upsert
+   */
+  export type LivelihoodProgramActivityCommentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LivelihoodProgramActivityComment to update in case it exists.
+     */
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+    /**
+     * In case the LivelihoodProgramActivityComment found by the `where` argument doesn't exist, create a new LivelihoodProgramActivityComment with this data.
+     */
+    create: XOR<LivelihoodProgramActivityCommentCreateInput, LivelihoodProgramActivityCommentUncheckedCreateInput>
+    /**
+     * In case the LivelihoodProgramActivityComment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LivelihoodProgramActivityCommentUpdateInput, LivelihoodProgramActivityCommentUncheckedUpdateInput>
+  }
+
+  /**
+   * LivelihoodProgramActivityComment delete
+   */
+  export type LivelihoodProgramActivityCommentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
+    /**
+     * Filter which LivelihoodProgramActivityComment to delete.
+     */
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramActivityComment deleteMany
+   */
+  export type LivelihoodProgramActivityCommentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LivelihoodProgramActivityComments to delete
+     */
+    where?: LivelihoodProgramActivityCommentWhereInput
+    /**
+     * Limit how many LivelihoodProgramActivityComments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LivelihoodProgramActivityComment without action
+   */
+  export type LivelihoodProgramActivityCommentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramActivityComment
+     */
+    select?: LivelihoodProgramActivityCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramActivityComment
+     */
+    omit?: LivelihoodProgramActivityCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramActivityCommentInclude<ExtArgs> | null
   }
 
 
@@ -141618,6 +144296,37 @@ export namespace Prisma {
   export type FellowLivelihoodProgramScalarFieldEnum = (typeof FellowLivelihoodProgramScalarFieldEnum)[keyof typeof FellowLivelihoodProgramScalarFieldEnum]
 
 
+  export const LivelihoodProgramActivityScalarFieldEnum: {
+    id: 'id',
+    programId: 'programId',
+    componentTypeKey: 'componentTypeKey',
+    title: 'title',
+    description: 'description',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    status: 'status',
+    createdById: 'createdById',
+    completedAt: 'completedAt',
+    completedById: 'completedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LivelihoodProgramActivityScalarFieldEnum = (typeof LivelihoodProgramActivityScalarFieldEnum)[keyof typeof LivelihoodProgramActivityScalarFieldEnum]
+
+
+  export const LivelihoodProgramActivityCommentScalarFieldEnum: {
+    id: 'id',
+    activityId: 'activityId',
+    authorId: 'authorId',
+    text: 'text',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LivelihoodProgramActivityCommentScalarFieldEnum = (typeof LivelihoodProgramActivityCommentScalarFieldEnum)[keyof typeof LivelihoodProgramActivityCommentScalarFieldEnum]
+
+
   export const DisasterIncidentScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -142869,6 +145578,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInListRelationFilter
     teamCheckInEdits?: TeamCheckInListRelationFilter
     verificationTokens?: VerificationTokenListRelationFilter
+    createdLivelihoodActivities?: LivelihoodProgramActivityListRelationFilter
+    completedLivelihoodActivities?: LivelihoodProgramActivityListRelationFilter
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -142956,6 +145668,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInOrderByRelationAggregateInput
     teamCheckInEdits?: TeamCheckInOrderByRelationAggregateInput
     verificationTokens?: VerificationTokenOrderByRelationAggregateInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityOrderByRelationAggregateInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityOrderByRelationAggregateInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -143046,6 +145761,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInListRelationFilter
     teamCheckInEdits?: TeamCheckInListRelationFilter
     verificationTokens?: VerificationTokenListRelationFilter
+    createdLivelihoodActivities?: LivelihoodProgramActivityListRelationFilter
+    completedLivelihoodActivities?: LivelihoodProgramActivityListRelationFilter
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentListRelationFilter
   }, "id" | "username" | "email" | "employeeId">
 
   export type UserOrderByWithAggregationInput = {
@@ -146997,6 +149715,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentListRelationFilter
     programManagers?: ProgramManagerLivelihoodProgramListRelationFilter
     fellows?: FellowLivelihoodProgramListRelationFilter
+    activities?: LivelihoodProgramActivityListRelationFilter
   }
 
   export type LivelihoodProgramOrderByWithRelationInput = {
@@ -147013,6 +149732,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentOrderByRelationAggregateInput
     programManagers?: ProgramManagerLivelihoodProgramOrderByRelationAggregateInput
     fellows?: FellowLivelihoodProgramOrderByRelationAggregateInput
+    activities?: LivelihoodProgramActivityOrderByRelationAggregateInput
   }
 
   export type LivelihoodProgramWhereUniqueInput = Prisma.AtLeast<{
@@ -147032,6 +149752,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentListRelationFilter
     programManagers?: ProgramManagerLivelihoodProgramListRelationFilter
     fellows?: FellowLivelihoodProgramListRelationFilter
+    activities?: LivelihoodProgramActivityListRelationFilter
   }, "id">
 
   export type LivelihoodProgramOrderByWithAggregationInput = {
@@ -147454,6 +150175,173 @@ export namespace Prisma {
     fellowId?: StringWithAggregatesFilter<"FellowLivelihoodProgram"> | string
     programId?: StringWithAggregatesFilter<"FellowLivelihoodProgram"> | string
     createdAt?: DateTimeWithAggregatesFilter<"FellowLivelihoodProgram"> | Date | string
+  }
+
+  export type LivelihoodProgramActivityWhereInput = {
+    AND?: LivelihoodProgramActivityWhereInput | LivelihoodProgramActivityWhereInput[]
+    OR?: LivelihoodProgramActivityWhereInput[]
+    NOT?: LivelihoodProgramActivityWhereInput | LivelihoodProgramActivityWhereInput[]
+    id?: StringFilter<"LivelihoodProgramActivity"> | string
+    programId?: StringFilter<"LivelihoodProgramActivity"> | string
+    componentTypeKey?: StringNullableFilter<"LivelihoodProgramActivity"> | string | null
+    title?: StringFilter<"LivelihoodProgramActivity"> | string
+    description?: StringNullableFilter<"LivelihoodProgramActivity"> | string | null
+    startDate?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    endDate?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    status?: StringFilter<"LivelihoodProgramActivity"> | string
+    createdById?: StringFilter<"LivelihoodProgramActivity"> | string
+    completedAt?: DateTimeNullableFilter<"LivelihoodProgramActivity"> | Date | string | null
+    completedById?: StringNullableFilter<"LivelihoodProgramActivity"> | string | null
+    createdAt?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    program?: XOR<LivelihoodProgramScalarRelationFilter, LivelihoodProgramWhereInput>
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    completedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    comments?: LivelihoodProgramActivityCommentListRelationFilter
+  }
+
+  export type LivelihoodProgramActivityOrderByWithRelationInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    componentTypeKey?: SortOrderInput | SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    completedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    program?: LivelihoodProgramOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    completedBy?: UserOrderByWithRelationInput
+    comments?: LivelihoodProgramActivityCommentOrderByRelationAggregateInput
+  }
+
+  export type LivelihoodProgramActivityWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LivelihoodProgramActivityWhereInput | LivelihoodProgramActivityWhereInput[]
+    OR?: LivelihoodProgramActivityWhereInput[]
+    NOT?: LivelihoodProgramActivityWhereInput | LivelihoodProgramActivityWhereInput[]
+    programId?: StringFilter<"LivelihoodProgramActivity"> | string
+    componentTypeKey?: StringNullableFilter<"LivelihoodProgramActivity"> | string | null
+    title?: StringFilter<"LivelihoodProgramActivity"> | string
+    description?: StringNullableFilter<"LivelihoodProgramActivity"> | string | null
+    startDate?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    endDate?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    status?: StringFilter<"LivelihoodProgramActivity"> | string
+    createdById?: StringFilter<"LivelihoodProgramActivity"> | string
+    completedAt?: DateTimeNullableFilter<"LivelihoodProgramActivity"> | Date | string | null
+    completedById?: StringNullableFilter<"LivelihoodProgramActivity"> | string | null
+    createdAt?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    program?: XOR<LivelihoodProgramScalarRelationFilter, LivelihoodProgramWhereInput>
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    completedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    comments?: LivelihoodProgramActivityCommentListRelationFilter
+  }, "id">
+
+  export type LivelihoodProgramActivityOrderByWithAggregationInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    componentTypeKey?: SortOrderInput | SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    completedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LivelihoodProgramActivityCountOrderByAggregateInput
+    _max?: LivelihoodProgramActivityMaxOrderByAggregateInput
+    _min?: LivelihoodProgramActivityMinOrderByAggregateInput
+  }
+
+  export type LivelihoodProgramActivityScalarWhereWithAggregatesInput = {
+    AND?: LivelihoodProgramActivityScalarWhereWithAggregatesInput | LivelihoodProgramActivityScalarWhereWithAggregatesInput[]
+    OR?: LivelihoodProgramActivityScalarWhereWithAggregatesInput[]
+    NOT?: LivelihoodProgramActivityScalarWhereWithAggregatesInput | LivelihoodProgramActivityScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LivelihoodProgramActivity"> | string
+    programId?: StringWithAggregatesFilter<"LivelihoodProgramActivity"> | string
+    componentTypeKey?: StringNullableWithAggregatesFilter<"LivelihoodProgramActivity"> | string | null
+    title?: StringWithAggregatesFilter<"LivelihoodProgramActivity"> | string
+    description?: StringNullableWithAggregatesFilter<"LivelihoodProgramActivity"> | string | null
+    startDate?: DateTimeWithAggregatesFilter<"LivelihoodProgramActivity"> | Date | string
+    endDate?: DateTimeWithAggregatesFilter<"LivelihoodProgramActivity"> | Date | string
+    status?: StringWithAggregatesFilter<"LivelihoodProgramActivity"> | string
+    createdById?: StringWithAggregatesFilter<"LivelihoodProgramActivity"> | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"LivelihoodProgramActivity"> | Date | string | null
+    completedById?: StringNullableWithAggregatesFilter<"LivelihoodProgramActivity"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"LivelihoodProgramActivity"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LivelihoodProgramActivity"> | Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentWhereInput = {
+    AND?: LivelihoodProgramActivityCommentWhereInput | LivelihoodProgramActivityCommentWhereInput[]
+    OR?: LivelihoodProgramActivityCommentWhereInput[]
+    NOT?: LivelihoodProgramActivityCommentWhereInput | LivelihoodProgramActivityCommentWhereInput[]
+    id?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    activityId?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    authorId?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    text?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    createdAt?: DateTimeFilter<"LivelihoodProgramActivityComment"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodProgramActivityComment"> | Date | string
+    activity?: XOR<LivelihoodProgramActivityScalarRelationFilter, LivelihoodProgramActivityWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type LivelihoodProgramActivityCommentOrderByWithRelationInput = {
+    id?: SortOrder
+    activityId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    activity?: LivelihoodProgramActivityOrderByWithRelationInput
+    author?: UserOrderByWithRelationInput
+  }
+
+  export type LivelihoodProgramActivityCommentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LivelihoodProgramActivityCommentWhereInput | LivelihoodProgramActivityCommentWhereInput[]
+    OR?: LivelihoodProgramActivityCommentWhereInput[]
+    NOT?: LivelihoodProgramActivityCommentWhereInput | LivelihoodProgramActivityCommentWhereInput[]
+    activityId?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    authorId?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    text?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    createdAt?: DateTimeFilter<"LivelihoodProgramActivityComment"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodProgramActivityComment"> | Date | string
+    activity?: XOR<LivelihoodProgramActivityScalarRelationFilter, LivelihoodProgramActivityWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type LivelihoodProgramActivityCommentOrderByWithAggregationInput = {
+    id?: SortOrder
+    activityId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LivelihoodProgramActivityCommentCountOrderByAggregateInput
+    _max?: LivelihoodProgramActivityCommentMaxOrderByAggregateInput
+    _min?: LivelihoodProgramActivityCommentMinOrderByAggregateInput
+  }
+
+  export type LivelihoodProgramActivityCommentScalarWhereWithAggregatesInput = {
+    AND?: LivelihoodProgramActivityCommentScalarWhereWithAggregatesInput | LivelihoodProgramActivityCommentScalarWhereWithAggregatesInput[]
+    OR?: LivelihoodProgramActivityCommentScalarWhereWithAggregatesInput[]
+    NOT?: LivelihoodProgramActivityCommentScalarWhereWithAggregatesInput | LivelihoodProgramActivityCommentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LivelihoodProgramActivityComment"> | string
+    activityId?: StringWithAggregatesFilter<"LivelihoodProgramActivityComment"> | string
+    authorId?: StringWithAggregatesFilter<"LivelihoodProgramActivityComment"> | string
+    text?: StringWithAggregatesFilter<"LivelihoodProgramActivityComment"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"LivelihoodProgramActivityComment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LivelihoodProgramActivityComment"> | Date | string
   }
 
   export type DisasterIncidentWhereInput = {
@@ -152138,6 +155026,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -152222,6 +155113,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUpdateInput = {
@@ -152306,6 +155200,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -152390,6 +155287,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -156741,6 +159641,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateInput = {
@@ -156757,6 +159658,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUpdateInput = {
@@ -156773,6 +159675,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateInput = {
@@ -156789,6 +159692,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramCreateManyInput = {
@@ -157243,6 +160147,180 @@ export namespace Prisma {
     fellowId?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityCreateInput = {
+    id?: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    program: LivelihoodProgramCreateNestedOneWithoutActivitiesInput
+    createdBy: UserCreateNestedOneWithoutCreatedLivelihoodActivitiesInput
+    completedBy?: UserCreateNestedOneWithoutCompletedLivelihoodActivitiesInput
+    comments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutActivityInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedCreateInput = {
+    id?: string
+    programId: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    createdById: string
+    completedAt?: Date | string | null
+    completedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutActivityInput
+  }
+
+  export type LivelihoodProgramActivityUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    program?: LivelihoodProgramUpdateOneRequiredWithoutActivitiesNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedLivelihoodActivitiesNestedInput
+    completedBy?: UserUpdateOneWithoutCompletedLivelihoodActivitiesNestedInput
+    comments?: LivelihoodProgramActivityCommentUpdateManyWithoutActivityNestedInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutActivityNestedInput
+  }
+
+  export type LivelihoodProgramActivityCreateManyInput = {
+    id?: string
+    programId: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    createdById: string
+    completedAt?: Date | string | null
+    completedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramActivityUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentCreateInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activity: LivelihoodProgramActivityCreateNestedOneWithoutCommentsInput
+    author: UserCreateNestedOneWithoutLivelihoodActivityCommentsInput
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedCreateInput = {
+    id?: string
+    activityId: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activity?: LivelihoodProgramActivityUpdateOneRequiredWithoutCommentsNestedInput
+    author?: UserUpdateOneRequiredWithoutLivelihoodActivityCommentsNestedInput
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentCreateManyInput = {
+    id?: string
+    activityId: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DisasterIncidentCreateInput = {
@@ -162570,6 +165648,18 @@ export namespace Prisma {
     none?: VerificationTokenWhereInput
   }
 
+  export type LivelihoodProgramActivityListRelationFilter = {
+    every?: LivelihoodProgramActivityWhereInput
+    some?: LivelihoodProgramActivityWhereInput
+    none?: LivelihoodProgramActivityWhereInput
+  }
+
+  export type LivelihoodProgramActivityCommentListRelationFilter = {
+    every?: LivelihoodProgramActivityCommentWhereInput
+    some?: LivelihoodProgramActivityCommentWhereInput
+    none?: LivelihoodProgramActivityCommentWhereInput
+  }
+
   export type UserPermissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -162671,6 +165761,14 @@ export namespace Prisma {
   }
 
   export type VerificationTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LivelihoodProgramActivityOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LivelihoodProgramActivityCommentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -165782,6 +168880,86 @@ export namespace Prisma {
     fellowId?: SortOrder
     programId?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type LivelihoodProgramActivityCountOrderByAggregateInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    componentTypeKey?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    completedAt?: SortOrder
+    completedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodProgramActivityMaxOrderByAggregateInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    componentTypeKey?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    completedAt?: SortOrder
+    completedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodProgramActivityMinOrderByAggregateInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    componentTypeKey?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    status?: SortOrder
+    createdById?: SortOrder
+    completedAt?: SortOrder
+    completedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodProgramActivityScalarRelationFilter = {
+    is?: LivelihoodProgramActivityWhereInput
+    isNot?: LivelihoodProgramActivityWhereInput
+  }
+
+  export type LivelihoodProgramActivityCommentCountOrderByAggregateInput = {
+    id?: SortOrder
+    activityId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodProgramActivityCommentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    activityId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodProgramActivityCommentMinOrderByAggregateInput = {
+    id?: SortOrder
+    activityId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type IncidentResourceNeedListRelationFilter = {
@@ -168965,6 +172143,27 @@ export namespace Prisma {
     connect?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
   }
 
+  export type LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCreatedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput> | LivelihoodProgramActivityCreateWithoutCreatedByInput[] | LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCreatedByInput | LivelihoodProgramActivityCreateOrConnectWithoutCreatedByInput[]
+    createMany?: LivelihoodProgramActivityCreateManyCreatedByInputEnvelope
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+  }
+
+  export type LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCompletedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput> | LivelihoodProgramActivityCreateWithoutCompletedByInput[] | LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCompletedByInput | LivelihoodProgramActivityCreateOrConnectWithoutCompletedByInput[]
+    createMany?: LivelihoodProgramActivityCreateManyCompletedByInputEnvelope
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+  }
+
+  export type LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<LivelihoodProgramActivityCommentCreateWithoutAuthorInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput> | LivelihoodProgramActivityCommentCreateWithoutAuthorInput[] | LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: LivelihoodProgramActivityCommentCreateOrConnectWithoutAuthorInput | LivelihoodProgramActivityCommentCreateOrConnectWithoutAuthorInput[]
+    createMany?: LivelihoodProgramActivityCommentCreateManyAuthorInputEnvelope
+    connect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+  }
+
   export type UserPermissionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -169227,6 +172426,27 @@ export namespace Prisma {
     connectOrCreate?: VerificationTokenCreateOrConnectWithoutUserInput | VerificationTokenCreateOrConnectWithoutUserInput[]
     createMany?: VerificationTokenCreateManyUserInputEnvelope
     connect?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+  }
+
+  export type LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCreatedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput> | LivelihoodProgramActivityCreateWithoutCreatedByInput[] | LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCreatedByInput | LivelihoodProgramActivityCreateOrConnectWithoutCreatedByInput[]
+    createMany?: LivelihoodProgramActivityCreateManyCreatedByInputEnvelope
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+  }
+
+  export type LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCompletedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput> | LivelihoodProgramActivityCreateWithoutCompletedByInput[] | LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCompletedByInput | LivelihoodProgramActivityCreateOrConnectWithoutCompletedByInput[]
+    createMany?: LivelihoodProgramActivityCreateManyCompletedByInputEnvelope
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<LivelihoodProgramActivityCommentCreateWithoutAuthorInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput> | LivelihoodProgramActivityCommentCreateWithoutAuthorInput[] | LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: LivelihoodProgramActivityCommentCreateOrConnectWithoutAuthorInput | LivelihoodProgramActivityCommentCreateOrConnectWithoutAuthorInput[]
+    createMany?: LivelihoodProgramActivityCommentCreateManyAuthorInputEnvelope
+    connect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
   }
 
   export type EnumUserStatusFieldUpdateOperationsInput = {
@@ -169797,6 +173017,48 @@ export namespace Prisma {
     deleteMany?: VerificationTokenScalarWhereInput | VerificationTokenScalarWhereInput[]
   }
 
+  export type LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCreatedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput> | LivelihoodProgramActivityCreateWithoutCreatedByInput[] | LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCreatedByInput | LivelihoodProgramActivityCreateOrConnectWithoutCreatedByInput[]
+    upsert?: LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCreatedByInput | LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: LivelihoodProgramActivityCreateManyCreatedByInputEnvelope
+    set?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    update?: LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCreatedByInput | LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: LivelihoodProgramActivityUpdateManyWithWhereWithoutCreatedByInput | LivelihoodProgramActivityUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: LivelihoodProgramActivityScalarWhereInput | LivelihoodProgramActivityScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCompletedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput> | LivelihoodProgramActivityCreateWithoutCompletedByInput[] | LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCompletedByInput | LivelihoodProgramActivityCreateOrConnectWithoutCompletedByInput[]
+    upsert?: LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCompletedByInput | LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCompletedByInput[]
+    createMany?: LivelihoodProgramActivityCreateManyCompletedByInputEnvelope
+    set?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    update?: LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCompletedByInput | LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCompletedByInput[]
+    updateMany?: LivelihoodProgramActivityUpdateManyWithWhereWithoutCompletedByInput | LivelihoodProgramActivityUpdateManyWithWhereWithoutCompletedByInput[]
+    deleteMany?: LivelihoodProgramActivityScalarWhereInput | LivelihoodProgramActivityScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCommentCreateWithoutAuthorInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput> | LivelihoodProgramActivityCommentCreateWithoutAuthorInput[] | LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: LivelihoodProgramActivityCommentCreateOrConnectWithoutAuthorInput | LivelihoodProgramActivityCommentCreateOrConnectWithoutAuthorInput[]
+    upsert?: LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutAuthorInput | LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: LivelihoodProgramActivityCommentCreateManyAuthorInputEnvelope
+    set?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    update?: LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutAuthorInput | LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutAuthorInput | LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: LivelihoodProgramActivityCommentScalarWhereInput | LivelihoodProgramActivityCommentScalarWhereInput[]
+  }
+
   export type UserPermissionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -170319,6 +173581,48 @@ export namespace Prisma {
     update?: VerificationTokenUpdateWithWhereUniqueWithoutUserInput | VerificationTokenUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: VerificationTokenUpdateManyWithWhereWithoutUserInput | VerificationTokenUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: VerificationTokenScalarWhereInput | VerificationTokenScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCreatedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput> | LivelihoodProgramActivityCreateWithoutCreatedByInput[] | LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCreatedByInput | LivelihoodProgramActivityCreateOrConnectWithoutCreatedByInput[]
+    upsert?: LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCreatedByInput | LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: LivelihoodProgramActivityCreateManyCreatedByInputEnvelope
+    set?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    update?: LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCreatedByInput | LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: LivelihoodProgramActivityUpdateManyWithWhereWithoutCreatedByInput | LivelihoodProgramActivityUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: LivelihoodProgramActivityScalarWhereInput | LivelihoodProgramActivityScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCompletedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput> | LivelihoodProgramActivityCreateWithoutCompletedByInput[] | LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCompletedByInput | LivelihoodProgramActivityCreateOrConnectWithoutCompletedByInput[]
+    upsert?: LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCompletedByInput | LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCompletedByInput[]
+    createMany?: LivelihoodProgramActivityCreateManyCompletedByInputEnvelope
+    set?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    update?: LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCompletedByInput | LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCompletedByInput[]
+    updateMany?: LivelihoodProgramActivityUpdateManyWithWhereWithoutCompletedByInput | LivelihoodProgramActivityUpdateManyWithWhereWithoutCompletedByInput[]
+    deleteMany?: LivelihoodProgramActivityScalarWhereInput | LivelihoodProgramActivityScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCommentCreateWithoutAuthorInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput> | LivelihoodProgramActivityCommentCreateWithoutAuthorInput[] | LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: LivelihoodProgramActivityCommentCreateOrConnectWithoutAuthorInput | LivelihoodProgramActivityCommentCreateOrConnectWithoutAuthorInput[]
+    upsert?: LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutAuthorInput | LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: LivelihoodProgramActivityCommentCreateManyAuthorInputEnvelope
+    set?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    update?: LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutAuthorInput | LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutAuthorInput | LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: LivelihoodProgramActivityCommentScalarWhereInput | LivelihoodProgramActivityCommentScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutVerificationTokensInput = {
@@ -173749,6 +177053,13 @@ export namespace Prisma {
     connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
   }
 
+  export type LivelihoodProgramActivityCreateNestedManyWithoutProgramInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutProgramInput, LivelihoodProgramActivityUncheckedCreateWithoutProgramInput> | LivelihoodProgramActivityCreateWithoutProgramInput[] | LivelihoodProgramActivityUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutProgramInput | LivelihoodProgramActivityCreateOrConnectWithoutProgramInput[]
+    createMany?: LivelihoodProgramActivityCreateManyProgramInputEnvelope
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+  }
+
   export type BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput = {
     create?: XOR<BeneficiaryLivelihoodCreateWithoutProgramInput, BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput> | BeneficiaryLivelihoodCreateWithoutProgramInput[] | BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput[]
     connectOrCreate?: BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput | BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput[]
@@ -173775,6 +177086,13 @@ export namespace Prisma {
     connectOrCreate?: FellowLivelihoodProgramCreateOrConnectWithoutProgramInput | FellowLivelihoodProgramCreateOrConnectWithoutProgramInput[]
     createMany?: FellowLivelihoodProgramCreateManyProgramInputEnvelope
     connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+  }
+
+  export type LivelihoodProgramActivityUncheckedCreateNestedManyWithoutProgramInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutProgramInput, LivelihoodProgramActivityUncheckedCreateWithoutProgramInput> | LivelihoodProgramActivityCreateWithoutProgramInput[] | LivelihoodProgramActivityUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutProgramInput | LivelihoodProgramActivityCreateOrConnectWithoutProgramInput[]
+    createMany?: LivelihoodProgramActivityCreateManyProgramInputEnvelope
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
   }
 
   export type EnumLivelihoodCategoryFieldUpdateOperationsInput = {
@@ -173837,6 +177155,20 @@ export namespace Prisma {
     deleteMany?: FellowLivelihoodProgramScalarWhereInput | FellowLivelihoodProgramScalarWhereInput[]
   }
 
+  export type LivelihoodProgramActivityUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutProgramInput, LivelihoodProgramActivityUncheckedCreateWithoutProgramInput> | LivelihoodProgramActivityCreateWithoutProgramInput[] | LivelihoodProgramActivityUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutProgramInput | LivelihoodProgramActivityCreateOrConnectWithoutProgramInput[]
+    upsert?: LivelihoodProgramActivityUpsertWithWhereUniqueWithoutProgramInput | LivelihoodProgramActivityUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: LivelihoodProgramActivityCreateManyProgramInputEnvelope
+    set?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    update?: LivelihoodProgramActivityUpdateWithWhereUniqueWithoutProgramInput | LivelihoodProgramActivityUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: LivelihoodProgramActivityUpdateManyWithWhereWithoutProgramInput | LivelihoodProgramActivityUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: LivelihoodProgramActivityScalarWhereInput | LivelihoodProgramActivityScalarWhereInput[]
+  }
+
   export type BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput = {
     create?: XOR<BeneficiaryLivelihoodCreateWithoutProgramInput, BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput> | BeneficiaryLivelihoodCreateWithoutProgramInput[] | BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput[]
     connectOrCreate?: BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput | BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput[]
@@ -173891,6 +177223,20 @@ export namespace Prisma {
     update?: FellowLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput | FellowLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput[]
     updateMany?: FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput | FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput[]
     deleteMany?: FellowLivelihoodProgramScalarWhereInput | FellowLivelihoodProgramScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutProgramInput, LivelihoodProgramActivityUncheckedCreateWithoutProgramInput> | LivelihoodProgramActivityCreateWithoutProgramInput[] | LivelihoodProgramActivityUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutProgramInput | LivelihoodProgramActivityCreateOrConnectWithoutProgramInput[]
+    upsert?: LivelihoodProgramActivityUpsertWithWhereUniqueWithoutProgramInput | LivelihoodProgramActivityUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: LivelihoodProgramActivityCreateManyProgramInputEnvelope
+    set?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityWhereUniqueInput | LivelihoodProgramActivityWhereUniqueInput[]
+    update?: LivelihoodProgramActivityUpdateWithWhereUniqueWithoutProgramInput | LivelihoodProgramActivityUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: LivelihoodProgramActivityUpdateManyWithWhereWithoutProgramInput | LivelihoodProgramActivityUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: LivelihoodProgramActivityScalarWhereInput | LivelihoodProgramActivityScalarWhereInput[]
   }
 
   export type LivelihoodProgramCreateNestedOneWithoutComponentsInput = {
@@ -174017,6 +177363,120 @@ export namespace Prisma {
     upsert?: LivelihoodProgramUpsertWithoutFellowsInput
     connect?: LivelihoodProgramWhereUniqueInput
     update?: XOR<XOR<LivelihoodProgramUpdateToOneWithWhereWithoutFellowsInput, LivelihoodProgramUpdateWithoutFellowsInput>, LivelihoodProgramUncheckedUpdateWithoutFellowsInput>
+  }
+
+  export type LivelihoodProgramCreateNestedOneWithoutActivitiesInput = {
+    create?: XOR<LivelihoodProgramCreateWithoutActivitiesInput, LivelihoodProgramUncheckedCreateWithoutActivitiesInput>
+    connectOrCreate?: LivelihoodProgramCreateOrConnectWithoutActivitiesInput
+    connect?: LivelihoodProgramWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCreatedLivelihoodActivitiesInput = {
+    create?: XOR<UserCreateWithoutCreatedLivelihoodActivitiesInput, UserUncheckedCreateWithoutCreatedLivelihoodActivitiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedLivelihoodActivitiesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCompletedLivelihoodActivitiesInput = {
+    create?: XOR<UserCreateWithoutCompletedLivelihoodActivitiesInput, UserUncheckedCreateWithoutCompletedLivelihoodActivitiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCompletedLivelihoodActivitiesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type LivelihoodProgramActivityCommentCreateNestedManyWithoutActivityInput = {
+    create?: XOR<LivelihoodProgramActivityCommentCreateWithoutActivityInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput> | LivelihoodProgramActivityCommentCreateWithoutActivityInput[] | LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput[]
+    connectOrCreate?: LivelihoodProgramActivityCommentCreateOrConnectWithoutActivityInput | LivelihoodProgramActivityCommentCreateOrConnectWithoutActivityInput[]
+    createMany?: LivelihoodProgramActivityCommentCreateManyActivityInputEnvelope
+    connect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutActivityInput = {
+    create?: XOR<LivelihoodProgramActivityCommentCreateWithoutActivityInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput> | LivelihoodProgramActivityCommentCreateWithoutActivityInput[] | LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput[]
+    connectOrCreate?: LivelihoodProgramActivityCommentCreateOrConnectWithoutActivityInput | LivelihoodProgramActivityCommentCreateOrConnectWithoutActivityInput[]
+    createMany?: LivelihoodProgramActivityCommentCreateManyActivityInputEnvelope
+    connect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+  }
+
+  export type LivelihoodProgramUpdateOneRequiredWithoutActivitiesNestedInput = {
+    create?: XOR<LivelihoodProgramCreateWithoutActivitiesInput, LivelihoodProgramUncheckedCreateWithoutActivitiesInput>
+    connectOrCreate?: LivelihoodProgramCreateOrConnectWithoutActivitiesInput
+    upsert?: LivelihoodProgramUpsertWithoutActivitiesInput
+    connect?: LivelihoodProgramWhereUniqueInput
+    update?: XOR<XOR<LivelihoodProgramUpdateToOneWithWhereWithoutActivitiesInput, LivelihoodProgramUpdateWithoutActivitiesInput>, LivelihoodProgramUncheckedUpdateWithoutActivitiesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatedLivelihoodActivitiesNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedLivelihoodActivitiesInput, UserUncheckedCreateWithoutCreatedLivelihoodActivitiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedLivelihoodActivitiesInput
+    upsert?: UserUpsertWithoutCreatedLivelihoodActivitiesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedLivelihoodActivitiesInput, UserUpdateWithoutCreatedLivelihoodActivitiesInput>, UserUncheckedUpdateWithoutCreatedLivelihoodActivitiesInput>
+  }
+
+  export type UserUpdateOneWithoutCompletedLivelihoodActivitiesNestedInput = {
+    create?: XOR<UserCreateWithoutCompletedLivelihoodActivitiesInput, UserUncheckedCreateWithoutCompletedLivelihoodActivitiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCompletedLivelihoodActivitiesInput
+    upsert?: UserUpsertWithoutCompletedLivelihoodActivitiesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCompletedLivelihoodActivitiesInput, UserUpdateWithoutCompletedLivelihoodActivitiesInput>, UserUncheckedUpdateWithoutCompletedLivelihoodActivitiesInput>
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateManyWithoutActivityNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCommentCreateWithoutActivityInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput> | LivelihoodProgramActivityCommentCreateWithoutActivityInput[] | LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput[]
+    connectOrCreate?: LivelihoodProgramActivityCommentCreateOrConnectWithoutActivityInput | LivelihoodProgramActivityCommentCreateOrConnectWithoutActivityInput[]
+    upsert?: LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutActivityInput | LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutActivityInput[]
+    createMany?: LivelihoodProgramActivityCommentCreateManyActivityInputEnvelope
+    set?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    update?: LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutActivityInput | LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutActivityInput[]
+    updateMany?: LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutActivityInput | LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutActivityInput[]
+    deleteMany?: LivelihoodProgramActivityCommentScalarWhereInput | LivelihoodProgramActivityCommentScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutActivityNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCommentCreateWithoutActivityInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput> | LivelihoodProgramActivityCommentCreateWithoutActivityInput[] | LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput[]
+    connectOrCreate?: LivelihoodProgramActivityCommentCreateOrConnectWithoutActivityInput | LivelihoodProgramActivityCommentCreateOrConnectWithoutActivityInput[]
+    upsert?: LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutActivityInput | LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutActivityInput[]
+    createMany?: LivelihoodProgramActivityCommentCreateManyActivityInputEnvelope
+    set?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    disconnect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    delete?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    connect?: LivelihoodProgramActivityCommentWhereUniqueInput | LivelihoodProgramActivityCommentWhereUniqueInput[]
+    update?: LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutActivityInput | LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutActivityInput[]
+    updateMany?: LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutActivityInput | LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutActivityInput[]
+    deleteMany?: LivelihoodProgramActivityCommentScalarWhereInput | LivelihoodProgramActivityCommentScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramActivityCreateNestedOneWithoutCommentsInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCommentsInput, LivelihoodProgramActivityUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCommentsInput
+    connect?: LivelihoodProgramActivityWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutLivelihoodActivityCommentsInput = {
+    create?: XOR<UserCreateWithoutLivelihoodActivityCommentsInput, UserUncheckedCreateWithoutLivelihoodActivityCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLivelihoodActivityCommentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type LivelihoodProgramActivityUpdateOneRequiredWithoutCommentsNestedInput = {
+    create?: XOR<LivelihoodProgramActivityCreateWithoutCommentsInput, LivelihoodProgramActivityUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: LivelihoodProgramActivityCreateOrConnectWithoutCommentsInput
+    upsert?: LivelihoodProgramActivityUpsertWithoutCommentsInput
+    connect?: LivelihoodProgramActivityWhereUniqueInput
+    update?: XOR<XOR<LivelihoodProgramActivityUpdateToOneWithWhereWithoutCommentsInput, LivelihoodProgramActivityUpdateWithoutCommentsInput>, LivelihoodProgramActivityUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutLivelihoodActivityCommentsNestedInput = {
+    create?: XOR<UserCreateWithoutLivelihoodActivityCommentsInput, UserUncheckedCreateWithoutLivelihoodActivityCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLivelihoodActivityCommentsInput
+    upsert?: UserUpsertWithoutLivelihoodActivityCommentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLivelihoodActivityCommentsInput, UserUpdateWithoutLivelihoodActivityCommentsInput>, UserUncheckedUpdateWithoutLivelihoodActivityCommentsInput>
   }
 
   export type IncidentResourceNeedCreateNestedManyWithoutIncidentInput = {
@@ -177180,6 +180640,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -177263,6 +180726,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -177585,6 +181051,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutCreatedUsersInput = {
@@ -177668,6 +181137,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutCreatedUsersInput = {
@@ -177756,6 +181228,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutCreatedByInput = {
@@ -177839,6 +181314,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutCreatedByInput = {
@@ -177932,6 +181410,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutDirectReportsInput = {
@@ -178015,6 +181496,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutDirectReportsInput = {
@@ -178103,6 +181587,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -178186,6 +181673,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -179670,6 +183160,116 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LivelihoodProgramActivityCreateWithoutCreatedByInput = {
+    id?: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    program: LivelihoodProgramCreateNestedOneWithoutActivitiesInput
+    completedBy?: UserCreateNestedOneWithoutCompletedLivelihoodActivitiesInput
+    comments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutActivityInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    programId: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    completedAt?: Date | string | null
+    completedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutActivityInput
+  }
+
+  export type LivelihoodProgramActivityCreateOrConnectWithoutCreatedByInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    create: XOR<LivelihoodProgramActivityCreateWithoutCreatedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type LivelihoodProgramActivityCreateManyCreatedByInputEnvelope = {
+    data: LivelihoodProgramActivityCreateManyCreatedByInput | LivelihoodProgramActivityCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LivelihoodProgramActivityCreateWithoutCompletedByInput = {
+    id?: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    program: LivelihoodProgramCreateNestedOneWithoutActivitiesInput
+    createdBy: UserCreateNestedOneWithoutCreatedLivelihoodActivitiesInput
+    comments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutActivityInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput = {
+    id?: string
+    programId: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    createdById: string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutActivityInput
+  }
+
+  export type LivelihoodProgramActivityCreateOrConnectWithoutCompletedByInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    create: XOR<LivelihoodProgramActivityCreateWithoutCompletedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput>
+  }
+
+  export type LivelihoodProgramActivityCreateManyCompletedByInputEnvelope = {
+    data: LivelihoodProgramActivityCreateManyCompletedByInput | LivelihoodProgramActivityCreateManyCompletedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LivelihoodProgramActivityCommentCreateWithoutAuthorInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    activity: LivelihoodProgramActivityCreateNestedOneWithoutCommentsInput
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    activityId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentCreateOrConnectWithoutAuthorInput = {
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+    create: XOR<LivelihoodProgramActivityCommentCreateWithoutAuthorInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type LivelihoodProgramActivityCommentCreateManyAuthorInputEnvelope = {
+    data: LivelihoodProgramActivityCommentCreateManyAuthorInput | LivelihoodProgramActivityCommentCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RoleUpsertWithoutUsersInput = {
     update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
@@ -179827,6 +183427,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedUsersInput = {
@@ -179910,6 +183513,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -180020,6 +183626,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDirectReportsInput = {
@@ -180103,6 +183712,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -181194,6 +184806,85 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"VerificationToken"> | Date | string
   }
 
+  export type LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    update: XOR<LivelihoodProgramActivityUpdateWithoutCreatedByInput, LivelihoodProgramActivityUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<LivelihoodProgramActivityCreateWithoutCreatedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    data: XOR<LivelihoodProgramActivityUpdateWithoutCreatedByInput, LivelihoodProgramActivityUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type LivelihoodProgramActivityUpdateManyWithWhereWithoutCreatedByInput = {
+    where: LivelihoodProgramActivityScalarWhereInput
+    data: XOR<LivelihoodProgramActivityUpdateManyMutationInput, LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type LivelihoodProgramActivityScalarWhereInput = {
+    AND?: LivelihoodProgramActivityScalarWhereInput | LivelihoodProgramActivityScalarWhereInput[]
+    OR?: LivelihoodProgramActivityScalarWhereInput[]
+    NOT?: LivelihoodProgramActivityScalarWhereInput | LivelihoodProgramActivityScalarWhereInput[]
+    id?: StringFilter<"LivelihoodProgramActivity"> | string
+    programId?: StringFilter<"LivelihoodProgramActivity"> | string
+    componentTypeKey?: StringNullableFilter<"LivelihoodProgramActivity"> | string | null
+    title?: StringFilter<"LivelihoodProgramActivity"> | string
+    description?: StringNullableFilter<"LivelihoodProgramActivity"> | string | null
+    startDate?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    endDate?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    status?: StringFilter<"LivelihoodProgramActivity"> | string
+    createdById?: StringFilter<"LivelihoodProgramActivity"> | string
+    completedAt?: DateTimeNullableFilter<"LivelihoodProgramActivity"> | Date | string | null
+    completedById?: StringNullableFilter<"LivelihoodProgramActivity"> | string | null
+    createdAt?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodProgramActivity"> | Date | string
+  }
+
+  export type LivelihoodProgramActivityUpsertWithWhereUniqueWithoutCompletedByInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    update: XOR<LivelihoodProgramActivityUpdateWithoutCompletedByInput, LivelihoodProgramActivityUncheckedUpdateWithoutCompletedByInput>
+    create: XOR<LivelihoodProgramActivityCreateWithoutCompletedByInput, LivelihoodProgramActivityUncheckedCreateWithoutCompletedByInput>
+  }
+
+  export type LivelihoodProgramActivityUpdateWithWhereUniqueWithoutCompletedByInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    data: XOR<LivelihoodProgramActivityUpdateWithoutCompletedByInput, LivelihoodProgramActivityUncheckedUpdateWithoutCompletedByInput>
+  }
+
+  export type LivelihoodProgramActivityUpdateManyWithWhereWithoutCompletedByInput = {
+    where: LivelihoodProgramActivityScalarWhereInput
+    data: XOR<LivelihoodProgramActivityUpdateManyMutationInput, LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByInput>
+  }
+
+  export type LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+    update: XOR<LivelihoodProgramActivityCommentUpdateWithoutAuthorInput, LivelihoodProgramActivityCommentUncheckedUpdateWithoutAuthorInput>
+    create: XOR<LivelihoodProgramActivityCommentCreateWithoutAuthorInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+    data: XOR<LivelihoodProgramActivityCommentUpdateWithoutAuthorInput, LivelihoodProgramActivityCommentUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutAuthorInput = {
+    where: LivelihoodProgramActivityCommentScalarWhereInput
+    data: XOR<LivelihoodProgramActivityCommentUpdateManyMutationInput, LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type LivelihoodProgramActivityCommentScalarWhereInput = {
+    AND?: LivelihoodProgramActivityCommentScalarWhereInput | LivelihoodProgramActivityCommentScalarWhereInput[]
+    OR?: LivelihoodProgramActivityCommentScalarWhereInput[]
+    NOT?: LivelihoodProgramActivityCommentScalarWhereInput | LivelihoodProgramActivityCommentScalarWhereInput[]
+    id?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    activityId?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    authorId?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    text?: StringFilter<"LivelihoodProgramActivityComment"> | string
+    createdAt?: DateTimeFilter<"LivelihoodProgramActivityComment"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodProgramActivityComment"> | Date | string
+  }
+
   export type UserCreateWithoutVerificationTokensInput = {
     id?: string
     name: string
@@ -181275,6 +184966,9 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutVerificationTokensInput = {
@@ -181358,6 +185052,9 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutVerificationTokensInput = {
@@ -181457,6 +185154,9 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerificationTokensInput = {
@@ -181540,6 +185240,9 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type RoleCreateWithoutDashboardConfigInput = {
@@ -181654,6 +185357,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutDashboardConfigInput = {
@@ -181737,6 +185443,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutDashboardConfigInput = {
@@ -181873,6 +185582,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDashboardConfigInput = {
@@ -181956,6 +185668,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -182039,6 +185754,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -182122,6 +185840,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -182221,6 +185942,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -182304,6 +186028,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type RolePermissionCreateWithoutPermissionInput = {
@@ -182593,6 +186320,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutPermissionsInput = {
@@ -182676,6 +186406,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutPermissionsInput = {
@@ -182800,6 +186533,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPermissionsInput = {
@@ -182883,6 +186619,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type PermissionUpsertWithoutUsersInput = {
@@ -183464,6 +187203,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutFellowInput = {
@@ -183547,6 +187289,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutFellowInput = {
@@ -184318,6 +188063,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFellowInput = {
@@ -184401,6 +188149,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type FellowSchoolUpsertWithWhereUniqueWithoutFellowInput = {
@@ -185128,6 +188879,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutPmReflectionsInput = {
@@ -185211,6 +188965,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutPmReflectionsInput = {
@@ -185385,6 +189142,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmReflectionsInput = {
@@ -185468,6 +189228,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type FellowCreateWithoutPerformanceObservationsInput = {
@@ -185620,6 +189383,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutPerformanceObservationsInput = {
@@ -185703,6 +189469,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutPerformanceObservationsInput = {
@@ -185877,6 +189646,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPerformanceObservationsInput = {
@@ -185960,6 +189732,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type FellowCreateWithoutReviewsInput = {
@@ -188871,6 +192646,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutManagedSchoolsInput = {
@@ -188954,6 +192732,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutManagedSchoolsInput = {
@@ -189112,6 +192893,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSchoolsInput = {
@@ -189195,6 +192979,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type SchoolUpsertWithoutProgramManagersInput = {
@@ -189343,6 +193130,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutManagedCentresInput = {
@@ -189426,6 +193216,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutManagedCentresInput = {
@@ -189578,6 +193371,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedCentresInput = {
@@ -189661,6 +193457,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type AfterSchoolCentreUpsertWithoutProgramManagersInput = {
@@ -189803,6 +193602,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutManagedLivelihoodProgramsInput = {
@@ -189886,6 +193688,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutManagedLivelihoodProgramsInput = {
@@ -189906,6 +193711,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
     components?: LivelihoodProgramComponentCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateWithoutProgramManagersInput = {
@@ -189921,6 +193727,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
     components?: LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramCreateOrConnectWithoutProgramManagersInput = {
@@ -190020,6 +193827,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedLivelihoodProgramsInput = {
@@ -190103,6 +193913,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type LivelihoodProgramUpsertWithoutProgramManagersInput = {
@@ -190129,6 +193942,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
     components?: LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateWithoutProgramManagersInput = {
@@ -190144,6 +193958,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
     components?: LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type UserCreateWithoutPmTasksInput = {
@@ -190227,6 +194042,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutPmTasksInput = {
@@ -190310,6 +194128,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutPmTasksInput = {
@@ -190435,6 +194256,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTasksInput = {
@@ -190518,6 +194342,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -190648,6 +194475,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutPmTaskCommentsInput = {
@@ -190731,6 +194561,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutPmTaskCommentsInput = {
@@ -190867,6 +194700,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTaskCommentsInput = {
@@ -190950,6 +194786,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutAssignedTasksInput = {
@@ -191033,6 +194872,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -191116,6 +194958,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -191204,6 +195049,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -191287,6 +195135,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -191442,6 +195293,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -191525,6 +195379,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -191619,6 +195476,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -191702,6 +195562,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type TaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -191858,6 +195721,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsNewInput = {
@@ -191941,6 +195807,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsNewInput = {
@@ -192087,6 +195956,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsNewInput = {
@@ -192170,6 +196042,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type TaskCreateWithoutDocumentsInput = {
@@ -192294,6 +196169,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTaskDocumentsInput = {
@@ -192377,6 +196255,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTaskDocumentsInput = {
@@ -192523,6 +196404,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskDocumentsInput = {
@@ -192606,6 +196490,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutCreatedAssetsInput = {
@@ -192689,6 +196576,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutCreatedAssetsInput = {
@@ -192772,6 +196662,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutCreatedAssetsInput = {
@@ -192907,6 +196800,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
@@ -192990,6 +196886,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput = {
@@ -193122,6 +197021,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutAssetAssignmentsInput = {
@@ -193205,6 +197107,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutAssetAssignmentsInput = {
@@ -193293,6 +197198,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutAssetAssignmentsMadeInput = {
@@ -193376,6 +197284,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutAssetAssignmentsMadeInput = {
@@ -193514,6 +197425,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetAssignmentsInput = {
@@ -193597,6 +197511,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutAssetAssignmentsMadeInput = {
@@ -193691,6 +197608,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetAssignmentsMadeInput = {
@@ -193774,6 +197694,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type SchoolCreateWithoutProgramsInput = {
@@ -196799,6 +200722,48 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LivelihoodProgramActivityCreateWithoutProgramInput = {
+    id?: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutCreatedLivelihoodActivitiesInput
+    completedBy?: UserCreateNestedOneWithoutCompletedLivelihoodActivitiesInput
+    comments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutActivityInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedCreateWithoutProgramInput = {
+    id?: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    createdById: string
+    completedAt?: Date | string | null
+    completedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutActivityInput
+  }
+
+  export type LivelihoodProgramActivityCreateOrConnectWithoutProgramInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    create: XOR<LivelihoodProgramActivityCreateWithoutProgramInput, LivelihoodProgramActivityUncheckedCreateWithoutProgramInput>
+  }
+
+  export type LivelihoodProgramActivityCreateManyProgramInputEnvelope = {
+    data: LivelihoodProgramActivityCreateManyProgramInput | LivelihoodProgramActivityCreateManyProgramInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BeneficiaryLivelihoodUpsertWithWhereUniqueWithoutProgramInput = {
     where: BeneficiaryLivelihoodWhereUniqueInput
     update: XOR<BeneficiaryLivelihoodUpdateWithoutProgramInput, BeneficiaryLivelihoodUncheckedUpdateWithoutProgramInput>
@@ -196876,6 +200841,22 @@ export namespace Prisma {
     data: XOR<FellowLivelihoodProgramUpdateManyMutationInput, FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramInput>
   }
 
+  export type LivelihoodProgramActivityUpsertWithWhereUniqueWithoutProgramInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    update: XOR<LivelihoodProgramActivityUpdateWithoutProgramInput, LivelihoodProgramActivityUncheckedUpdateWithoutProgramInput>
+    create: XOR<LivelihoodProgramActivityCreateWithoutProgramInput, LivelihoodProgramActivityUncheckedCreateWithoutProgramInput>
+  }
+
+  export type LivelihoodProgramActivityUpdateWithWhereUniqueWithoutProgramInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    data: XOR<LivelihoodProgramActivityUpdateWithoutProgramInput, LivelihoodProgramActivityUncheckedUpdateWithoutProgramInput>
+  }
+
+  export type LivelihoodProgramActivityUpdateManyWithWhereWithoutProgramInput = {
+    where: LivelihoodProgramActivityScalarWhereInput
+    data: XOR<LivelihoodProgramActivityUpdateManyMutationInput, LivelihoodProgramActivityUncheckedUpdateManyWithoutProgramInput>
+  }
+
   export type LivelihoodProgramCreateWithoutComponentsInput = {
     id?: string
     category: $Enums.LivelihoodCategory
@@ -196889,6 +200870,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateWithoutComponentsInput = {
@@ -196904,6 +200886,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramCreateOrConnectWithoutComponentsInput = {
@@ -196935,6 +200918,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateWithoutComponentsInput = {
@@ -196950,6 +200934,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type BeneficiaryCreateWithoutLivelihoodDetailsInput = {
@@ -197070,6 +201055,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateWithoutAssignmentsInput = {
@@ -197085,6 +201071,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramCreateOrConnectWithoutAssignmentsInput = {
@@ -197261,6 +201248,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateWithoutAssignmentsInput = {
@@ -197276,6 +201264,7 @@ export namespace Prisma {
     components?: LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodEventUpsertWithWhereUniqueWithoutLivelihoodInput = {
@@ -197456,6 +201445,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
     components?: LivelihoodProgramComponentCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateWithoutFellowsInput = {
@@ -197471,6 +201461,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
     components?: LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+    activities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramCreateOrConnectWithoutFellowsInput = {
@@ -197577,6 +201568,7 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
     components?: LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateWithoutFellowsInput = {
@@ -197592,6 +201584,1289 @@ export namespace Prisma {
     assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
     components?: LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+    activities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutProgramNestedInput
+  }
+
+  export type LivelihoodProgramCreateWithoutActivitiesInput = {
+    id?: string
+    category: $Enums.LivelihoodCategory
+    type: string
+    name: string
+    description?: string | null
+    status?: string
+    totalTarget?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
+    components?: LivelihoodProgramComponentCreateNestedManyWithoutProgramInput
+    programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
+  }
+
+  export type LivelihoodProgramUncheckedCreateWithoutActivitiesInput = {
+    id?: string
+    category: $Enums.LivelihoodCategory
+    type: string
+    name: string
+    description?: string | null
+    status?: string
+    totalTarget?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
+    components?: LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+  }
+
+  export type LivelihoodProgramCreateOrConnectWithoutActivitiesInput = {
+    where: LivelihoodProgramWhereUniqueInput
+    create: XOR<LivelihoodProgramCreateWithoutActivitiesInput, LivelihoodProgramUncheckedCreateWithoutActivitiesInput>
+  }
+
+  export type UserCreateWithoutCreatedLivelihoodActivitiesInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedLivelihoodActivitiesInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedLivelihoodActivitiesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedLivelihoodActivitiesInput, UserUncheckedCreateWithoutCreatedLivelihoodActivitiesInput>
+  }
+
+  export type UserCreateWithoutCompletedLivelihoodActivitiesInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutCompletedLivelihoodActivitiesInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutCompletedLivelihoodActivitiesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCompletedLivelihoodActivitiesInput, UserUncheckedCreateWithoutCompletedLivelihoodActivitiesInput>
+  }
+
+  export type LivelihoodProgramActivityCommentCreateWithoutActivityInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutLivelihoodActivityCommentsInput
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput = {
+    id?: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentCreateOrConnectWithoutActivityInput = {
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+    create: XOR<LivelihoodProgramActivityCommentCreateWithoutActivityInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput>
+  }
+
+  export type LivelihoodProgramActivityCommentCreateManyActivityInputEnvelope = {
+    data: LivelihoodProgramActivityCommentCreateManyActivityInput | LivelihoodProgramActivityCommentCreateManyActivityInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LivelihoodProgramUpsertWithoutActivitiesInput = {
+    update: XOR<LivelihoodProgramUpdateWithoutActivitiesInput, LivelihoodProgramUncheckedUpdateWithoutActivitiesInput>
+    create: XOR<LivelihoodProgramCreateWithoutActivitiesInput, LivelihoodProgramUncheckedCreateWithoutActivitiesInput>
+    where?: LivelihoodProgramWhereInput
+  }
+
+  export type LivelihoodProgramUpdateToOneWithWhereWithoutActivitiesInput = {
+    where?: LivelihoodProgramWhereInput
+    data: XOR<LivelihoodProgramUpdateWithoutActivitiesInput, LivelihoodProgramUncheckedUpdateWithoutActivitiesInput>
+  }
+
+  export type LivelihoodProgramUpdateWithoutActivitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    type?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
+    components?: LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput
+    programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
+  }
+
+  export type LivelihoodProgramUncheckedUpdateWithoutActivitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    type?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
+    components?: LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedLivelihoodActivitiesInput = {
+    update: XOR<UserUpdateWithoutCreatedLivelihoodActivitiesInput, UserUncheckedUpdateWithoutCreatedLivelihoodActivitiesInput>
+    create: XOR<UserCreateWithoutCreatedLivelihoodActivitiesInput, UserUncheckedCreateWithoutCreatedLivelihoodActivitiesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedLivelihoodActivitiesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedLivelihoodActivitiesInput, UserUncheckedUpdateWithoutCreatedLivelihoodActivitiesInput>
+  }
+
+  export type UserUpdateWithoutCreatedLivelihoodActivitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedLivelihoodActivitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUpsertWithoutCompletedLivelihoodActivitiesInput = {
+    update: XOR<UserUpdateWithoutCompletedLivelihoodActivitiesInput, UserUncheckedUpdateWithoutCompletedLivelihoodActivitiesInput>
+    create: XOR<UserCreateWithoutCompletedLivelihoodActivitiesInput, UserUncheckedCreateWithoutCompletedLivelihoodActivitiesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCompletedLivelihoodActivitiesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCompletedLivelihoodActivitiesInput, UserUncheckedUpdateWithoutCompletedLivelihoodActivitiesInput>
+  }
+
+  export type UserUpdateWithoutCompletedLivelihoodActivitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCompletedLivelihoodActivitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type LivelihoodProgramActivityCommentUpsertWithWhereUniqueWithoutActivityInput = {
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+    update: XOR<LivelihoodProgramActivityCommentUpdateWithoutActivityInput, LivelihoodProgramActivityCommentUncheckedUpdateWithoutActivityInput>
+    create: XOR<LivelihoodProgramActivityCommentCreateWithoutActivityInput, LivelihoodProgramActivityCommentUncheckedCreateWithoutActivityInput>
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateWithWhereUniqueWithoutActivityInput = {
+    where: LivelihoodProgramActivityCommentWhereUniqueInput
+    data: XOR<LivelihoodProgramActivityCommentUpdateWithoutActivityInput, LivelihoodProgramActivityCommentUncheckedUpdateWithoutActivityInput>
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateManyWithWhereWithoutActivityInput = {
+    where: LivelihoodProgramActivityCommentScalarWhereInput
+    data: XOR<LivelihoodProgramActivityCommentUpdateManyMutationInput, LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutActivityInput>
+  }
+
+  export type LivelihoodProgramActivityCreateWithoutCommentsInput = {
+    id?: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    program: LivelihoodProgramCreateNestedOneWithoutActivitiesInput
+    createdBy: UserCreateNestedOneWithoutCreatedLivelihoodActivitiesInput
+    completedBy?: UserCreateNestedOneWithoutCompletedLivelihoodActivitiesInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedCreateWithoutCommentsInput = {
+    id?: string
+    programId: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    createdById: string
+    completedAt?: Date | string | null
+    completedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramActivityCreateOrConnectWithoutCommentsInput = {
+    where: LivelihoodProgramActivityWhereUniqueInput
+    create: XOR<LivelihoodProgramActivityCreateWithoutCommentsInput, LivelihoodProgramActivityUncheckedCreateWithoutCommentsInput>
+  }
+
+  export type UserCreateWithoutLivelihoodActivityCommentsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+  }
+
+  export type UserUncheckedCreateWithoutLivelihoodActivityCommentsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+  }
+
+  export type UserCreateOrConnectWithoutLivelihoodActivityCommentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLivelihoodActivityCommentsInput, UserUncheckedCreateWithoutLivelihoodActivityCommentsInput>
+  }
+
+  export type LivelihoodProgramActivityUpsertWithoutCommentsInput = {
+    update: XOR<LivelihoodProgramActivityUpdateWithoutCommentsInput, LivelihoodProgramActivityUncheckedUpdateWithoutCommentsInput>
+    create: XOR<LivelihoodProgramActivityCreateWithoutCommentsInput, LivelihoodProgramActivityUncheckedCreateWithoutCommentsInput>
+    where?: LivelihoodProgramActivityWhereInput
+  }
+
+  export type LivelihoodProgramActivityUpdateToOneWithWhereWithoutCommentsInput = {
+    where?: LivelihoodProgramActivityWhereInput
+    data: XOR<LivelihoodProgramActivityUpdateWithoutCommentsInput, LivelihoodProgramActivityUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type LivelihoodProgramActivityUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    program?: LivelihoodProgramUpdateOneRequiredWithoutActivitiesNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedLivelihoodActivitiesNestedInput
+    completedBy?: UserUpdateOneWithoutCompletedLivelihoodActivitiesNestedInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutLivelihoodActivityCommentsInput = {
+    update: XOR<UserUpdateWithoutLivelihoodActivityCommentsInput, UserUncheckedUpdateWithoutLivelihoodActivityCommentsInput>
+    create: XOR<UserCreateWithoutLivelihoodActivityCommentsInput, UserUncheckedCreateWithoutLivelihoodActivityCommentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLivelihoodActivityCommentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLivelihoodActivityCommentsInput, UserUncheckedUpdateWithoutLivelihoodActivityCommentsInput>
+  }
+
+  export type UserUpdateWithoutLivelihoodActivityCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLivelihoodActivityCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
   }
 
   export type IncidentResourceNeedCreateWithoutIncidentInput = {
@@ -197983,6 +203258,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedTransactionsInput = {
@@ -198066,6 +203344,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedTransactionsInput = {
@@ -198231,6 +203512,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedTransactionsInput = {
@@ -198314,6 +203598,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type IncidentResourceNeedUpsertWithoutTransactionsInput = {
@@ -198434,6 +203721,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutAttendanceLogsInput = {
@@ -198517,6 +203807,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutAttendanceLogsInput = {
@@ -198616,6 +203909,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendanceLogsInput = {
@@ -198699,6 +203995,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutLeavesInput = {
@@ -198782,6 +204081,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutLeavesInput = {
@@ -198865,6 +204167,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutLeavesInput = {
@@ -198993,6 +204298,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeavesInput = {
@@ -199076,6 +204384,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CompOffCreditUpsertWithoutLeaveInput = {
@@ -199194,6 +204505,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutCompOffCreditsInput = {
@@ -199277,6 +204591,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutCompOffCreditsInput = {
@@ -199421,6 +204738,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompOffCreditsInput = {
@@ -199504,6 +204824,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type LeaveUpsertWithoutCompOffCreditInput = {
@@ -199911,6 +205234,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReliefDistributionsInput = {
@@ -199994,6 +205320,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReliefDistributionsInput = {
@@ -200166,6 +205495,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReliefDistributionsInput = {
@@ -200249,6 +205581,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type ReliefDistributionItemUpsertWithWhereUniqueWithoutDistributionInput = {
@@ -200769,6 +206104,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsInput = {
@@ -200852,6 +206190,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsInput = {
@@ -200988,6 +206329,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsInput = {
@@ -201071,6 +206415,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type BeneficiaryCreateWithoutResilienceSurveysInput = {
@@ -202519,6 +207866,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutCoachingRecordsInput = {
@@ -202602,6 +207952,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutCoachingRecordsInput = {
@@ -202776,6 +208129,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCoachingRecordsInput = {
@@ -202859,6 +208215,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type FellowCreateWithoutEngagementSurveysInput = {
@@ -203299,6 +208658,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutIndividualFeedbackInput = {
@@ -203382,6 +208744,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutIndividualFeedbackInput = {
@@ -203556,6 +208921,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutIndividualFeedbackInput = {
@@ -203639,6 +209007,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutTravelRequestsInput = {
@@ -203722,6 +209093,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTravelRequestsInput = {
@@ -203805,6 +209179,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTravelRequestsInput = {
@@ -203893,6 +209270,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutApprovedTravelInput = {
@@ -203976,6 +209356,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutApprovedTravelInput = {
@@ -204064,6 +209447,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutRevertedTravelInput = {
@@ -204147,6 +209533,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutRevertedTravelInput = {
@@ -204278,6 +209667,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTravelRequestsInput = {
@@ -204361,6 +209753,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutApprovedTravelInput = {
@@ -204455,6 +209850,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedTravelInput = {
@@ -204538,6 +209936,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutRevertedTravelInput = {
@@ -204632,6 +210033,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRevertedTravelInput = {
@@ -204715,6 +210119,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type TravelExpenseUpsertWithWhereUniqueWithoutTravelRequestInput = {
@@ -204929,6 +210336,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementRequestsInput = {
@@ -205012,6 +210422,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementRequestsInput = {
@@ -205100,6 +210513,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsVerifiedInput = {
@@ -205183,6 +210599,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsVerifiedInput = {
@@ -205271,6 +210690,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsApprovedInput = {
@@ -205354,6 +210776,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsApprovedInput = {
@@ -205442,6 +210867,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsReimbursedInput = {
@@ -205525,6 +210953,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsReimbursedInput = {
@@ -205658,6 +211089,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementRequestsInput = {
@@ -205741,6 +211175,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsVerifiedInput = {
@@ -205835,6 +211272,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsVerifiedInput = {
@@ -205918,6 +211358,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsApprovedInput = {
@@ -206012,6 +211455,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsApprovedInput = {
@@ -206095,6 +211541,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsReimbursedInput = {
@@ -206189,6 +211638,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsReimbursedInput = {
@@ -206272,6 +211724,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type ReimbursementItemUpsertWithWhereUniqueWithoutReimbursementInput = {
@@ -211278,6 +216733,9 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTeamCheckInsInput = {
@@ -211361,6 +216819,9 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTeamCheckInsInput = {
@@ -211449,6 +216910,9 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTeamCheckInEditsInput = {
@@ -211532,6 +216996,9 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCreatedByInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedCreateNestedManyWithoutCompletedByInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTeamCheckInEditsInput = {
@@ -211663,6 +217130,9 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTeamCheckInsInput = {
@@ -211746,6 +217216,9 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutTeamCheckInEditsInput = {
@@ -211840,6 +217313,9 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTeamCheckInEditsInput = {
@@ -211923,6 +217399,9 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type TeamCheckInPromiseUpsertWithWhereUniqueWithoutCheckInInput = {
@@ -212181,6 +217660,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -212264,6 +217746,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -212937,6 +218422,44 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type LivelihoodProgramActivityCreateManyCreatedByInput = {
+    id?: string
+    programId: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    completedAt?: Date | string | null
+    completedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramActivityCreateManyCompletedByInput = {
+    id?: string
+    programId: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    createdById: string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentCreateManyAuthorInput = {
+    id?: string
+    activityId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type UserPermissionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
@@ -213042,6 +218565,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedByInput = {
@@ -213125,6 +218651,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCreatedByInput = {
@@ -213253,6 +218782,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -213336,6 +218868,9 @@ export namespace Prisma {
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
     verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+    createdLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedLivelihoodActivities?: LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByNestedInput
+    livelihoodActivityComments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -214936,6 +220471,124 @@ export namespace Prisma {
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    program?: LivelihoodProgramUpdateOneRequiredWithoutActivitiesNestedInput
+    completedBy?: UserUpdateOneWithoutCompletedLivelihoodActivitiesNestedInput
+    comments?: LivelihoodProgramActivityCommentUpdateManyWithoutActivityNestedInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutActivityNestedInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityUpdateWithoutCompletedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    program?: LivelihoodProgramUpdateOneRequiredWithoutActivitiesNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedLivelihoodActivitiesNestedInput
+    comments?: LivelihoodProgramActivityCommentUpdateManyWithoutActivityNestedInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateWithoutCompletedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutActivityNestedInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateManyWithoutCompletedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    activity?: LivelihoodProgramActivityUpdateOneRequiredWithoutCommentsNestedInput
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RolePermissionCreateManyPermissionInput = {
@@ -217842,6 +223495,21 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type LivelihoodProgramActivityCreateManyProgramInput = {
+    id?: string
+    componentTypeKey?: string | null
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    createdById: string
+    completedAt?: Date | string | null
+    completedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type BeneficiaryLivelihoodUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     typeKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -217940,6 +223608,53 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LivelihoodProgramActivityUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutCreatedLivelihoodActivitiesNestedInput
+    completedBy?: UserUpdateOneWithoutCompletedLivelihoodActivitiesNestedInput
+    comments?: LivelihoodProgramActivityCommentUpdateManyWithoutActivityNestedInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutActivityNestedInput
+  }
+
+  export type LivelihoodProgramActivityUncheckedUpdateManyWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    componentTypeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LivelihoodEventCreateManyLivelihoodInput = {
     id?: string
     eventType: string
@@ -217984,6 +223699,38 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     recordedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentCreateManyActivityInput = {
+    id?: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentUpdateWithoutActivityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutLivelihoodActivityCommentsNestedInput
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedUpdateWithoutActivityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramActivityCommentUncheckedUpdateManyWithoutActivityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

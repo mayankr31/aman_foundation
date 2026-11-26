@@ -1,13 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import Avatar from "@/components/ui/Avatar";
 import AddBeneficiaryModal from "@/components/AddBeneficiaryModal";
+
+const TIER_LABELS = {
+  "Tier 1": "Tier 1 (Critical)",
+  "Tier 2": "Tier 2 (Progressing)",
+  "Tier 3": "Tier 3 (Stable)",
+};
 
 export default function BeneficiaryMasterDirectory() {
   const router = useRouter();
@@ -101,6 +107,20 @@ export default function BeneficiaryMasterDirectory() {
     setMigratedFilter("All");
     setCurrentPage(1);
   };
+
+  const locationOptions = useMemo(() => {
+    const values = beneficiaries
+      .map((b) => (b.location || "").split(",")[0].trim())
+      .filter((value) => value && value !== "—");
+    return [...new Set(values)].sort((a, b) => a.localeCompare(b));
+  }, [beneficiaries]);
+
+  const tierOptions = useMemo(() => {
+    const values = [...new Set(beneficiaries.map((b) => b.tier).filter(Boolean))];
+    return values.length > 0
+      ? values.sort((a, b) => a.localeCompare(b))
+      : Object.keys(TIER_LABELS);
+  }, [beneficiaries]);
 
   const filteredBeneficiaries = beneficiaries.filter((b) => {
     const matchesSearch =
@@ -216,12 +236,9 @@ export default function BeneficiaryMasterDirectory() {
               className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
             >
               <option value="All Locations">All Locations</option>
-              <option value="Bartari">Bartari</option>
-              <option value="Digjani">Digjani</option>
-              <option value="Sawpur">Sawpur</option>
-              <option value="Balikuri">Balikuri</option>
-              <option value="Moinbari">Moinbari</option>
-              <option value="Gunialguri">Gunialguri</option>
+              {locationOptions.map((location) => (
+                <option key={location} value={location}>{location}</option>
+              ))}
             </select>
 
             <select
@@ -230,9 +247,9 @@ export default function BeneficiaryMasterDirectory() {
               className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
             >
               <option value="All Tiers">All Tiers</option>
-              <option value="Tier 1">Tier 1 (Critical)</option>
-              <option value="Tier 2">Tier 2 (Progressing)</option>
-              <option value="Tier 3">Tier 3 (Stable)</option>
+              {tierOptions.map((tier) => (
+                <option key={tier} value={tier}>{TIER_LABELS[tier] || tier}</option>
+              ))}
             </select>
 
             <select

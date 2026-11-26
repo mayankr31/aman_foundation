@@ -12,6 +12,7 @@ import { formatRoleLabel } from "@/lib/roles";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import EditProgramModal from "@/components/EditProgramModal";
 import ProgramComponentPanel from "@/components/livelihood/ProgramComponentPanel";
+import MonthlyActivityPlan from "@/components/livelihood/MonthlyActivityPlan";
 
 const CATEGORY_META = {
   FARM: {
@@ -95,7 +96,7 @@ function FieldInputs({ config, values, onChange }) {
 export default function ProgramDetail() {
   const { id } = useParams();
   const router = useRouter();
-  const { token, user, canDeleteRecords } = useAuth();
+  const { token, user, can, canDeleteRecords } = useAuth();
   const toast = useToast();
   const confirm = useConfirm();
   const { getTypeConfig } = useLivelihoodTypes(token);
@@ -613,6 +614,11 @@ export default function ProgramDetail() {
   const assignedManagers = program.programManagers || [];
   const canManagePeople =
     isAdmin || assignedManagers.some((manager) => manager.userId === user?.id);
+  const canWriteLivelihood =
+    can("livelihood-farm", "WRITE") ||
+    can("livelihood-non-farm", "WRITE") ||
+    can("livelihood-integrated", "WRITE");
+  const canManagePlans = canManagePeople && canWriteLivelihood;
   const programManagerIds = new Set(assignedManagers.map((m) => m.userId));
   const filteredManagers = allProgramManagers.filter(
     (m) =>
@@ -715,6 +721,16 @@ export default function ProgramDetail() {
             );
           })}
         </div>
+
+        {/* Monthly activity planning */}
+        <MonthlyActivityPlan
+          programId={id}
+          components={components}
+          getTypeConfig={getTypeConfig}
+          canManagePlans={canManagePlans}
+          currentUserId={user?.id}
+          token={token}
+        />
 
         {/* Assigned Staff */}
         <div className="bg-surface-container-lowest rounded-lg shadow-ambient border border-outline-variant/10 p-6">
