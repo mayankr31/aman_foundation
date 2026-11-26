@@ -764,6 +764,16 @@ exports.Prisma.LivelihoodProgramScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LivelihoodProgramComponentScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  typeKey: 'typeKey',
+  target: 'target',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.LivelihoodTypeScalarFieldEnum = {
   id: 'id',
   key: 'key',
@@ -786,6 +796,7 @@ exports.Prisma.BeneficiaryLivelihoodScalarFieldEnum = {
   id: 'id',
   beneficiaryId: 'beneficiaryId',
   programId: 'programId',
+  typeKey: 'typeKey',
   attributes: 'attributes',
   notes: 'notes',
   enrolledAt: 'enrolledAt',
@@ -1554,7 +1565,8 @@ exports.PermissionType = exports.$Enums.PermissionType = {
 
 exports.LivelihoodCategory = exports.$Enums.LivelihoodCategory = {
   FARM: 'FARM',
-  NON_FARM: 'NON_FARM'
+  NON_FARM: 'NON_FARM',
+  MIXED: 'MIXED'
 };
 
 exports.LeaveStatus = exports.$Enums.LeaveStatus = {
@@ -1629,6 +1641,7 @@ exports.Prisma.ModelName = {
   BeneficiarySugarcane: 'BeneficiarySugarcane',
   SugarcaneProgram: 'SugarcaneProgram',
   LivelihoodProgram: 'LivelihoodProgram',
+  LivelihoodProgramComponent: 'LivelihoodProgramComponent',
   LivelihoodType: 'LivelihoodType',
   BeneficiaryLivelihood: 'BeneficiaryLivelihood',
   LivelihoodEvent: 'LivelihoodEvent',

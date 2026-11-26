@@ -22,6 +22,12 @@ const TONES = {
     title: "group-hover:text-primary",
     action: "text-primary",
   },
+  indigo: {
+    glow: "bg-indigo-500/5",
+    icon: "bg-indigo-100 text-indigo-700 group-hover:bg-indigo-200/70",
+    title: "group-hover:text-indigo-600",
+    action: "text-indigo-600",
+  },
 };
 
 function HubCard({ href, icon, title, description, actionLabel, tone = "primary" }) {
@@ -85,7 +91,7 @@ export default function LivelihoodHub() {
       {/* Livelihood KPIs (configurable from Dashboard Config) */}
       <HubKpiStrip group="livelihood" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8 max-w-7xl">
         <HubCard
           href="/livelihood/farm"
           icon="agriculture"
@@ -102,6 +108,15 @@ export default function LivelihoodHub() {
           description="Livestock and allied activities: goat rearing, fish farming, poultry, and more. Track asset distribution, ROI, health events, and growth metrics."
           actionLabel="Manage Non-Farm Programs"
           tone="amber"
+        />
+
+        <HubCard
+          href="/livelihood/integrated"
+          icon="account_tree"
+          title="Integrated Programs"
+          description="Programs that combine Farm and Non-Farm activities — for example sugarcane cultivation with goat rearing — and enrol a household in several components at once."
+          actionLabel="Manage Integrated Programs"
+          tone="indigo"
         />
 
         <HubCard

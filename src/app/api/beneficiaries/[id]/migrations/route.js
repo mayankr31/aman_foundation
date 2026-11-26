@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-import { canViewBeneficiary } from "@/lib/beneficiaryAccess";
+import { canViewBeneficiary, canEditBeneficiary } from "@/lib/beneficiaryAccess";
 
 async function resolveBeneficiaryId(id) {
   if (!id || id === "undefined" || id === "null") return null;
@@ -67,15 +67,15 @@ export async function POST(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
       return NextResponse.json({ error: "Participant not found" }, { status: 404 });
+    }
+
+    if (!(await canEditBeneficiary(user, beneficiaryId))) {
+      return NextResponse.json({ error: "Forbidden: You do not have access to this participant" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -121,15 +121,15 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
       return NextResponse.json({ error: "Participant not found" }, { status: 404 });
+    }
+
+    if (!(await canEditBeneficiary(user, beneficiaryId))) {
+      return NextResponse.json({ error: "Forbidden: You do not have access to this participant" }, { status: 403 });
     }
 
     const body = await req.json();

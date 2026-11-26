@@ -45,6 +45,13 @@ export const KPI_DEFINITIONS = [
     tone: "amber",
     group: "livelihood",
   },
+  {
+    key: "integratedPrograms",
+    label: "Integrated Programs",
+    icon: "account_tree",
+    tone: "indigo",
+    group: "livelihood",
+  },
 ];
 
 /** KPI groups, in display order. */
@@ -146,6 +153,13 @@ const LIVELIHOOD_LINKS = [
     kpiKey: "nonFarmPrograms",
     icon: "pets",
     page: "livelihood-non-farm",
+  },
+  {
+    key: "livelihood.integrated",
+    label: "Integrated Programs",
+    href: "/livelihood/integrated",
+    icon: "account_tree",
+    page: "livelihood-integrated",
   },
   {
     key: "livelihood.beneficiaries",

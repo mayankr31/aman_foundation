@@ -22,7 +22,7 @@ import { formatDate } from "@/lib/date";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption, normalizeStateName } from "@/lib/indiaLocations";
 import { PRIMARY_INCOME_CATEGORIES, isKnownIncomeCategory, MONTH_OPTIONS, getIncomePeriod, formatIncomePeriod } from "@/lib/incomeCategories";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
-import { computeBeneficiaryImpact, formatNumber } from "@/lib/beneficiaryImpact";
+import { computeBeneficiaryImpact, formatNumber, groupLivelihoodDetails } from "@/lib/beneficiaryImpact";
 import {
   validateMobile,
   validateAadhaar,
@@ -64,7 +64,30 @@ export default function BeneficiaryProfileDetail() {
 
 function ImpactProgramCard({ program }) {
   const isFarm = program.category === "FARM";
-  const hasMetrics = program.kpis.length > 0 || program.computed.length > 0;
+  const isMixed =
+    program.category === "MIXED" || (!["FARM", "NON_FARM"].includes(program.category));
+  const categoryLabel = isFarm ? "Farm" : isMixed ? "Integrated" : "Non-Farm";
+  const categoryClass = isFarm
+    ? "bg-primary-fixed text-on-primary-fixed"
+    : isMixed
+      ? "bg-indigo-100 text-indigo-700"
+      : "bg-secondary-container/20 text-secondary";
+
+  const components =
+    Array.isArray(program.components) && program.components.length > 0
+      ? program.components
+      : [
+          {
+            id: program.id,
+            typeLabel: program.typeLabel,
+            kpis: program.kpis || [],
+            computed: program.computed || [],
+            notes: program.notes,
+          },
+        ];
+  const hasMetrics = components.some(
+    (component) => component.kpis?.length > 0 || component.computed?.length > 0
+  );
 
   return (
     <div className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 font-sans">
@@ -72,16 +95,13 @@ function ImpactProgramCard({ program }) {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h4 className="font-bold text-on-surface text-base">{program.name}</h4>
-            <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-              isFarm
-                ? "bg-primary-fixed text-on-primary-fixed"
-                : "bg-secondary-container/20 text-secondary"
-            }`}>
-              {isFarm ? "Farm" : "Non-Farm"}
+            <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${categoryClass}`}>
+              {categoryLabel}
             </span>
           </div>
           <p className="text-xs text-on-surface-variant mt-1">
-            {program.typeLabel} · Enrolled {formatDate(program.enrolledAt)}
+            {components.length} {components.length === 1 ? "activity" : "activities"} · Enrolled{" "}
+            {formatDate(program.enrolledAt)}
           </p>
         </div>
         <p className="text-xs text-on-surface-variant shrink-0">
@@ -90,45 +110,65 @@ function ImpactProgramCard({ program }) {
         </p>
       </div>
 
-      {program.kpis.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
-          {program.kpis.map((kpi) => (
-            <div key={kpi.key} className="p-3 rounded-lg bg-surface-container-low border border-outline-variant/10">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{kpi.label}</p>
-              <p className="text-sm font-bold text-on-surface mt-1 break-words">{kpi.formatted}</p>
+      <div className="mt-4 space-y-4">
+        {components.map((component) => (
+          <div
+            key={component.id}
+            className="rounded-lg border border-outline-variant/10 bg-surface-container-low/30 p-3"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">
+                {component.typeLabel || "Program activity"}
+              </span>
+              {component.enrolledAt && (
+                <span className="text-[10px] text-slate-400">
+                  Enrolled {formatDate(component.enrolledAt)}
+                </span>
+              )}
             </div>
-          ))}
-        </div>
-      )}
 
-      {program.computed.length > 0 && (
-        <div className="space-y-3 mt-4">
-          {program.computed.map((metric) => (
-            <div key={metric.key}>
-              <div className="flex justify-between text-xs font-bold mb-1">
-                <span>{metric.label}</span>
-                <span className="text-primary">{metric.formatted}</span>
+            {component.kpis?.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
+                {component.kpis.map((kpi) => (
+                  <div key={kpi.key} className="p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/10">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{kpi.label}</p>
+                    <p className="text-sm font-bold text-on-surface mt-1 break-words">{kpi.formatted}</p>
+                  </div>
+                ))}
               </div>
-              <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-primary h-full rounded-full"
-                  style={{ width: `${metric.progress}%` }}
-                />
+            )}
+
+            {component.computed?.length > 0 && (
+              <div className="space-y-3 mt-3">
+                {component.computed.map((metric) => (
+                  <div key={metric.key}>
+                    <div className="flex justify-between text-xs font-bold mb-1">
+                      <span>{metric.label}</span>
+                      <span className="text-primary">{metric.formatted}</span>
+                    </div>
+                    <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+                      <div
+                        className="bg-primary h-full rounded-full"
+                        style={{ width: `${metric.progress}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            )}
+
+            {component.notes && (
+              <p className="text-xs text-on-surface-variant mt-3 border-t border-surface-container-high pt-2">
+                {component.notes}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
 
       {!hasMetrics && (
         <p className="text-xs text-on-surface-variant italic mt-4">
-          Program assigned, but no impact values recorded yet. Edit this assignment to add its metrics.
-        </p>
-      )}
-
-      {program.notes && (
-        <p className="text-xs text-on-surface-variant mt-4 border-t border-surface-container-high pt-3">
-          {program.notes}
+          Program assigned, but no impact values recorded yet. Edit the assignment to add its metrics.
         </p>
       )}
     </div>
@@ -308,7 +348,9 @@ function BeneficiaryProfileDetailContent() {
 
         const assignments = {};
         (b.livelihoodDetails || []).forEach((d) => {
-          if (d.programId) assignments[d.programId] = d.id;
+          if (!d.programId) return;
+          if (!assignments[d.programId]) assignments[d.programId] = [];
+          assignments[d.programId].push(d.id);
         });
         setOriginalAssignments(assignments);
         setSelectedProgramIds(Object.keys(assignments));
@@ -608,11 +650,13 @@ function BeneficiaryProfileDetailContent() {
             body: JSON.stringify({ beneficiaryId: beneficiary.id, attributes: {} })
           });
         }
-        for (const [programId, assignId] of toRemove) {
-          await fetch(`/api/livelihood/programs/${programId}/assignments/${assignId}`, {
-            method: "DELETE",
-            headers
-          });
+        for (const [programId, assignIds] of toRemove) {
+          for (const assignId of assignIds) {
+            await fetch(`/api/livelihood/programs/${programId}/assignments/${assignId}`, {
+              method: "DELETE",
+              headers
+            });
+          }
         }
 
         setShowEditModal(false);
@@ -700,12 +744,13 @@ function BeneficiaryProfileDetailContent() {
     e.preventDefault();
     try {
       const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
-      const url = editMigrationId
-        ? `/api/beneficiaries/${id}/migrations/${editMigrationId}`
-        : `/api/beneficiaries/${id}/migrations`;
+      const url = `/api/beneficiaries/${id}/migrations`;
       const method = editMigrationId ? "PUT" : "POST";
+      const payload = editMigrationId
+        ? { ...migrationForm, migrationId: editMigrationId }
+        : migrationForm;
 
-      const res = await fetch(url, { method, headers, body: JSON.stringify(migrationForm) });
+      const res = await fetch(url, { method, headers, body: JSON.stringify(payload) });
       const json = await res.json();
       if (json.success) {
         handleCloseMigrationForm();
@@ -1056,6 +1101,17 @@ function BeneficiaryProfileDetailContent() {
   const kyrProfileFields = buildKyrProfilePrefill(beneficiary);
 
   const impact = computeBeneficiaryImpact(beneficiary, getTypeConfig);
+  const livelihoodGroups = groupLivelihoodDetails(
+    beneficiary?.livelihoodDetails || [],
+    getTypeConfig
+  );
+  const livelihoodCategoryLabels = Array.from(
+    new Set(livelihoodGroups.map((group) => group.category))
+  )
+    .map((category) =>
+      category === "FARM" ? "Farm" : category === "NON_FARM" ? "Non-Farm" : "Integrated"
+    )
+    .join(" & ");
   const recordedCapacityCount = 3 - missingCapacityTypes.length;
   const farmImpactSummary = [
     impact.farmSummary.totalLand !== null
@@ -1573,73 +1629,99 @@ function BeneficiaryProfileDetailContent() {
                   <p className="text-sm text-on-surface-variant italic">No program enrollments found. Enroll this participant through a program detail page.</p>
                 ) : (
                   <div className="space-y-6">
-                    {/* New Unified Livelihood Details */}
-                    {beneficiary.livelihoodDetails && beneficiary.livelihoodDetails.length > 0 && (
+                    {/* New Unified Livelihood Details — grouped per program */}
+                    {livelihoodGroups.length > 0 && (
                       <div className="space-y-4">
                         <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider border-b border-surface-container-high pb-2">
-                          {beneficiary.livelihoodDetails.filter(d => d.program?.category === "FARM").length > 0 ? "Farm" : ""}
-                          {beneficiary.livelihoodDetails.filter(d => d.program?.category === "FARM").length > 0 && beneficiary.livelihoodDetails.filter(d => d.program?.category === "NON_FARM").length > 0 ? " & " : ""}
-                          {beneficiary.livelihoodDetails.filter(d => d.program?.category === "NON_FARM").length > 0 ? "Non-Farm" : ""} Programs
+                          {livelihoodCategoryLabels} Programs
                         </p>
-                        {beneficiary.livelihoodDetails.map((detail) => (
-                          <div key={detail.id} className="bg-surface p-5 rounded-lg border border-surface-container-high">
-                            <div className="flex justify-between items-start gap-3 mb-3">
+                        {livelihoodGroups.map((group) => (
+                          <div key={group.programId} className="bg-surface p-5 rounded-lg border border-surface-container-high">
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
                               <div className="min-w-0">
-                                <h4 className="font-bold text-on-surface text-base break-words">{detail.program?.name || "Unknown Program"}</h4>
+                                <h4 className="font-bold text-on-surface text-base break-words">
+                                  {group.program?.name || "Unknown Program"}
+                                </h4>
                                 <p className="text-xs text-on-surface-variant mt-1">
-                                  {detail.program?.category === "FARM" ? "Farm" : "Non-Farm"} · {detail.program?.type?.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "N/A"}
+                                  {group.category === "FARM"
+                                    ? "Farm"
+                                    : group.category === "NON_FARM"
+                                      ? "Non-Farm"
+                                      : "Integrated"}{" "}
+                                  · {group.components.length}{" "}
+                                  {group.components.length === 1 ? "activity" : "activities"}
                                 </p>
                               </div>
-                              <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded shrink-0">
-                                Enrolled {formatDate(detail.enrolledAt)}
+                              <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded shrink-0 w-fit">
+                                Enrolled {formatDate(group.enrolledAt)}
                               </span>
                             </div>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 text-xs p-3 bg-surface-container-lowest rounded-lg border border-outline-variant/10">
-                              {detail.attributes && typeof detail.attributes === "object" && Object.entries(detail.attributes).map(([key, val]) => {
-                                if (val === null || val === undefined || val === "") return null;
-                                const label = key.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
-                                let display = String(val);
-                                if (["investment", "returnsAmount", "estimatedRevenue", "actualRevenue"].includes(key)) {
-                                  display = `₹${Number(val).toLocaleString("en-IN")}`;
-                                } else if (key === "roiPercentage") {
-                                  display = `${Number(val).toFixed(1)}%`;
-                                } else if (typeof val === "number") {
-                                  display = Number(val).toLocaleString("en-IN");
-                                }
-                                return (
-                                  <div key={key}>
-                                    <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">{label}</p>
-                                    <p className="text-on-surface font-bold text-sm mt-0.5">{display}</p>
+
+                            <div className="space-y-4">
+                              {group.components.map((detail) => (
+                                <div
+                                  key={detail.id}
+                                  className="rounded-lg border border-outline-variant/10 bg-surface-container-lowest p-3"
+                                >
+                                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                                    <span className="px-2 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">
+                                      {detail.typeLabel}
+                                    </span>
+                                    <span className="text-[10px] text-slate-400">
+                                      Enrolled {formatDate(detail.enrolledAt)}
+                                    </span>
                                   </div>
-                                );
-                              })}
-                              {detail.notes && (
-                                <div className="col-span-full border-t border-surface-container-high pt-2 mt-1">
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Notes</p>
-                                  <p className="text-on-surface-variant text-sm mt-0.5">{detail.notes}</p>
-                                </div>
-                              )}
-                            </div>
-                            {detail.events && detail.events.length > 0 && (
-                              <div className="mt-3 border-t border-surface-container-high pt-3">
-                                <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mb-2">Events</p>
-                                <div className="space-y-2">
-                                  {detail.events.map((evt) => (
-                                    <div key={evt.id} className="flex items-start gap-2 p-2 bg-surface-container-low rounded border border-outline-variant/10 text-xs">
-                                      <span className="px-2 py-0.5 rounded font-semibold bg-slate-100 text-slate-700 shrink-0">{evt.eventType}</span>
-                                      <span className="text-on-surface-variant">{formatDate(evt.eventDate)}</span>
-                                      {evt.quantity != null && <span className="text-on-surface-variant">Qty: {evt.quantity}</span>}
-                                      {evt.notes && <span className="text-on-surface-variant truncate max-w-xs">{evt.notes}</span>}
-                                      {evt.photoUrl && (
-                                        <button onClick={() => setLightboxPhoto(evt.photoUrl)} className="shrink-0 w-8 h-8 rounded overflow-hidden border border-outline-variant/20 cursor-pointer bg-transparent p-0 ml-auto">
-                                          <img src={evt.photoUrl} alt="Event" className="w-full h-full object-cover" />
-                                        </button>
-                                      )}
+
+                                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 text-xs p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
+                                    {detail.attributes && typeof detail.attributes === "object" && Object.entries(detail.attributes).map(([key, val]) => {
+                                      if (val === null || val === undefined || val === "") return null;
+                                      const label = key.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
+                                      let display = String(val);
+                                      if (["investment", "returnsAmount", "estimatedRevenue", "actualRevenue"].includes(key)) {
+                                        display = `₹${Number(val).toLocaleString("en-IN")}`;
+                                      } else if (key === "roiPercentage") {
+                                        display = `${Number(val).toFixed(1)}%`;
+                                      } else if (typeof val === "number") {
+                                        display = Number(val).toLocaleString("en-IN");
+                                      }
+                                      return (
+                                        <div key={key}>
+                                          <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">{label}</p>
+                                          <p className="text-on-surface font-bold text-sm mt-0.5">{display}</p>
+                                        </div>
+                                      );
+                                    })}
+                                    {detail.notes && (
+                                      <div className="col-span-full border-t border-surface-container-high pt-2 mt-1">
+                                        <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Notes</p>
+                                        <p className="text-on-surface-variant text-sm mt-0.5">{detail.notes}</p>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {detail.events && detail.events.length > 0 && (
+                                    <div className="mt-3 border-t border-surface-container-high pt-3">
+                                      <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mb-2">Events</p>
+                                      <div className="space-y-2">
+                                        {detail.events.map((evt) => (
+                                          <div key={evt.id} className="flex flex-wrap items-start gap-2 p-2 bg-surface-container-low rounded border border-outline-variant/10 text-xs">
+                                            <span className="px-2 py-0.5 rounded font-semibold bg-slate-100 text-slate-700 shrink-0">{evt.eventType}</span>
+                                            <span className="text-on-surface-variant">{formatDate(evt.eventDate)}</span>
+                                            {evt.quantity != null && <span className="text-on-surface-variant">Qty: {evt.quantity}</span>}
+                                            {evt.notes && <span className="text-on-surface-variant truncate max-w-xs">{evt.notes}</span>}
+                                            {evt.photoUrl && (
+                                              <button onClick={() => setLightboxPhoto(evt.photoUrl)} className="shrink-0 w-8 h-8 rounded overflow-hidden border border-outline-variant/20 cursor-pointer bg-transparent p-0 ml-auto">
+                                                <img src={evt.photoUrl} alt="Event" className="w-full h-full object-cover" />
+                                              </button>
+                                            )}
+                                          </div>
+                                        ))}
+                                      </div>
                                     </div>
-                                  ))}
+                                  )}
                                 </div>
-                              </div>
-                            )}
+                              ))}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -2577,6 +2659,11 @@ function BeneficiaryProfileDetailContent() {
                       {impact.nonFarmPrograms.length} Non-Farm
                     </span>
                   )}
+                  {impact.integratedPrograms.length > 0 && (
+                    <span className="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700">
+                      {impact.integratedPrograms.length} Integrated
+                    </span>
+                  )}
                   {impact.totalEvents > 0 && (
                     <span className="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant">
                       {impact.totalEvents} event{impact.totalEvents === 1 ? "" : "s"}
@@ -2681,12 +2768,33 @@ function BeneficiaryProfileDetailContent() {
                 </section>
               )}
 
+              {impact.integratedPrograms.length > 0 && (
+                <section className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+                    <div>
+                      <h3 className="text-base font-bold text-on-surface flex items-center gap-2 font-headline">
+                        <span className="material-symbols-outlined text-indigo-600">account_tree</span>
+                        Integrated Programs
+                      </h3>
+                      <p className="text-xs text-on-surface-variant mt-1">
+                        {impact.integratedPrograms.length} program{impact.integratedPrograms.length === 1 ? "" : "s"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    {impact.integratedPrograms.map((program) => (
+                      <ImpactProgramCard key={program.id} program={program} />
+                    ))}
+                  </div>
+                </section>
+              )}
+
               {impact.programs.length === 0 && (
                 <div className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient border border-dashed border-outline-variant/30 text-center font-sans">
                   <span className="material-symbols-outlined text-3xl text-on-surface-variant">insights</span>
                   <p className="font-bold text-on-surface mt-2">No livelihood programs assigned yet</p>
                   <p className="text-xs text-on-surface-variant mt-1 max-w-md mx-auto">
-                    Enroll this participant from a Farm or Non-Farm program page to start tracking real impact metrics.
+                    Enroll this participant from a Farm, Non-Farm, or Integrated program page to start tracking real impact metrics.
                   </p>
                 </div>
               )}
@@ -3054,8 +3162,13 @@ function BeneficiaryProfileDetailContent() {
 
               {editTab === "Programs" && (
                 <div className="space-y-6 text-xs">
-                  {["FARM", "NON_FARM"].map((category) => {
-                    const label = category === "FARM" ? "Farm Programs" : "Non-Farm Programs";
+                  {["FARM", "NON_FARM", "MIXED"].map((category) => {
+                    const label =
+                      category === "FARM"
+                        ? "Farm Programs"
+                        : category === "NON_FARM"
+                          ? "Non-Farm Programs"
+                          : "Integrated Programs";
                     const programs = livelihoodPrograms.filter((p) => p.category === category);
                     if (programs.length === 0) return null;
                     return (

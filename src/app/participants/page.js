@@ -27,25 +27,37 @@ export default function BeneficiaryMasterDirectory() {
   const [livelihoodPrograms, setLivelihoodPrograms] = useState([]);
 
   const mapBeneficiaries = (data) =>
-    data.map((b) => ({
-      id: b.id,
-      enrolmentId: b.enrolmentId,
-      name: b.name,
-      photoUrl: b.photoUrl || null,
-      location:
-        b.address ||
-        [b.village, b.block, b.district, b.state].map((s) => (s || "").trim()).filter(Boolean).join(", ") ||
-        "—",
-      householdSize: b.householdSize || 4,
-      income: b.primaryIncomeType || "—",
-      tier: b.tier,
-      programs:
-        (b.livelihoodDetails || []).map((d) => d.program?.name).filter(Boolean).length > 0
-          ? (b.livelihoodDetails || []).map((d) => d.program?.name).filter(Boolean)
-          : (b.schemeEnrollments || []).map((se) => se.scheme?.name).filter(Boolean),
-      resilienceScore: b.resilienceIndex ?? null,
-      isMigrated: b.isMigrated,
-    }));
+    data.map((b) => {
+      // One program can have several enrolment rows (one per activity/component).
+      // Dedupe by program id so the list shows each program only once.
+      const programNames = [
+        ...new Map(
+          (b.livelihoodDetails || [])
+            .filter((d) => d.program?.id || d.program?.name)
+            .map((d) => [d.program?.id || d.program?.name, d.program?.name])
+        ).values(),
+      ].filter(Boolean);
+      const schemeNames = (b.schemeEnrollments || [])
+        .map((se) => se.scheme?.name)
+        .filter(Boolean);
+
+      return {
+        id: b.id,
+        enrolmentId: b.enrolmentId,
+        name: b.name,
+        photoUrl: b.photoUrl || null,
+        location:
+          b.address ||
+          [b.village, b.block, b.district, b.state].map((s) => (s || "").trim()).filter(Boolean).join(", ") ||
+          "—",
+        householdSize: b.householdSize || 4,
+        income: b.primaryIncomeType || "—",
+        tier: b.tier,
+        programs: programNames.length > 0 ? programNames : schemeNames,
+        resilienceScore: b.resilienceIndex ?? null,
+        isMigrated: b.isMigrated,
+      };
+    });
 
   const refreshBeneficiaries = async () => {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};

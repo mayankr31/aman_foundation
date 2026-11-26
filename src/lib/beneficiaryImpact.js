@@ -83,9 +83,9 @@ function getAverage(values) {
 function buildProgram(detail, getTypeConfig) {
   const attributes =
     detail.attributes && typeof detail.attributes === "object" ? detail.attributes : {};
-  const type = detail.program?.type || "";
+  const type = detail.typeKey || detail.program?.type || "";
   const config = typeof getTypeConfig === "function" ? getTypeConfig(type) : null;
-  const category = detail.program?.category || "UNKNOWN";
+  const category = config?.category || detail.program?.category || "UNKNOWN";
   const events = Array.isArray(detail.events) ? detail.events : [];
 
   const kpiCards = (Array.isArray(config?.kpiCards) ? config.kpiCards : []).filter(
@@ -189,7 +189,10 @@ function buildProgram(detail, getTypeConfig) {
 
   return {
     id: detail.id,
+    programId: detail.programId || detail.program?.id || detail.id,
     name: detail.program?.name || config?.label || "Unknown Program",
+    programName: detail.program?.name || config?.label || "Unknown Program",
+    programCategory: detail.program?.category || config?.category || "UNKNOWN",
     category,
     type,
     typeLabel: config?.label || humanizeKey(type || "Program"),
@@ -201,6 +204,65 @@ function buildProgram(detail, getTypeConfig) {
     eventCount: events.length,
     lastEventDate: eventDates[0] || null,
   };
+}
+
+function typeLabelForDetail(detail, getTypeConfig) {
+  const type = detail.typeKey || detail.program?.type || "";
+  const config = typeof getTypeConfig === "function" ? getTypeConfig(type) : null;
+  return config?.label || humanizeKey(type || "Program");
+}
+
+/**
+ * Groups raw BeneficiaryLivelihood rows (one row per program component) into
+ * one entry per program. Use this anywhere the UI lists a participant's
+ * programs so an integrated program is shown once with all its activities.
+ */
+export function groupLivelihoodDetails(details, getTypeConfig) {
+  const groups = new Map();
+
+  (Array.isArray(details) ? details : []).forEach((detail) => {
+    const program = detail.program || {};
+    const key = detail.programId || program.id || detail.id;
+    if (!key) return;
+
+    if (!groups.has(key)) {
+      groups.set(key, {
+        programId: key,
+        program,
+        category: program.category || "UNKNOWN",
+        enrolledAt: null,
+        components: [],
+      });
+    }
+
+    const group = groups.get(key);
+    group.components.push(detail);
+
+    const enrolled = detail.enrolledAt || detail.createdAt || null;
+    if (enrolled && (!group.enrolledAt || new Date(enrolled) < new Date(group.enrolledAt))) {
+      group.enrolledAt = enrolled;
+    }
+  });
+
+  const programComponentOrder = (detail) => {
+    const components = detail?.program?.components;
+    if (!Array.isArray(components) || components.length === 0) {
+      return Number.MAX_SAFE_INTEGER;
+    }
+    const typeKey = detail.typeKey || detail.program?.type;
+    const index = components.findIndex((component) => component.typeKey === typeKey);
+    return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  };
+
+  return Array.from(groups.values()).map((group) => ({
+    ...group,
+    components: [...group.components]
+      .sort((a, b) => programComponentOrder(a) - programComponentOrder(b))
+      .map((detail) => ({
+        ...detail,
+        typeLabel: typeLabelForDetail(detail, getTypeConfig),
+      })),
+  }));
 }
 
 function buildLegacyDetails(beneficiary) {
@@ -271,28 +333,73 @@ export function computeBeneficiaryImpact(beneficiary, getTypeConfig) {
     }
   }
 
-  const programs = sourceDetails.map((detail) => buildProgram(detail, getTypeConfig));
+  const componentPrograms = sourceDetails.map((detail) => buildProgram(detail, getTypeConfig));
+  const farmComponents = componentPrograms.filter((program) => program.category === "FARM");
+  const nonFarmComponents = componentPrograms.filter((program) => program.category === "NON_FARM");
+
+  // Group component rows into one entry per program so an integrated program
+  // with several activities is shown once.
+  const programGroups = new Map();
+  componentPrograms.forEach((component) => {
+    const key = component.programId;
+    if (!programGroups.has(key)) {
+      programGroups.set(key, {
+        id: key,
+        name: component.programName,
+        category: component.programCategory,
+        enrolledAt: component.enrolledAt,
+        components: [],
+        eventCount: 0,
+        lastEventDate: null,
+        notes: "",
+      });
+    }
+
+    const group = programGroups.get(key);
+    group.components.push(component);
+    group.eventCount += component.eventCount || 0;
+
+    if (
+      component.lastEventDate &&
+      (!group.lastEventDate ||
+        new Date(component.lastEventDate) > new Date(group.lastEventDate))
+    ) {
+      group.lastEventDate = component.lastEventDate;
+    }
+    if (
+      component.enrolledAt &&
+      (!group.enrolledAt || new Date(component.enrolledAt) < new Date(group.enrolledAt))
+    ) {
+      group.enrolledAt = component.enrolledAt;
+    }
+    if (!group.notes && component.notes) group.notes = component.notes;
+  });
+
+  const programs = Array.from(programGroups.values());
   const farmPrograms = programs.filter((program) => program.category === "FARM");
   const nonFarmPrograms = programs.filter((program) => program.category === "NON_FARM");
+  const integratedPrograms = programs.filter(
+    (program) => program.category === "MIXED" || !["FARM", "NON_FARM"].includes(program.category)
+  );
 
-  const farmHasLand = hasAttribute(farmPrograms, "hectaresAllotted");
-  const farmHasEstimatedYield = hasAttribute(farmPrograms, "estimatedYieldTons");
-  const farmHasActualYield = hasAttribute(farmPrograms, "actualYieldTons");
-  const farmHasEstimatedRevenue = hasAttribute(farmPrograms, "estimatedRevenue");
-  const farmHasActualRevenue = hasAttribute(farmPrograms, "actualRevenue");
+  const farmHasLand = hasAttribute(farmComponents, "hectaresAllotted");
+  const farmHasEstimatedYield = hasAttribute(farmComponents, "estimatedYieldTons");
+  const farmHasActualYield = hasAttribute(farmComponents, "actualYieldTons");
+  const farmHasEstimatedRevenue = hasAttribute(farmComponents, "estimatedRevenue");
+  const farmHasActualRevenue = hasAttribute(farmComponents, "actualRevenue");
 
-  const totalLand = farmHasLand ? getSum(farmPrograms, "hectaresAllotted") : null;
+  const totalLand = farmHasLand ? getSum(farmComponents, "hectaresAllotted") : null;
   const totalEstimatedYield = farmHasEstimatedYield
-    ? getSum(farmPrograms, "estimatedYieldTons")
+    ? getSum(farmComponents, "estimatedYieldTons")
     : null;
   const totalActualYield = farmHasActualYield
-    ? getSum(farmPrograms, "actualYieldTons")
+    ? getSum(farmComponents, "actualYieldTons")
     : null;
   const totalEstimatedRevenue = farmHasEstimatedRevenue
-    ? getSum(farmPrograms, "estimatedRevenue")
+    ? getSum(farmComponents, "estimatedRevenue")
     : null;
   const totalActualRevenue = farmHasActualRevenue
-    ? getSum(farmPrograms, "actualRevenue")
+    ? getSum(farmComponents, "actualRevenue")
     : null;
 
   const yieldEfficiency =
@@ -306,17 +413,17 @@ export function computeBeneficiaryImpact(beneficiary, getTypeConfig) {
       ? Math.round((totalActualRevenue / totalEstimatedRevenue) * 100)
       : null;
 
-  const nonFarmHasInvestment = hasAttribute(nonFarmPrograms, "investment");
-  const nonFarmHasReturns = hasAttribute(nonFarmPrograms, "returnsAmount");
+  const nonFarmHasInvestment = hasAttribute(nonFarmComponents, "investment");
+  const nonFarmHasReturns = hasAttribute(nonFarmComponents, "returnsAmount");
   const totalInvestment = nonFarmHasInvestment
-    ? getSum(nonFarmPrograms, "investment")
+    ? getSum(nonFarmComponents, "investment")
     : null;
   const totalReturns = nonFarmHasReturns
-    ? getSum(nonFarmPrograms, "returnsAmount")
+    ? getSum(nonFarmComponents, "returnsAmount")
     : null;
 
   const averageRoi = getAverage(
-    nonFarmPrograms
+    nonFarmComponents
       .map((program) => toNumber(program.attributes?.roiPercentage))
       .filter((value) => value !== null)
   );
@@ -341,6 +448,7 @@ export function computeBeneficiaryImpact(beneficiary, getTypeConfig) {
     programs,
     farmPrograms,
     nonFarmPrograms,
+    integratedPrograms,
     usingLegacy,
     totalEvents: programs.reduce((sum, program) => sum + program.eventCount, 0),
     lastEventDate: allEventDates[0] || null,

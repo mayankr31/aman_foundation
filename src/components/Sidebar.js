@@ -393,6 +393,15 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
                       Non-Farm Programs
                     </Link>
                   )}
+                  {can("livelihood-integrated") && (
+                    <Link
+                      className={sublinkClass(pathname === "/livelihood/integrated")}
+                      href="/livelihood/integrated"
+                      onClick={onClose}
+                    >
+                      Integrated Programs
+                    </Link>
+                  )}
                   {can("participants") && (
                     <Link
                       className={sublinkClass(pathname === "/participants")}

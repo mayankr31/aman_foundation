@@ -260,6 +260,11 @@ export type SugarcaneProgram = $Result.DefaultSelection<Prisma.$SugarcaneProgram
  */
 export type LivelihoodProgram = $Result.DefaultSelection<Prisma.$LivelihoodProgramPayload>
 /**
+ * Model LivelihoodProgramComponent
+ * 
+ */
+export type LivelihoodProgramComponent = $Result.DefaultSelection<Prisma.$LivelihoodProgramComponentPayload>
+/**
  * Model LivelihoodType
  * 
  */
@@ -614,7 +619,8 @@ export type PermissionType = (typeof PermissionType)[keyof typeof PermissionType
 
 export const LivelihoodCategory: {
   FARM: 'FARM',
-  NON_FARM: 'NON_FARM'
+  NON_FARM: 'NON_FARM',
+  MIXED: 'MIXED'
 };
 
 export type LivelihoodCategory = (typeof LivelihoodCategory)[keyof typeof LivelihoodCategory]
@@ -1259,6 +1265,16 @@ export class PrismaClient<
     * ```
     */
   get livelihoodProgram(): Prisma.LivelihoodProgramDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.livelihoodProgramComponent`: Exposes CRUD operations for the **LivelihoodProgramComponent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LivelihoodProgramComponents
+    * const livelihoodProgramComponents = await prisma.livelihoodProgramComponent.findMany()
+    * ```
+    */
+  get livelihoodProgramComponent(): Prisma.LivelihoodProgramComponentDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.livelihoodType`: Exposes CRUD operations for the **LivelihoodType** model.
@@ -2322,6 +2338,7 @@ export namespace Prisma {
     BeneficiarySugarcane: 'BeneficiarySugarcane',
     SugarcaneProgram: 'SugarcaneProgram',
     LivelihoodProgram: 'LivelihoodProgram',
+    LivelihoodProgramComponent: 'LivelihoodProgramComponent',
     LivelihoodType: 'LivelihoodType',
     BeneficiaryLivelihood: 'BeneficiaryLivelihood',
     LivelihoodEvent: 'LivelihoodEvent',
@@ -2395,7 +2412,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "verificationToken" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "holiday" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "surveyTemplate" | "institutionStudentDataNote"
+      modelProps: "role" | "user" | "verificationToken" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodProgramComponent" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "holiday" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "surveyTemplate" | "institutionStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6022,6 +6039,80 @@ export namespace Prisma {
           count: {
             args: Prisma.LivelihoodProgramCountArgs<ExtArgs>
             result: $Utils.Optional<LivelihoodProgramCountAggregateOutputType> | number
+          }
+        }
+      }
+      LivelihoodProgramComponent: {
+        payload: Prisma.$LivelihoodProgramComponentPayload<ExtArgs>
+        fields: Prisma.LivelihoodProgramComponentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LivelihoodProgramComponentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LivelihoodProgramComponentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload>
+          }
+          findFirst: {
+            args: Prisma.LivelihoodProgramComponentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LivelihoodProgramComponentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload>
+          }
+          findMany: {
+            args: Prisma.LivelihoodProgramComponentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload>[]
+          }
+          create: {
+            args: Prisma.LivelihoodProgramComponentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload>
+          }
+          createMany: {
+            args: Prisma.LivelihoodProgramComponentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LivelihoodProgramComponentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload>[]
+          }
+          delete: {
+            args: Prisma.LivelihoodProgramComponentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload>
+          }
+          update: {
+            args: Prisma.LivelihoodProgramComponentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload>
+          }
+          deleteMany: {
+            args: Prisma.LivelihoodProgramComponentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LivelihoodProgramComponentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LivelihoodProgramComponentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload>[]
+          }
+          upsert: {
+            args: Prisma.LivelihoodProgramComponentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodProgramComponentPayload>
+          }
+          aggregate: {
+            args: Prisma.LivelihoodProgramComponentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLivelihoodProgramComponent>
+          }
+          groupBy: {
+            args: Prisma.LivelihoodProgramComponentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LivelihoodProgramComponentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LivelihoodProgramComponentCountArgs<ExtArgs>
+            result: $Utils.Optional<LivelihoodProgramComponentCountAggregateOutputType> | number
           }
         }
       }
@@ -10474,6 +10565,7 @@ export namespace Prisma {
     beneficiarySugarcane?: BeneficiarySugarcaneOmit
     sugarcaneProgram?: SugarcaneProgramOmit
     livelihoodProgram?: LivelihoodProgramOmit
+    livelihoodProgramComponent?: LivelihoodProgramComponentOmit
     livelihoodType?: LivelihoodTypeOmit
     beneficiaryLivelihood?: BeneficiaryLivelihoodOmit
     livelihoodEvent?: LivelihoodEventOmit
@@ -11860,12 +11952,14 @@ export namespace Prisma {
 
   export type LivelihoodProgramCountOutputType = {
     assignments: number
+    components: number
     programManagers: number
     fellows: number
   }
 
   export type LivelihoodProgramCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignments?: boolean | LivelihoodProgramCountOutputTypeCountAssignmentsArgs
+    components?: boolean | LivelihoodProgramCountOutputTypeCountComponentsArgs
     programManagers?: boolean | LivelihoodProgramCountOutputTypeCountProgramManagersArgs
     fellows?: boolean | LivelihoodProgramCountOutputTypeCountFellowsArgs
   }
@@ -11886,6 +11980,13 @@ export namespace Prisma {
    */
   export type LivelihoodProgramCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BeneficiaryLivelihoodWhereInput
+  }
+
+  /**
+   * LivelihoodProgramCountOutputType without action
+   */
+  export type LivelihoodProgramCountOutputTypeCountComponentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodProgramComponentWhereInput
   }
 
   /**
@@ -70897,6 +70998,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     assignments?: boolean | LivelihoodProgram$assignmentsArgs<ExtArgs>
+    components?: boolean | LivelihoodProgram$componentsArgs<ExtArgs>
     programManagers?: boolean | LivelihoodProgram$programManagersArgs<ExtArgs>
     fellows?: boolean | LivelihoodProgram$fellowsArgs<ExtArgs>
     _count?: boolean | LivelihoodProgramCountOutputTypeDefaultArgs<ExtArgs>
@@ -70941,6 +71043,7 @@ export namespace Prisma {
   export type LivelihoodProgramOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category" | "type" | "name" | "description" | "status" | "totalTarget" | "createdAt" | "updatedAt", ExtArgs["result"]["livelihoodProgram"]>
   export type LivelihoodProgramInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignments?: boolean | LivelihoodProgram$assignmentsArgs<ExtArgs>
+    components?: boolean | LivelihoodProgram$componentsArgs<ExtArgs>
     programManagers?: boolean | LivelihoodProgram$programManagersArgs<ExtArgs>
     fellows?: boolean | LivelihoodProgram$fellowsArgs<ExtArgs>
     _count?: boolean | LivelihoodProgramCountOutputTypeDefaultArgs<ExtArgs>
@@ -70952,6 +71055,7 @@ export namespace Prisma {
     name: "LivelihoodProgram"
     objects: {
       assignments: Prisma.$BeneficiaryLivelihoodPayload<ExtArgs>[]
+      components: Prisma.$LivelihoodProgramComponentPayload<ExtArgs>[]
       programManagers: Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>[]
       fellows: Prisma.$FellowLivelihoodProgramPayload<ExtArgs>[]
     }
@@ -71360,6 +71464,7 @@ export namespace Prisma {
   export interface Prisma__LivelihoodProgramClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     assignments<T extends LivelihoodProgram$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryLivelihoodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    components<T extends LivelihoodProgram$componentsArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$componentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     programManagers<T extends LivelihoodProgram$programManagersArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$programManagersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fellows<T extends LivelihoodProgram$fellowsArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$fellowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -71817,6 +71922,30 @@ export namespace Prisma {
   }
 
   /**
+   * LivelihoodProgram.components
+   */
+  export type LivelihoodProgram$componentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    where?: LivelihoodProgramComponentWhereInput
+    orderBy?: LivelihoodProgramComponentOrderByWithRelationInput | LivelihoodProgramComponentOrderByWithRelationInput[]
+    cursor?: LivelihoodProgramComponentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LivelihoodProgramComponentScalarFieldEnum | LivelihoodProgramComponentScalarFieldEnum[]
+  }
+
+  /**
    * LivelihoodProgram.programManagers
    */
   export type LivelihoodProgram$programManagersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -71880,6 +72009,1133 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LivelihoodProgramInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LivelihoodProgramComponent
+   */
+
+  export type AggregateLivelihoodProgramComponent = {
+    _count: LivelihoodProgramComponentCountAggregateOutputType | null
+    _avg: LivelihoodProgramComponentAvgAggregateOutputType | null
+    _sum: LivelihoodProgramComponentSumAggregateOutputType | null
+    _min: LivelihoodProgramComponentMinAggregateOutputType | null
+    _max: LivelihoodProgramComponentMaxAggregateOutputType | null
+  }
+
+  export type LivelihoodProgramComponentAvgAggregateOutputType = {
+    target: number | null
+    order: number | null
+  }
+
+  export type LivelihoodProgramComponentSumAggregateOutputType = {
+    target: number | null
+    order: number | null
+  }
+
+  export type LivelihoodProgramComponentMinAggregateOutputType = {
+    id: string | null
+    programId: string | null
+    typeKey: string | null
+    target: number | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LivelihoodProgramComponentMaxAggregateOutputType = {
+    id: string | null
+    programId: string | null
+    typeKey: string | null
+    target: number | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LivelihoodProgramComponentCountAggregateOutputType = {
+    id: number
+    programId: number
+    typeKey: number
+    target: number
+    order: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LivelihoodProgramComponentAvgAggregateInputType = {
+    target?: true
+    order?: true
+  }
+
+  export type LivelihoodProgramComponentSumAggregateInputType = {
+    target?: true
+    order?: true
+  }
+
+  export type LivelihoodProgramComponentMinAggregateInputType = {
+    id?: true
+    programId?: true
+    typeKey?: true
+    target?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LivelihoodProgramComponentMaxAggregateInputType = {
+    id?: true
+    programId?: true
+    typeKey?: true
+    target?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LivelihoodProgramComponentCountAggregateInputType = {
+    id?: true
+    programId?: true
+    typeKey?: true
+    target?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LivelihoodProgramComponentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LivelihoodProgramComponent to aggregate.
+     */
+    where?: LivelihoodProgramComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramComponents to fetch.
+     */
+    orderBy?: LivelihoodProgramComponentOrderByWithRelationInput | LivelihoodProgramComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LivelihoodProgramComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LivelihoodProgramComponents
+    **/
+    _count?: true | LivelihoodProgramComponentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LivelihoodProgramComponentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LivelihoodProgramComponentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LivelihoodProgramComponentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LivelihoodProgramComponentMaxAggregateInputType
+  }
+
+  export type GetLivelihoodProgramComponentAggregateType<T extends LivelihoodProgramComponentAggregateArgs> = {
+        [P in keyof T & keyof AggregateLivelihoodProgramComponent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLivelihoodProgramComponent[P]>
+      : GetScalarType<T[P], AggregateLivelihoodProgramComponent[P]>
+  }
+
+
+
+
+  export type LivelihoodProgramComponentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodProgramComponentWhereInput
+    orderBy?: LivelihoodProgramComponentOrderByWithAggregationInput | LivelihoodProgramComponentOrderByWithAggregationInput[]
+    by: LivelihoodProgramComponentScalarFieldEnum[] | LivelihoodProgramComponentScalarFieldEnum
+    having?: LivelihoodProgramComponentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LivelihoodProgramComponentCountAggregateInputType | true
+    _avg?: LivelihoodProgramComponentAvgAggregateInputType
+    _sum?: LivelihoodProgramComponentSumAggregateInputType
+    _min?: LivelihoodProgramComponentMinAggregateInputType
+    _max?: LivelihoodProgramComponentMaxAggregateInputType
+  }
+
+  export type LivelihoodProgramComponentGroupByOutputType = {
+    id: string
+    programId: string
+    typeKey: string
+    target: number | null
+    order: number
+    createdAt: Date
+    updatedAt: Date
+    _count: LivelihoodProgramComponentCountAggregateOutputType | null
+    _avg: LivelihoodProgramComponentAvgAggregateOutputType | null
+    _sum: LivelihoodProgramComponentSumAggregateOutputType | null
+    _min: LivelihoodProgramComponentMinAggregateOutputType | null
+    _max: LivelihoodProgramComponentMaxAggregateOutputType | null
+  }
+
+  type GetLivelihoodProgramComponentGroupByPayload<T extends LivelihoodProgramComponentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LivelihoodProgramComponentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LivelihoodProgramComponentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LivelihoodProgramComponentGroupByOutputType[P]>
+            : GetScalarType<T[P], LivelihoodProgramComponentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LivelihoodProgramComponentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programId?: boolean
+    typeKey?: boolean
+    target?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["livelihoodProgramComponent"]>
+
+  export type LivelihoodProgramComponentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programId?: boolean
+    typeKey?: boolean
+    target?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["livelihoodProgramComponent"]>
+
+  export type LivelihoodProgramComponentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programId?: boolean
+    typeKey?: boolean
+    target?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["livelihoodProgramComponent"]>
+
+  export type LivelihoodProgramComponentSelectScalar = {
+    id?: boolean
+    programId?: boolean
+    typeKey?: boolean
+    target?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LivelihoodProgramComponentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "typeKey" | "target" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["livelihoodProgramComponent"]>
+  export type LivelihoodProgramComponentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }
+  export type LivelihoodProgramComponentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }
+  export type LivelihoodProgramComponentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }
+
+  export type $LivelihoodProgramComponentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LivelihoodProgramComponent"
+    objects: {
+      program: Prisma.$LivelihoodProgramPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      programId: string
+      typeKey: string
+      target: number | null
+      order: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["livelihoodProgramComponent"]>
+    composites: {}
+  }
+
+  type LivelihoodProgramComponentGetPayload<S extends boolean | null | undefined | LivelihoodProgramComponentDefaultArgs> = $Result.GetResult<Prisma.$LivelihoodProgramComponentPayload, S>
+
+  type LivelihoodProgramComponentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LivelihoodProgramComponentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LivelihoodProgramComponentCountAggregateInputType | true
+    }
+
+  export interface LivelihoodProgramComponentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LivelihoodProgramComponent'], meta: { name: 'LivelihoodProgramComponent' } }
+    /**
+     * Find zero or one LivelihoodProgramComponent that matches the filter.
+     * @param {LivelihoodProgramComponentFindUniqueArgs} args - Arguments to find a LivelihoodProgramComponent
+     * @example
+     * // Get one LivelihoodProgramComponent
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LivelihoodProgramComponentFindUniqueArgs>(args: SelectSubset<T, LivelihoodProgramComponentFindUniqueArgs<ExtArgs>>): Prisma__LivelihoodProgramComponentClient<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LivelihoodProgramComponent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LivelihoodProgramComponentFindUniqueOrThrowArgs} args - Arguments to find a LivelihoodProgramComponent
+     * @example
+     * // Get one LivelihoodProgramComponent
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LivelihoodProgramComponentFindUniqueOrThrowArgs>(args: SelectSubset<T, LivelihoodProgramComponentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LivelihoodProgramComponentClient<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LivelihoodProgramComponent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramComponentFindFirstArgs} args - Arguments to find a LivelihoodProgramComponent
+     * @example
+     * // Get one LivelihoodProgramComponent
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LivelihoodProgramComponentFindFirstArgs>(args?: SelectSubset<T, LivelihoodProgramComponentFindFirstArgs<ExtArgs>>): Prisma__LivelihoodProgramComponentClient<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LivelihoodProgramComponent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramComponentFindFirstOrThrowArgs} args - Arguments to find a LivelihoodProgramComponent
+     * @example
+     * // Get one LivelihoodProgramComponent
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LivelihoodProgramComponentFindFirstOrThrowArgs>(args?: SelectSubset<T, LivelihoodProgramComponentFindFirstOrThrowArgs<ExtArgs>>): Prisma__LivelihoodProgramComponentClient<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LivelihoodProgramComponents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramComponentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LivelihoodProgramComponents
+     * const livelihoodProgramComponents = await prisma.livelihoodProgramComponent.findMany()
+     * 
+     * // Get first 10 LivelihoodProgramComponents
+     * const livelihoodProgramComponents = await prisma.livelihoodProgramComponent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const livelihoodProgramComponentWithIdOnly = await prisma.livelihoodProgramComponent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LivelihoodProgramComponentFindManyArgs>(args?: SelectSubset<T, LivelihoodProgramComponentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LivelihoodProgramComponent.
+     * @param {LivelihoodProgramComponentCreateArgs} args - Arguments to create a LivelihoodProgramComponent.
+     * @example
+     * // Create one LivelihoodProgramComponent
+     * const LivelihoodProgramComponent = await prisma.livelihoodProgramComponent.create({
+     *   data: {
+     *     // ... data to create a LivelihoodProgramComponent
+     *   }
+     * })
+     * 
+     */
+    create<T extends LivelihoodProgramComponentCreateArgs>(args: SelectSubset<T, LivelihoodProgramComponentCreateArgs<ExtArgs>>): Prisma__LivelihoodProgramComponentClient<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LivelihoodProgramComponents.
+     * @param {LivelihoodProgramComponentCreateManyArgs} args - Arguments to create many LivelihoodProgramComponents.
+     * @example
+     * // Create many LivelihoodProgramComponents
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LivelihoodProgramComponentCreateManyArgs>(args?: SelectSubset<T, LivelihoodProgramComponentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LivelihoodProgramComponents and returns the data saved in the database.
+     * @param {LivelihoodProgramComponentCreateManyAndReturnArgs} args - Arguments to create many LivelihoodProgramComponents.
+     * @example
+     * // Create many LivelihoodProgramComponents
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LivelihoodProgramComponents and only return the `id`
+     * const livelihoodProgramComponentWithIdOnly = await prisma.livelihoodProgramComponent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LivelihoodProgramComponentCreateManyAndReturnArgs>(args?: SelectSubset<T, LivelihoodProgramComponentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LivelihoodProgramComponent.
+     * @param {LivelihoodProgramComponentDeleteArgs} args - Arguments to delete one LivelihoodProgramComponent.
+     * @example
+     * // Delete one LivelihoodProgramComponent
+     * const LivelihoodProgramComponent = await prisma.livelihoodProgramComponent.delete({
+     *   where: {
+     *     // ... filter to delete one LivelihoodProgramComponent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LivelihoodProgramComponentDeleteArgs>(args: SelectSubset<T, LivelihoodProgramComponentDeleteArgs<ExtArgs>>): Prisma__LivelihoodProgramComponentClient<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LivelihoodProgramComponent.
+     * @param {LivelihoodProgramComponentUpdateArgs} args - Arguments to update one LivelihoodProgramComponent.
+     * @example
+     * // Update one LivelihoodProgramComponent
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LivelihoodProgramComponentUpdateArgs>(args: SelectSubset<T, LivelihoodProgramComponentUpdateArgs<ExtArgs>>): Prisma__LivelihoodProgramComponentClient<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LivelihoodProgramComponents.
+     * @param {LivelihoodProgramComponentDeleteManyArgs} args - Arguments to filter LivelihoodProgramComponents to delete.
+     * @example
+     * // Delete a few LivelihoodProgramComponents
+     * const { count } = await prisma.livelihoodProgramComponent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LivelihoodProgramComponentDeleteManyArgs>(args?: SelectSubset<T, LivelihoodProgramComponentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LivelihoodProgramComponents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramComponentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LivelihoodProgramComponents
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LivelihoodProgramComponentUpdateManyArgs>(args: SelectSubset<T, LivelihoodProgramComponentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LivelihoodProgramComponents and returns the data updated in the database.
+     * @param {LivelihoodProgramComponentUpdateManyAndReturnArgs} args - Arguments to update many LivelihoodProgramComponents.
+     * @example
+     * // Update many LivelihoodProgramComponents
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LivelihoodProgramComponents and only return the `id`
+     * const livelihoodProgramComponentWithIdOnly = await prisma.livelihoodProgramComponent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LivelihoodProgramComponentUpdateManyAndReturnArgs>(args: SelectSubset<T, LivelihoodProgramComponentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LivelihoodProgramComponent.
+     * @param {LivelihoodProgramComponentUpsertArgs} args - Arguments to update or create a LivelihoodProgramComponent.
+     * @example
+     * // Update or create a LivelihoodProgramComponent
+     * const livelihoodProgramComponent = await prisma.livelihoodProgramComponent.upsert({
+     *   create: {
+     *     // ... data to create a LivelihoodProgramComponent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LivelihoodProgramComponent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LivelihoodProgramComponentUpsertArgs>(args: SelectSubset<T, LivelihoodProgramComponentUpsertArgs<ExtArgs>>): Prisma__LivelihoodProgramComponentClient<$Result.GetResult<Prisma.$LivelihoodProgramComponentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LivelihoodProgramComponents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramComponentCountArgs} args - Arguments to filter LivelihoodProgramComponents to count.
+     * @example
+     * // Count the number of LivelihoodProgramComponents
+     * const count = await prisma.livelihoodProgramComponent.count({
+     *   where: {
+     *     // ... the filter for the LivelihoodProgramComponents we want to count
+     *   }
+     * })
+    **/
+    count<T extends LivelihoodProgramComponentCountArgs>(
+      args?: Subset<T, LivelihoodProgramComponentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LivelihoodProgramComponentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LivelihoodProgramComponent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramComponentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LivelihoodProgramComponentAggregateArgs>(args: Subset<T, LivelihoodProgramComponentAggregateArgs>): Prisma.PrismaPromise<GetLivelihoodProgramComponentAggregateType<T>>
+
+    /**
+     * Group by LivelihoodProgramComponent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodProgramComponentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LivelihoodProgramComponentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LivelihoodProgramComponentGroupByArgs['orderBy'] }
+        : { orderBy?: LivelihoodProgramComponentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LivelihoodProgramComponentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLivelihoodProgramComponentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LivelihoodProgramComponent model
+   */
+  readonly fields: LivelihoodProgramComponentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LivelihoodProgramComponent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LivelihoodProgramComponentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    program<T extends LivelihoodProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgramDefaultArgs<ExtArgs>>): Prisma__LivelihoodProgramClient<$Result.GetResult<Prisma.$LivelihoodProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LivelihoodProgramComponent model
+   */
+  interface LivelihoodProgramComponentFieldRefs {
+    readonly id: FieldRef<"LivelihoodProgramComponent", 'String'>
+    readonly programId: FieldRef<"LivelihoodProgramComponent", 'String'>
+    readonly typeKey: FieldRef<"LivelihoodProgramComponent", 'String'>
+    readonly target: FieldRef<"LivelihoodProgramComponent", 'Float'>
+    readonly order: FieldRef<"LivelihoodProgramComponent", 'Int'>
+    readonly createdAt: FieldRef<"LivelihoodProgramComponent", 'DateTime'>
+    readonly updatedAt: FieldRef<"LivelihoodProgramComponent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LivelihoodProgramComponent findUnique
+   */
+  export type LivelihoodProgramComponentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramComponent to fetch.
+     */
+    where: LivelihoodProgramComponentWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramComponent findUniqueOrThrow
+   */
+  export type LivelihoodProgramComponentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramComponent to fetch.
+     */
+    where: LivelihoodProgramComponentWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramComponent findFirst
+   */
+  export type LivelihoodProgramComponentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramComponent to fetch.
+     */
+    where?: LivelihoodProgramComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramComponents to fetch.
+     */
+    orderBy?: LivelihoodProgramComponentOrderByWithRelationInput | LivelihoodProgramComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LivelihoodProgramComponents.
+     */
+    cursor?: LivelihoodProgramComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodProgramComponents.
+     */
+    distinct?: LivelihoodProgramComponentScalarFieldEnum | LivelihoodProgramComponentScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramComponent findFirstOrThrow
+   */
+  export type LivelihoodProgramComponentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramComponent to fetch.
+     */
+    where?: LivelihoodProgramComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramComponents to fetch.
+     */
+    orderBy?: LivelihoodProgramComponentOrderByWithRelationInput | LivelihoodProgramComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LivelihoodProgramComponents.
+     */
+    cursor?: LivelihoodProgramComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodProgramComponents.
+     */
+    distinct?: LivelihoodProgramComponentScalarFieldEnum | LivelihoodProgramComponentScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramComponent findMany
+   */
+  export type LivelihoodProgramComponentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodProgramComponents to fetch.
+     */
+    where?: LivelihoodProgramComponentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodProgramComponents to fetch.
+     */
+    orderBy?: LivelihoodProgramComponentOrderByWithRelationInput | LivelihoodProgramComponentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LivelihoodProgramComponents.
+     */
+    cursor?: LivelihoodProgramComponentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodProgramComponents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodProgramComponents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodProgramComponents.
+     */
+    distinct?: LivelihoodProgramComponentScalarFieldEnum | LivelihoodProgramComponentScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgramComponent create
+   */
+  export type LivelihoodProgramComponentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LivelihoodProgramComponent.
+     */
+    data: XOR<LivelihoodProgramComponentCreateInput, LivelihoodProgramComponentUncheckedCreateInput>
+  }
+
+  /**
+   * LivelihoodProgramComponent createMany
+   */
+  export type LivelihoodProgramComponentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LivelihoodProgramComponents.
+     */
+    data: LivelihoodProgramComponentCreateManyInput | LivelihoodProgramComponentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LivelihoodProgramComponent createManyAndReturn
+   */
+  export type LivelihoodProgramComponentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * The data used to create many LivelihoodProgramComponents.
+     */
+    data: LivelihoodProgramComponentCreateManyInput | LivelihoodProgramComponentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LivelihoodProgramComponent update
+   */
+  export type LivelihoodProgramComponentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LivelihoodProgramComponent.
+     */
+    data: XOR<LivelihoodProgramComponentUpdateInput, LivelihoodProgramComponentUncheckedUpdateInput>
+    /**
+     * Choose, which LivelihoodProgramComponent to update.
+     */
+    where: LivelihoodProgramComponentWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramComponent updateMany
+   */
+  export type LivelihoodProgramComponentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LivelihoodProgramComponents.
+     */
+    data: XOR<LivelihoodProgramComponentUpdateManyMutationInput, LivelihoodProgramComponentUncheckedUpdateManyInput>
+    /**
+     * Filter which LivelihoodProgramComponents to update
+     */
+    where?: LivelihoodProgramComponentWhereInput
+    /**
+     * Limit how many LivelihoodProgramComponents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LivelihoodProgramComponent updateManyAndReturn
+   */
+  export type LivelihoodProgramComponentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * The data used to update LivelihoodProgramComponents.
+     */
+    data: XOR<LivelihoodProgramComponentUpdateManyMutationInput, LivelihoodProgramComponentUncheckedUpdateManyInput>
+    /**
+     * Filter which LivelihoodProgramComponents to update
+     */
+    where?: LivelihoodProgramComponentWhereInput
+    /**
+     * Limit how many LivelihoodProgramComponents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LivelihoodProgramComponent upsert
+   */
+  export type LivelihoodProgramComponentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LivelihoodProgramComponent to update in case it exists.
+     */
+    where: LivelihoodProgramComponentWhereUniqueInput
+    /**
+     * In case the LivelihoodProgramComponent found by the `where` argument doesn't exist, create a new LivelihoodProgramComponent with this data.
+     */
+    create: XOR<LivelihoodProgramComponentCreateInput, LivelihoodProgramComponentUncheckedCreateInput>
+    /**
+     * In case the LivelihoodProgramComponent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LivelihoodProgramComponentUpdateInput, LivelihoodProgramComponentUncheckedUpdateInput>
+  }
+
+  /**
+   * LivelihoodProgramComponent delete
+   */
+  export type LivelihoodProgramComponentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
+    /**
+     * Filter which LivelihoodProgramComponent to delete.
+     */
+    where: LivelihoodProgramComponentWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodProgramComponent deleteMany
+   */
+  export type LivelihoodProgramComponentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LivelihoodProgramComponents to delete
+     */
+    where?: LivelihoodProgramComponentWhereInput
+    /**
+     * Limit how many LivelihoodProgramComponents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LivelihoodProgramComponent without action
+   */
+  export type LivelihoodProgramComponentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodProgramComponent
+     */
+    select?: LivelihoodProgramComponentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodProgramComponent
+     */
+    omit?: LivelihoodProgramComponentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LivelihoodProgramComponentInclude<ExtArgs> | null
   }
 
 
@@ -73045,6 +74301,7 @@ export namespace Prisma {
     id: string | null
     beneficiaryId: string | null
     programId: string | null
+    typeKey: string | null
     notes: string | null
     enrolledAt: Date | null
     createdAt: Date | null
@@ -73055,6 +74312,7 @@ export namespace Prisma {
     id: string | null
     beneficiaryId: string | null
     programId: string | null
+    typeKey: string | null
     notes: string | null
     enrolledAt: Date | null
     createdAt: Date | null
@@ -73065,6 +74323,7 @@ export namespace Prisma {
     id: number
     beneficiaryId: number
     programId: number
+    typeKey: number
     attributes: number
     notes: number
     enrolledAt: number
@@ -73078,6 +74337,7 @@ export namespace Prisma {
     id?: true
     beneficiaryId?: true
     programId?: true
+    typeKey?: true
     notes?: true
     enrolledAt?: true
     createdAt?: true
@@ -73088,6 +74348,7 @@ export namespace Prisma {
     id?: true
     beneficiaryId?: true
     programId?: true
+    typeKey?: true
     notes?: true
     enrolledAt?: true
     createdAt?: true
@@ -73098,6 +74359,7 @@ export namespace Prisma {
     id?: true
     beneficiaryId?: true
     programId?: true
+    typeKey?: true
     attributes?: true
     notes?: true
     enrolledAt?: true
@@ -73182,6 +74444,7 @@ export namespace Prisma {
     id: string
     beneficiaryId: string
     programId: string
+    typeKey: string | null
     attributes: JsonValue
     notes: string | null
     enrolledAt: Date
@@ -73210,6 +74473,7 @@ export namespace Prisma {
     id?: boolean
     beneficiaryId?: boolean
     programId?: boolean
+    typeKey?: boolean
     attributes?: boolean
     notes?: boolean
     enrolledAt?: boolean
@@ -73225,6 +74489,7 @@ export namespace Prisma {
     id?: boolean
     beneficiaryId?: boolean
     programId?: boolean
+    typeKey?: boolean
     attributes?: boolean
     notes?: boolean
     enrolledAt?: boolean
@@ -73238,6 +74503,7 @@ export namespace Prisma {
     id?: boolean
     beneficiaryId?: boolean
     programId?: boolean
+    typeKey?: boolean
     attributes?: boolean
     notes?: boolean
     enrolledAt?: boolean
@@ -73251,6 +74517,7 @@ export namespace Prisma {
     id?: boolean
     beneficiaryId?: boolean
     programId?: boolean
+    typeKey?: boolean
     attributes?: boolean
     notes?: boolean
     enrolledAt?: boolean
@@ -73258,7 +74525,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BeneficiaryLivelihoodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "programId" | "attributes" | "notes" | "enrolledAt" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiaryLivelihood"]>
+  export type BeneficiaryLivelihoodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "programId" | "typeKey" | "attributes" | "notes" | "enrolledAt" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiaryLivelihood"]>
   export type BeneficiaryLivelihoodInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
     program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
@@ -73285,6 +74552,7 @@ export namespace Prisma {
       id: string
       beneficiaryId: string
       programId: string
+      typeKey: string | null
       attributes: Prisma.JsonValue
       notes: string | null
       enrolledAt: Date
@@ -73719,6 +74987,7 @@ export namespace Prisma {
     readonly id: FieldRef<"BeneficiaryLivelihood", 'String'>
     readonly beneficiaryId: FieldRef<"BeneficiaryLivelihood", 'String'>
     readonly programId: FieldRef<"BeneficiaryLivelihood", 'String'>
+    readonly typeKey: FieldRef<"BeneficiaryLivelihood", 'String'>
     readonly attributes: FieldRef<"BeneficiaryLivelihood", 'Json'>
     readonly notes: FieldRef<"BeneficiaryLivelihood", 'String'>
     readonly enrolledAt: FieldRef<"BeneficiaryLivelihood", 'DateTime'>
@@ -140274,6 +141543,19 @@ export namespace Prisma {
   export type LivelihoodProgramScalarFieldEnum = (typeof LivelihoodProgramScalarFieldEnum)[keyof typeof LivelihoodProgramScalarFieldEnum]
 
 
+  export const LivelihoodProgramComponentScalarFieldEnum: {
+    id: 'id',
+    programId: 'programId',
+    typeKey: 'typeKey',
+    target: 'target',
+    order: 'order',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LivelihoodProgramComponentScalarFieldEnum = (typeof LivelihoodProgramComponentScalarFieldEnum)[keyof typeof LivelihoodProgramComponentScalarFieldEnum]
+
+
   export const LivelihoodTypeScalarFieldEnum: {
     id: 'id',
     key: 'key',
@@ -140299,6 +141581,7 @@ export namespace Prisma {
     id: 'id',
     beneficiaryId: 'beneficiaryId',
     programId: 'programId',
+    typeKey: 'typeKey',
     attributes: 'attributes',
     notes: 'notes',
     enrolledAt: 'enrolledAt',
@@ -145711,6 +146994,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     updatedAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     assignments?: BeneficiaryLivelihoodListRelationFilter
+    components?: LivelihoodProgramComponentListRelationFilter
     programManagers?: ProgramManagerLivelihoodProgramListRelationFilter
     fellows?: FellowLivelihoodProgramListRelationFilter
   }
@@ -145726,6 +147010,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     assignments?: BeneficiaryLivelihoodOrderByRelationAggregateInput
+    components?: LivelihoodProgramComponentOrderByRelationAggregateInput
     programManagers?: ProgramManagerLivelihoodProgramOrderByRelationAggregateInput
     fellows?: FellowLivelihoodProgramOrderByRelationAggregateInput
   }
@@ -145744,6 +147029,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     updatedAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     assignments?: BeneficiaryLivelihoodListRelationFilter
+    components?: LivelihoodProgramComponentListRelationFilter
     programManagers?: ProgramManagerLivelihoodProgramListRelationFilter
     fellows?: FellowLivelihoodProgramListRelationFilter
   }, "id">
@@ -145778,6 +147064,74 @@ export namespace Prisma {
     totalTarget?: FloatNullableWithAggregatesFilter<"LivelihoodProgram"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"LivelihoodProgram"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"LivelihoodProgram"> | Date | string
+  }
+
+  export type LivelihoodProgramComponentWhereInput = {
+    AND?: LivelihoodProgramComponentWhereInput | LivelihoodProgramComponentWhereInput[]
+    OR?: LivelihoodProgramComponentWhereInput[]
+    NOT?: LivelihoodProgramComponentWhereInput | LivelihoodProgramComponentWhereInput[]
+    id?: StringFilter<"LivelihoodProgramComponent"> | string
+    programId?: StringFilter<"LivelihoodProgramComponent"> | string
+    typeKey?: StringFilter<"LivelihoodProgramComponent"> | string
+    target?: FloatNullableFilter<"LivelihoodProgramComponent"> | number | null
+    order?: IntFilter<"LivelihoodProgramComponent"> | number
+    createdAt?: DateTimeFilter<"LivelihoodProgramComponent"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodProgramComponent"> | Date | string
+    program?: XOR<LivelihoodProgramScalarRelationFilter, LivelihoodProgramWhereInput>
+  }
+
+  export type LivelihoodProgramComponentOrderByWithRelationInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    typeKey?: SortOrder
+    target?: SortOrderInput | SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    program?: LivelihoodProgramOrderByWithRelationInput
+  }
+
+  export type LivelihoodProgramComponentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    programId_typeKey?: LivelihoodProgramComponentProgramIdTypeKeyCompoundUniqueInput
+    AND?: LivelihoodProgramComponentWhereInput | LivelihoodProgramComponentWhereInput[]
+    OR?: LivelihoodProgramComponentWhereInput[]
+    NOT?: LivelihoodProgramComponentWhereInput | LivelihoodProgramComponentWhereInput[]
+    programId?: StringFilter<"LivelihoodProgramComponent"> | string
+    typeKey?: StringFilter<"LivelihoodProgramComponent"> | string
+    target?: FloatNullableFilter<"LivelihoodProgramComponent"> | number | null
+    order?: IntFilter<"LivelihoodProgramComponent"> | number
+    createdAt?: DateTimeFilter<"LivelihoodProgramComponent"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodProgramComponent"> | Date | string
+    program?: XOR<LivelihoodProgramScalarRelationFilter, LivelihoodProgramWhereInput>
+  }, "id" | "programId_typeKey">
+
+  export type LivelihoodProgramComponentOrderByWithAggregationInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    typeKey?: SortOrder
+    target?: SortOrderInput | SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LivelihoodProgramComponentCountOrderByAggregateInput
+    _avg?: LivelihoodProgramComponentAvgOrderByAggregateInput
+    _max?: LivelihoodProgramComponentMaxOrderByAggregateInput
+    _min?: LivelihoodProgramComponentMinOrderByAggregateInput
+    _sum?: LivelihoodProgramComponentSumOrderByAggregateInput
+  }
+
+  export type LivelihoodProgramComponentScalarWhereWithAggregatesInput = {
+    AND?: LivelihoodProgramComponentScalarWhereWithAggregatesInput | LivelihoodProgramComponentScalarWhereWithAggregatesInput[]
+    OR?: LivelihoodProgramComponentScalarWhereWithAggregatesInput[]
+    NOT?: LivelihoodProgramComponentScalarWhereWithAggregatesInput | LivelihoodProgramComponentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LivelihoodProgramComponent"> | string
+    programId?: StringWithAggregatesFilter<"LivelihoodProgramComponent"> | string
+    typeKey?: StringWithAggregatesFilter<"LivelihoodProgramComponent"> | string
+    target?: FloatNullableWithAggregatesFilter<"LivelihoodProgramComponent"> | number | null
+    order?: IntWithAggregatesFilter<"LivelihoodProgramComponent"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"LivelihoodProgramComponent"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LivelihoodProgramComponent"> | Date | string
   }
 
   export type LivelihoodTypeWhereInput = {
@@ -145891,6 +147245,7 @@ export namespace Prisma {
     id?: StringFilter<"BeneficiaryLivelihood"> | string
     beneficiaryId?: StringFilter<"BeneficiaryLivelihood"> | string
     programId?: StringFilter<"BeneficiaryLivelihood"> | string
+    typeKey?: StringNullableFilter<"BeneficiaryLivelihood"> | string | null
     attributes?: JsonFilter<"BeneficiaryLivelihood">
     notes?: StringNullableFilter<"BeneficiaryLivelihood"> | string | null
     enrolledAt?: DateTimeFilter<"BeneficiaryLivelihood"> | Date | string
@@ -145905,6 +147260,7 @@ export namespace Prisma {
     id?: SortOrder
     beneficiaryId?: SortOrder
     programId?: SortOrder
+    typeKey?: SortOrderInput | SortOrder
     attributes?: SortOrder
     notes?: SortOrderInput | SortOrder
     enrolledAt?: SortOrder
@@ -145917,11 +147273,13 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    beneficiaryId_programId_typeKey?: BeneficiaryLivelihoodBeneficiaryIdProgramIdTypeKeyCompoundUniqueInput
     AND?: BeneficiaryLivelihoodWhereInput | BeneficiaryLivelihoodWhereInput[]
     OR?: BeneficiaryLivelihoodWhereInput[]
     NOT?: BeneficiaryLivelihoodWhereInput | BeneficiaryLivelihoodWhereInput[]
     beneficiaryId?: StringFilter<"BeneficiaryLivelihood"> | string
     programId?: StringFilter<"BeneficiaryLivelihood"> | string
+    typeKey?: StringNullableFilter<"BeneficiaryLivelihood"> | string | null
     attributes?: JsonFilter<"BeneficiaryLivelihood">
     notes?: StringNullableFilter<"BeneficiaryLivelihood"> | string | null
     enrolledAt?: DateTimeFilter<"BeneficiaryLivelihood"> | Date | string
@@ -145930,12 +147288,13 @@ export namespace Prisma {
     beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
     program?: XOR<LivelihoodProgramScalarRelationFilter, LivelihoodProgramWhereInput>
     events?: LivelihoodEventListRelationFilter
-  }, "id">
+  }, "id" | "beneficiaryId_programId_typeKey">
 
   export type BeneficiaryLivelihoodOrderByWithAggregationInput = {
     id?: SortOrder
     beneficiaryId?: SortOrder
     programId?: SortOrder
+    typeKey?: SortOrderInput | SortOrder
     attributes?: SortOrder
     notes?: SortOrderInput | SortOrder
     enrolledAt?: SortOrder
@@ -145953,6 +147312,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"BeneficiaryLivelihood"> | string
     beneficiaryId?: StringWithAggregatesFilter<"BeneficiaryLivelihood"> | string
     programId?: StringWithAggregatesFilter<"BeneficiaryLivelihood"> | string
+    typeKey?: StringNullableWithAggregatesFilter<"BeneficiaryLivelihood"> | string | null
     attributes?: JsonWithAggregatesFilter<"BeneficiaryLivelihood">
     notes?: StringNullableWithAggregatesFilter<"BeneficiaryLivelihood"> | string | null
     enrolledAt?: DateTimeWithAggregatesFilter<"BeneficiaryLivelihood"> | Date | string
@@ -155378,6 +156738,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
+    components?: LivelihoodProgramComponentCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
   }
@@ -155393,6 +156754,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
+    components?: LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
   }
@@ -155408,6 +156770,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
+    components?: LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
   }
@@ -155423,6 +156786,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
+    components?: LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
@@ -155459,6 +156823,75 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramComponentCreateInput = {
+    id?: string
+    typeKey: string
+    target?: number | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    program: LivelihoodProgramCreateNestedOneWithoutComponentsInput
+  }
+
+  export type LivelihoodProgramComponentUncheckedCreateInput = {
+    id?: string
+    programId: string
+    typeKey: string
+    target?: number | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramComponentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    typeKey?: StringFieldUpdateOperationsInput | string
+    target?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    program?: LivelihoodProgramUpdateOneRequiredWithoutComponentsNestedInput
+  }
+
+  export type LivelihoodProgramComponentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    typeKey?: StringFieldUpdateOperationsInput | string
+    target?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramComponentCreateManyInput = {
+    id?: string
+    programId: string
+    typeKey: string
+    target?: number | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramComponentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    typeKey?: StringFieldUpdateOperationsInput | string
+    target?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramComponentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    typeKey?: StringFieldUpdateOperationsInput | string
+    target?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -155591,6 +157024,7 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodCreateInput = {
     id?: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -155605,6 +157039,7 @@ export namespace Prisma {
     id?: string
     beneficiaryId: string
     programId: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -155615,6 +157050,7 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -155629,6 +157065,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     beneficiaryId?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -155641,6 +157078,7 @@ export namespace Prisma {
     id?: string
     beneficiaryId: string
     programId: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -155650,6 +157088,7 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -155661,6 +157100,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     beneficiaryId?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -164053,6 +165493,16 @@ export namespace Prisma {
     not?: NestedEnumLivelihoodCategoryFilter<$PrismaModel> | $Enums.LivelihoodCategory
   }
 
+  export type LivelihoodProgramComponentListRelationFilter = {
+    every?: LivelihoodProgramComponentWhereInput
+    some?: LivelihoodProgramComponentWhereInput
+    none?: LivelihoodProgramComponentWhereInput
+  }
+
+  export type LivelihoodProgramComponentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type LivelihoodProgramCountOrderByAggregateInput = {
     id?: SortOrder
     category?: SortOrder
@@ -164105,6 +165555,51 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLivelihoodCategoryFilter<$PrismaModel>
     _max?: NestedEnumLivelihoodCategoryFilter<$PrismaModel>
+  }
+
+  export type LivelihoodProgramComponentProgramIdTypeKeyCompoundUniqueInput = {
+    programId: string
+    typeKey: string
+  }
+
+  export type LivelihoodProgramComponentCountOrderByAggregateInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    typeKey?: SortOrder
+    target?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodProgramComponentAvgOrderByAggregateInput = {
+    target?: SortOrder
+    order?: SortOrder
+  }
+
+  export type LivelihoodProgramComponentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    typeKey?: SortOrder
+    target?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodProgramComponentMinOrderByAggregateInput = {
+    id?: SortOrder
+    programId?: SortOrder
+    typeKey?: SortOrder
+    target?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodProgramComponentSumOrderByAggregateInput = {
+    target?: SortOrder
+    order?: SortOrder
   }
 
   export type LivelihoodTypeCountOrderByAggregateInput = {
@@ -164171,10 +165666,17 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type BeneficiaryLivelihoodBeneficiaryIdProgramIdTypeKeyCompoundUniqueInput = {
+    beneficiaryId: string
+    programId: string
+    typeKey: string
+  }
+
   export type BeneficiaryLivelihoodCountOrderByAggregateInput = {
     id?: SortOrder
     beneficiaryId?: SortOrder
     programId?: SortOrder
+    typeKey?: SortOrder
     attributes?: SortOrder
     notes?: SortOrder
     enrolledAt?: SortOrder
@@ -164186,6 +165688,7 @@ export namespace Prisma {
     id?: SortOrder
     beneficiaryId?: SortOrder
     programId?: SortOrder
+    typeKey?: SortOrder
     notes?: SortOrder
     enrolledAt?: SortOrder
     createdAt?: SortOrder
@@ -164196,6 +165699,7 @@ export namespace Prisma {
     id?: SortOrder
     beneficiaryId?: SortOrder
     programId?: SortOrder
+    typeKey?: SortOrder
     notes?: SortOrder
     enrolledAt?: SortOrder
     createdAt?: SortOrder
@@ -172224,6 +173728,13 @@ export namespace Prisma {
     connect?: BeneficiaryLivelihoodWhereUniqueInput | BeneficiaryLivelihoodWhereUniqueInput[]
   }
 
+  export type LivelihoodProgramComponentCreateNestedManyWithoutProgramInput = {
+    create?: XOR<LivelihoodProgramComponentCreateWithoutProgramInput, LivelihoodProgramComponentUncheckedCreateWithoutProgramInput> | LivelihoodProgramComponentCreateWithoutProgramInput[] | LivelihoodProgramComponentUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: LivelihoodProgramComponentCreateOrConnectWithoutProgramInput | LivelihoodProgramComponentCreateOrConnectWithoutProgramInput[]
+    createMany?: LivelihoodProgramComponentCreateManyProgramInputEnvelope
+    connect?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
+  }
+
   export type ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput = {
     create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput> | ProgramManagerLivelihoodProgramCreateWithoutProgramInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput[]
     connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput[]
@@ -172243,6 +173754,13 @@ export namespace Prisma {
     connectOrCreate?: BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput | BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput[]
     createMany?: BeneficiaryLivelihoodCreateManyProgramInputEnvelope
     connect?: BeneficiaryLivelihoodWhereUniqueInput | BeneficiaryLivelihoodWhereUniqueInput[]
+  }
+
+  export type LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput = {
+    create?: XOR<LivelihoodProgramComponentCreateWithoutProgramInput, LivelihoodProgramComponentUncheckedCreateWithoutProgramInput> | LivelihoodProgramComponentCreateWithoutProgramInput[] | LivelihoodProgramComponentUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: LivelihoodProgramComponentCreateOrConnectWithoutProgramInput | LivelihoodProgramComponentCreateOrConnectWithoutProgramInput[]
+    createMany?: LivelihoodProgramComponentCreateManyProgramInputEnvelope
+    connect?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
   }
 
   export type ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput = {
@@ -172275,6 +173793,20 @@ export namespace Prisma {
     update?: BeneficiaryLivelihoodUpdateWithWhereUniqueWithoutProgramInput | BeneficiaryLivelihoodUpdateWithWhereUniqueWithoutProgramInput[]
     updateMany?: BeneficiaryLivelihoodUpdateManyWithWhereWithoutProgramInput | BeneficiaryLivelihoodUpdateManyWithWhereWithoutProgramInput[]
     deleteMany?: BeneficiaryLivelihoodScalarWhereInput | BeneficiaryLivelihoodScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<LivelihoodProgramComponentCreateWithoutProgramInput, LivelihoodProgramComponentUncheckedCreateWithoutProgramInput> | LivelihoodProgramComponentCreateWithoutProgramInput[] | LivelihoodProgramComponentUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: LivelihoodProgramComponentCreateOrConnectWithoutProgramInput | LivelihoodProgramComponentCreateOrConnectWithoutProgramInput[]
+    upsert?: LivelihoodProgramComponentUpsertWithWhereUniqueWithoutProgramInput | LivelihoodProgramComponentUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: LivelihoodProgramComponentCreateManyProgramInputEnvelope
+    set?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
+    disconnect?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
+    delete?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
+    connect?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
+    update?: LivelihoodProgramComponentUpdateWithWhereUniqueWithoutProgramInput | LivelihoodProgramComponentUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: LivelihoodProgramComponentUpdateManyWithWhereWithoutProgramInput | LivelihoodProgramComponentUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: LivelihoodProgramComponentScalarWhereInput | LivelihoodProgramComponentScalarWhereInput[]
   }
 
   export type ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput = {
@@ -172319,6 +173851,20 @@ export namespace Prisma {
     deleteMany?: BeneficiaryLivelihoodScalarWhereInput | BeneficiaryLivelihoodScalarWhereInput[]
   }
 
+  export type LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<LivelihoodProgramComponentCreateWithoutProgramInput, LivelihoodProgramComponentUncheckedCreateWithoutProgramInput> | LivelihoodProgramComponentCreateWithoutProgramInput[] | LivelihoodProgramComponentUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: LivelihoodProgramComponentCreateOrConnectWithoutProgramInput | LivelihoodProgramComponentCreateOrConnectWithoutProgramInput[]
+    upsert?: LivelihoodProgramComponentUpsertWithWhereUniqueWithoutProgramInput | LivelihoodProgramComponentUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: LivelihoodProgramComponentCreateManyProgramInputEnvelope
+    set?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
+    disconnect?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
+    delete?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
+    connect?: LivelihoodProgramComponentWhereUniqueInput | LivelihoodProgramComponentWhereUniqueInput[]
+    update?: LivelihoodProgramComponentUpdateWithWhereUniqueWithoutProgramInput | LivelihoodProgramComponentUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: LivelihoodProgramComponentUpdateManyWithWhereWithoutProgramInput | LivelihoodProgramComponentUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: LivelihoodProgramComponentScalarWhereInput | LivelihoodProgramComponentScalarWhereInput[]
+  }
+
   export type ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput = {
     create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput> | ProgramManagerLivelihoodProgramCreateWithoutProgramInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput[]
     connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput[]
@@ -172345,6 +173891,20 @@ export namespace Prisma {
     update?: FellowLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput | FellowLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput[]
     updateMany?: FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput | FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput[]
     deleteMany?: FellowLivelihoodProgramScalarWhereInput | FellowLivelihoodProgramScalarWhereInput[]
+  }
+
+  export type LivelihoodProgramCreateNestedOneWithoutComponentsInput = {
+    create?: XOR<LivelihoodProgramCreateWithoutComponentsInput, LivelihoodProgramUncheckedCreateWithoutComponentsInput>
+    connectOrCreate?: LivelihoodProgramCreateOrConnectWithoutComponentsInput
+    connect?: LivelihoodProgramWhereUniqueInput
+  }
+
+  export type LivelihoodProgramUpdateOneRequiredWithoutComponentsNestedInput = {
+    create?: XOR<LivelihoodProgramCreateWithoutComponentsInput, LivelihoodProgramUncheckedCreateWithoutComponentsInput>
+    connectOrCreate?: LivelihoodProgramCreateOrConnectWithoutComponentsInput
+    upsert?: LivelihoodProgramUpsertWithoutComponentsInput
+    connect?: LivelihoodProgramWhereUniqueInput
+    update?: XOR<XOR<LivelihoodProgramUpdateToOneWithWhereWithoutComponentsInput, LivelihoodProgramUpdateWithoutComponentsInput>, LivelihoodProgramUncheckedUpdateWithoutComponentsInput>
   }
 
   export type BeneficiaryCreateNestedOneWithoutLivelihoodDetailsInput = {
@@ -188344,6 +189904,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
+    components?: LivelihoodProgramComponentCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
   }
 
@@ -188358,6 +189919,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
+    components?: LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
   }
 
@@ -188565,6 +190127,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
+    components?: LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
   }
 
@@ -188579,6 +190142,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
+    components?: LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
 
@@ -192818,6 +194382,7 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodCreateWithoutBeneficiaryInput = {
     id?: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -192830,6 +194395,7 @@ export namespace Prisma {
   export type BeneficiaryLivelihoodUncheckedCreateWithoutBeneficiaryInput = {
     id?: string
     programId: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -193292,6 +194858,7 @@ export namespace Prisma {
     id?: StringFilter<"BeneficiaryLivelihood"> | string
     beneficiaryId?: StringFilter<"BeneficiaryLivelihood"> | string
     programId?: StringFilter<"BeneficiaryLivelihood"> | string
+    typeKey?: StringNullableFilter<"BeneficiaryLivelihood"> | string | null
     attributes?: JsonFilter<"BeneficiaryLivelihood">
     notes?: StringNullableFilter<"BeneficiaryLivelihood"> | string | null
     enrolledAt?: DateTimeFilter<"BeneficiaryLivelihood"> | Date | string
@@ -195128,6 +196695,7 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodCreateWithoutProgramInput = {
     id?: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -195140,6 +196708,7 @@ export namespace Prisma {
   export type BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput = {
     id?: string
     beneficiaryId: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -195155,6 +196724,34 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodCreateManyProgramInputEnvelope = {
     data: BeneficiaryLivelihoodCreateManyProgramInput | BeneficiaryLivelihoodCreateManyProgramInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LivelihoodProgramComponentCreateWithoutProgramInput = {
+    id?: string
+    typeKey: string
+    target?: number | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramComponentUncheckedCreateWithoutProgramInput = {
+    id?: string
+    typeKey: string
+    target?: number | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramComponentCreateOrConnectWithoutProgramInput = {
+    where: LivelihoodProgramComponentWhereUniqueInput
+    create: XOR<LivelihoodProgramComponentCreateWithoutProgramInput, LivelihoodProgramComponentUncheckedCreateWithoutProgramInput>
+  }
+
+  export type LivelihoodProgramComponentCreateManyProgramInputEnvelope = {
+    data: LivelihoodProgramComponentCreateManyProgramInput | LivelihoodProgramComponentCreateManyProgramInput[]
     skipDuplicates?: boolean
   }
 
@@ -195218,6 +196815,35 @@ export namespace Prisma {
     data: XOR<BeneficiaryLivelihoodUpdateManyMutationInput, BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramInput>
   }
 
+  export type LivelihoodProgramComponentUpsertWithWhereUniqueWithoutProgramInput = {
+    where: LivelihoodProgramComponentWhereUniqueInput
+    update: XOR<LivelihoodProgramComponentUpdateWithoutProgramInput, LivelihoodProgramComponentUncheckedUpdateWithoutProgramInput>
+    create: XOR<LivelihoodProgramComponentCreateWithoutProgramInput, LivelihoodProgramComponentUncheckedCreateWithoutProgramInput>
+  }
+
+  export type LivelihoodProgramComponentUpdateWithWhereUniqueWithoutProgramInput = {
+    where: LivelihoodProgramComponentWhereUniqueInput
+    data: XOR<LivelihoodProgramComponentUpdateWithoutProgramInput, LivelihoodProgramComponentUncheckedUpdateWithoutProgramInput>
+  }
+
+  export type LivelihoodProgramComponentUpdateManyWithWhereWithoutProgramInput = {
+    where: LivelihoodProgramComponentScalarWhereInput
+    data: XOR<LivelihoodProgramComponentUpdateManyMutationInput, LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramInput>
+  }
+
+  export type LivelihoodProgramComponentScalarWhereInput = {
+    AND?: LivelihoodProgramComponentScalarWhereInput | LivelihoodProgramComponentScalarWhereInput[]
+    OR?: LivelihoodProgramComponentScalarWhereInput[]
+    NOT?: LivelihoodProgramComponentScalarWhereInput | LivelihoodProgramComponentScalarWhereInput[]
+    id?: StringFilter<"LivelihoodProgramComponent"> | string
+    programId?: StringFilter<"LivelihoodProgramComponent"> | string
+    typeKey?: StringFilter<"LivelihoodProgramComponent"> | string
+    target?: FloatNullableFilter<"LivelihoodProgramComponent"> | number | null
+    order?: IntFilter<"LivelihoodProgramComponent"> | number
+    createdAt?: DateTimeFilter<"LivelihoodProgramComponent"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodProgramComponent"> | Date | string
+  }
+
   export type ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput = {
     where: ProgramManagerLivelihoodProgramWhereUniqueInput
     update: XOR<ProgramManagerLivelihoodProgramUpdateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedUpdateWithoutProgramInput>
@@ -195248,6 +196874,82 @@ export namespace Prisma {
   export type FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput = {
     where: FellowLivelihoodProgramScalarWhereInput
     data: XOR<FellowLivelihoodProgramUpdateManyMutationInput, FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramInput>
+  }
+
+  export type LivelihoodProgramCreateWithoutComponentsInput = {
+    id?: string
+    category: $Enums.LivelihoodCategory
+    type: string
+    name: string
+    description?: string | null
+    status?: string
+    totalTarget?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
+    programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
+  }
+
+  export type LivelihoodProgramUncheckedCreateWithoutComponentsInput = {
+    id?: string
+    category: $Enums.LivelihoodCategory
+    type: string
+    name: string
+    description?: string | null
+    status?: string
+    totalTarget?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+  }
+
+  export type LivelihoodProgramCreateOrConnectWithoutComponentsInput = {
+    where: LivelihoodProgramWhereUniqueInput
+    create: XOR<LivelihoodProgramCreateWithoutComponentsInput, LivelihoodProgramUncheckedCreateWithoutComponentsInput>
+  }
+
+  export type LivelihoodProgramUpsertWithoutComponentsInput = {
+    update: XOR<LivelihoodProgramUpdateWithoutComponentsInput, LivelihoodProgramUncheckedUpdateWithoutComponentsInput>
+    create: XOR<LivelihoodProgramCreateWithoutComponentsInput, LivelihoodProgramUncheckedCreateWithoutComponentsInput>
+    where?: LivelihoodProgramWhereInput
+  }
+
+  export type LivelihoodProgramUpdateToOneWithWhereWithoutComponentsInput = {
+    where?: LivelihoodProgramWhereInput
+    data: XOR<LivelihoodProgramUpdateWithoutComponentsInput, LivelihoodProgramUncheckedUpdateWithoutComponentsInput>
+  }
+
+  export type LivelihoodProgramUpdateWithoutComponentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    type?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
+    programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
+  }
+
+  export type LivelihoodProgramUncheckedUpdateWithoutComponentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    type?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type BeneficiaryCreateWithoutLivelihoodDetailsInput = {
@@ -195365,6 +197067,7 @@ export namespace Prisma {
     totalTarget?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    components?: LivelihoodProgramComponentCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
   }
@@ -195379,6 +197082,7 @@ export namespace Prisma {
     totalTarget?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    components?: LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
     fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
   }
@@ -195554,6 +197258,7 @@ export namespace Prisma {
     totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    components?: LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
   }
@@ -195568,6 +197273,7 @@ export namespace Prisma {
     totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    components?: LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
     fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
@@ -195606,6 +197312,7 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodCreateWithoutEventsInput = {
     id?: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -195619,6 +197326,7 @@ export namespace Prisma {
     id?: string
     beneficiaryId: string
     programId: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -195644,6 +197352,7 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodUpdateWithoutEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -195657,6 +197366,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     beneficiaryId?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -195744,6 +197454,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
+    components?: LivelihoodProgramComponentCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
   }
 
@@ -195758,6 +197469,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
+    components?: LivelihoodProgramComponentUncheckedCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
   }
 
@@ -195863,6 +197575,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
+    components?: LivelihoodProgramComponentUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
   }
 
@@ -195877,6 +197590,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
+    components?: LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
 
@@ -215214,6 +216928,7 @@ export namespace Prisma {
   export type BeneficiaryLivelihoodCreateManyBeneficiaryInput = {
     id?: string
     programId: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
@@ -215650,6 +217365,7 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodUpdateWithoutBeneficiaryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -215662,6 +217378,7 @@ export namespace Prisma {
   export type BeneficiaryLivelihoodUncheckedUpdateWithoutBeneficiaryInput = {
     id?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -215673,6 +217390,7 @@ export namespace Prisma {
   export type BeneficiaryLivelihoodUncheckedUpdateManyWithoutBeneficiaryInput = {
     id?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216095,9 +217813,19 @@ export namespace Prisma {
   export type BeneficiaryLivelihoodCreateManyProgramInput = {
     id?: string
     beneficiaryId: string
+    typeKey?: string | null
     attributes: JsonNullValueInput | InputJsonValue
     notes?: string | null
     enrolledAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodProgramComponentCreateManyProgramInput = {
+    id?: string
+    typeKey: string
+    target?: number | null
+    order?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -216116,6 +217844,7 @@ export namespace Prisma {
 
   export type BeneficiaryLivelihoodUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216128,6 +217857,7 @@ export namespace Prisma {
   export type BeneficiaryLivelihoodUncheckedUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     beneficiaryId?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216139,9 +217869,37 @@ export namespace Prisma {
   export type BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     beneficiaryId?: StringFieldUpdateOperationsInput | string
+    typeKey?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramComponentUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    typeKey?: StringFieldUpdateOperationsInput | string
+    target?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramComponentUncheckedUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    typeKey?: StringFieldUpdateOperationsInput | string
+    target?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodProgramComponentUncheckedUpdateManyWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    typeKey?: StringFieldUpdateOperationsInput | string
+    target?: NullableFloatFieldUpdateOperationsInput | number | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

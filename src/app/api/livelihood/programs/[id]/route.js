@@ -35,6 +35,7 @@ export async function GET(req, { params }) {
     const program = await prisma.livelihoodProgram.findUnique({
       where: { id },
       include: {
+        components: { orderBy: { order: "asc" } },
         programManagers: {
           include: {
             user: {
@@ -103,9 +104,12 @@ export async function PATCH(req, { params }) {
     }
 
     const body = await req.json();
-    const { name, description, category, type, status, totalTarget } = body;
+    const { name, description, status, totalTarget } = body;
 
-    const existing = await prisma.livelihoodProgram.findUnique({ where: { id } });
+    const existing = await prisma.livelihoodProgram.findUnique({
+      where: { id },
+      include: { components: { orderBy: { order: "asc" } } },
+    });
     if (!existing) {
       return NextResponse.json({ error: "Program not found" }, { status: 404 });
     }
@@ -113,15 +117,116 @@ export async function PATCH(req, { params }) {
     const updateData = {};
     if (name !== undefined) updateData.name = name;
     if (description !== undefined) updateData.description = description;
-    if (category !== undefined) updateData.category = category;
-    if (type !== undefined) updateData.type = type;
     if (status !== undefined) updateData.status = status;
     if (totalTarget !== undefined)
-      updateData.totalTarget = totalTarget !== "" ? parseFloat(totalTarget) : null;
+      updateData.totalTarget = totalTarget !== "" && totalTarget !== null ? parseFloat(totalTarget) : null;
+
+    // Update the program's components when provided.
+    if (body.components !== undefined) {
+      if (!Array.isArray(body.components)) {
+        return NextResponse.json({ error: "components must be an array" }, { status: 400 });
+      }
+
+      const desired = [];
+      for (const raw of body.components) {
+        const typeKey = String(
+          typeof raw === "string" ? raw : raw?.typeKey || ""
+        ).trim();
+        if (!typeKey || desired.some((c) => c.typeKey === typeKey)) continue;
+        const target =
+          typeof raw === "object" && raw?.target !== undefined && raw?.target !== null && raw?.target !== ""
+            ? parseFloat(raw.target)
+            : null;
+        desired.push({ typeKey, target: Number.isFinite(target) ? target : null });
+      }
+
+      if (desired.length === 0) {
+        return NextResponse.json(
+          { error: "A program must have at least one type" },
+          { status: 400 }
+        );
+      }
+
+      const existingKeys = new Set(existing.components.map((c) => c.typeKey));
+      const desiredKeys = new Set(desired.map((c) => c.typeKey));
+      const addedKeys = desired.filter((c) => !existingKeys.has(c.typeKey));
+      const removedKeys = existing.components
+        .map((c) => c.typeKey)
+        .filter((key) => !desiredKeys.has(key));
+
+      if (addedKeys.length > 0) {
+        const validTypes = await prisma.livelihoodType.findMany({
+          where: { key: { in: addedKeys.map((c) => c.typeKey) }, active: true },
+          select: { key: true },
+        });
+        if (validTypes.length !== addedKeys.length) {
+          return NextResponse.json(
+            { error: "One or more selected program types are invalid or inactive" },
+            { status: 400 }
+          );
+        }
+      }
+
+      for (const key of removedKeys) {
+        const enrolled = await prisma.beneficiaryLivelihood.count({
+          where: { programId: id, typeKey: key },
+        });
+        if (enrolled > 0) {
+          return NextResponse.json(
+            {
+              error: `Cannot remove "${key}" because ${enrolled} participant(s) are enrolled in it. Remove those assignments first.`,
+            },
+            { status: 409 }
+          );
+        }
+      }
+
+      const types = await prisma.livelihoodType.findMany({
+        where: { key: { in: desired.map((c) => c.typeKey) } },
+        select: { key: true, category: true },
+      });
+      if (types.length !== desired.length) {
+        return NextResponse.json(
+          { error: "One or more selected program types do not exist" },
+          { status: 400 }
+        );
+      }
+      const categories = new Set(types.map((t) => t.category));
+      updateData.category = categories.size > 1 ? "MIXED" : [...categories][0];
+      updateData.type = desired[0].typeKey;
+
+      await prisma.$transaction([
+        prisma.livelihoodProgramComponent.deleteMany({
+          where: { programId: id, typeKey: { in: removedKeys } },
+        }),
+        ...desired.map((component, index) =>
+          prisma.livelihoodProgramComponent.upsert({
+            where: {
+              programId_typeKey: { programId: id, typeKey: component.typeKey },
+            },
+            create: {
+              programId: id,
+              typeKey: component.typeKey,
+              target: component.target,
+              order: index,
+            },
+            update: { target: component.target, order: index },
+          })
+        ),
+        prisma.livelihoodProgram.update({ where: { id }, data: updateData }),
+      ]);
+
+      const program = await prisma.livelihoodProgram.findUnique({
+        where: { id },
+        include: { components: { orderBy: { order: "asc" } } },
+      });
+      return NextResponse.json({ success: true, data: program });
+    }
 
     const program = await prisma.livelihoodProgram.update({
       where: { id },
       data: updateData,
+      include: { components: { orderBy: { order: "asc" } } },
     });
 
     return NextResponse.json({ success: true, data: program });

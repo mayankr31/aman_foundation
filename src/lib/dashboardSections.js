@@ -220,6 +220,7 @@ function buildKpiConfig(role) {
       { key: "fellows", label: "Fellows", icon: "badge", tone: "sky" },
       { key: "farmPrograms", label: "Farm Programs", icon: "agriculture", tone: "amber" },
       { key: "nonFarmPrograms", label: "Non-Farm Programs", icon: "pets", tone: "amber" },
+      { key: "integratedPrograms", label: "Integrated Programs", icon: "account_tree", tone: "indigo" },
       { key: "beneficiaries", label: "Participants", icon: "volunteer_activism", tone: "amber" },
     ];
   }
@@ -233,5 +234,6 @@ function buildKpiConfig(role) {
     { key: "beneficiaries", label: "Participants", icon: "volunteer_activism", tone: "amber" },
     { key: "farmPrograms", label: "Farm Programs", icon: "agriculture", tone: "amber" },
     { key: "nonFarmPrograms", label: "Non-Farm Programs", icon: "pets", tone: "amber" },
+    { key: "integratedPrograms", label: "Integrated Programs", icon: "account_tree", tone: "indigo" },
   ];
 }

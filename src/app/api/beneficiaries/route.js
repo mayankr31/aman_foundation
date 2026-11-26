@@ -95,7 +95,9 @@ export async function GET(req) {
         },
         livelihoodDetails: {
           include: {
-            program: true,
+            program: {
+              include: { components: { orderBy: { order: "asc" } } },
+            },
           }
         },
         adaptiveCapacitySurveys: {
@@ -254,6 +256,17 @@ export async function POST(req) {
 
     const resilienceSurveyCreate = buildResilienceSurveyCreateData(resilienceSurvey);
 
+    // Enrol the participant in the program's primary component. Additional
+    // components can be added later from the program detail page.
+    let primaryTypeKey = null;
+    if (programId) {
+      const program = await prisma.livelihoodProgram.findUnique({
+        where: { id: programId },
+        select: { type: true },
+      });
+      primaryTypeKey = program?.type || null;
+    }
+
     const beneficiary = await prisma.beneficiary.create({
       data: {
         enrolmentId,
@@ -302,7 +315,7 @@ export async function POST(req) {
           }))
         } : undefined,
         livelihoodDetails: programId ? {
-          create: { programId, attributes: attributes || {} }
+          create: { programId, typeKey: primaryTypeKey, attributes: attributes || {} }
         } : undefined,
         students: studentId ? {
           connect: { id: studentId }

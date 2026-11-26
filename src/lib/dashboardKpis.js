@@ -16,6 +16,7 @@ const EMPTY_KPIS = {
   beneficiaries: 0,
   farmPrograms: 0,
   nonFarmPrograms: 0,
+  integratedPrograms: 0,
 };
 
 async function getAdminKpis() {
@@ -28,6 +29,7 @@ async function getAdminKpis() {
     beneficiaries,
     farmPrograms,
     nonFarmPrograms,
+    integratedPrograms,
   ] = await Promise.all([
     prisma.student.count(),
     prisma.school.count(),
@@ -37,6 +39,7 @@ async function getAdminKpis() {
     prisma.beneficiary.count(),
     prisma.livelihoodProgram.count({ where: { category: "FARM" } }),
     prisma.livelihoodProgram.count({ where: { category: "NON_FARM" } }),
+    prisma.livelihoodProgram.count({ where: { category: "MIXED" } }),
   ]);
 
   return {
@@ -48,6 +51,7 @@ async function getAdminKpis() {
     beneficiaries,
     farmPrograms,
     nonFarmPrograms,
+    integratedPrograms,
   };
 }
 
@@ -65,6 +69,7 @@ async function getProgramManagerKpis(user) {
     beneficiaries,
     farmPrograms,
     nonFarmPrograms,
+    integratedPrograms,
   ] = await Promise.all([
     schoolIds.length
       ? prisma.student.count({ where: { schoolId: { in: schoolIds } } })
@@ -83,6 +88,9 @@ async function getProgramManagerKpis(user) {
     programIds.length
       ? prisma.livelihoodProgram.count({ where: { id: { in: programIds }, category: "NON_FARM" } })
       : 0,
+    programIds.length
+      ? prisma.livelihoodProgram.count({ where: { id: { in: programIds }, category: "MIXED" } })
+      : 0,
   ]);
 
   return {
@@ -94,6 +102,7 @@ async function getProgramManagerKpis(user) {
     beneficiaries,
     farmPrograms,
     nonFarmPrograms,
+    integratedPrograms,
   };
 }
 
@@ -114,6 +123,7 @@ async function getFellowKpis(user) {
     afterSchoolStudents,
     farmPrograms,
     nonFarmPrograms,
+    integratedPrograms,
     beneficiaries,
   ] = await Promise.all([
     prisma.fellowSchool.count({ where: { fellowId } }),
@@ -125,6 +135,9 @@ async function getFellowKpis(user) {
     }),
     prisma.fellowLivelihoodProgram.count({
       where: { fellowId, program: { category: "NON_FARM" } },
+    }),
+    prisma.fellowLivelihoodProgram.count({
+      where: { fellowId, program: { category: "MIXED" } },
     }),
     prisma.beneficiary.count({
       where: { livelihoodDetails: { some: { program: { fellows: { some: { fellowId } } } } } },
@@ -140,6 +153,7 @@ async function getFellowKpis(user) {
     beneficiaries,
     farmPrograms,
     nonFarmPrograms,
+    integratedPrograms,
   };
 }
 

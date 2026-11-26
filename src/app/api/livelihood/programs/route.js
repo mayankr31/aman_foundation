@@ -28,7 +28,12 @@ export async function GET(req) {
 
     const where = {};
     if (category && category !== "all") where.category = category;
-    if (type) where.type = type;
+    if (type) {
+      where.OR = [
+        { type },
+        { components: { some: { typeKey: type } } },
+      ];
+    }
     if (status) where.status = status;
     if (!all) {
       if (isProgramStaffRole(user?.role?.name)) {
@@ -41,6 +46,7 @@ export async function GET(req) {
     const programs = await prisma.livelihoodProgram.findMany({
       where,
       include: {
+        components: { orderBy: { order: "asc" } },
         _count: { select: { assignments: true } },
       },
       orderBy: { createdAt: "desc" },
@@ -80,50 +86,69 @@ export async function POST(req) {
 
 
     const body = await req.json();
-    const { category, name, description, totalTarget } = body;
+    const { name, description, totalTarget } = body;
     const type = String(body.type || "").trim();
 
-    if (!name || !category || !type) {
+    // A program can bundle several livelihood types ("components").
+    // `type` is still accepted for backward compatibility and creates one component.
+    const rawComponents = Array.isArray(body.components)
+      ? body.components
+      : type
+        ? [{ typeKey: type, target: totalTarget }]
+        : [];
+
+    const requested = [];
+    for (const raw of rawComponents) {
+      const typeKey = String(
+        typeof raw === "string" ? raw : raw?.typeKey || ""
+      ).trim();
+      if (!typeKey || requested.some((c) => c.typeKey === typeKey)) continue;
+      const target =
+        typeof raw === "object" && raw?.target !== undefined && raw?.target !== null && raw?.target !== ""
+          ? parseFloat(raw.target)
+          : null;
+      requested.push({ typeKey, target: Number.isFinite(target) ? target : null });
+    }
+
+    if (!name || requested.length === 0) {
       return NextResponse.json(
-        { error: "Name, category, and type are required" },
+        { error: "Name and at least one program type are required" },
         { status: 400 }
       );
     }
 
-    if (!["FARM", "NON_FARM"].includes(category)) {
-      return NextResponse.json(
-        { error: "Category must be FARM or NON_FARM" },
-        { status: 400 }
-      );
-    }
-
-    const programType = await prisma.livelihoodType.findFirst({
-      where: {
-        category,
-        active: true,
-        OR: [
-          { key: type },
-          { label: { equals: type, mode: "insensitive" } },
-        ],
-      },
-      select: { key: true },
+    const types = await prisma.livelihoodType.findMany({
+      where: { key: { in: requested.map((c) => c.typeKey) }, active: true },
+      select: { key: true, category: true },
     });
 
-    if (!programType) {
+    if (types.length !== requested.length) {
       return NextResponse.json(
-        { error: "Invalid program type for the selected category" },
+        { error: "One or more selected program types are invalid or inactive" },
         { status: 400 }
       );
     }
+
+    // Category is derived from the selected components.
+    const categories = new Set(types.map((t) => t.category));
+    const category = categories.size > 1 ? "MIXED" : [...categories][0];
 
     const program = await prisma.livelihoodProgram.create({
       data: {
         category,
-        type: programType.key,
+        type: requested[0].typeKey,
         name,
         description: description || null,
         totalTarget: totalTarget ? parseFloat(totalTarget) : null,
+        components: {
+          create: requested.map((component, index) => ({
+            typeKey: component.typeKey,
+            target: component.target,
+            order: index,
+          })),
+        },
       },
+      include: { components: { orderBy: { order: "asc" } } },
     });
 
     return NextResponse.json({ success: true, data: program }, { status: 201 });

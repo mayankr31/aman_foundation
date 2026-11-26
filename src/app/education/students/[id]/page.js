@@ -834,7 +834,7 @@ export default function StudentProfileDetail() {
                 <span className="material-symbols-outlined text-primary">analytics</span>
                 Academic Assessments
               </h3>
-              {canEditStudent && (
+              {canEditStudent && user?.roleName !== "FELLOW" && (
                 <button
                   onClick={() => { loadTemplates(); setModal("assessment_templates"); }}
                   className="bg-surface-container text-on-surface px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-1.5 cursor-pointer border border-outline-variant/20"

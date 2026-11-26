@@ -111,7 +111,9 @@ export async function GET(req, { params }) {
         },
         livelihoodDetails: {
           include: {
-            program: true,
+            program: {
+              include: { components: { orderBy: { order: "asc" } } },
+            },
             events: {
               orderBy: { eventDate: "desc" }
             }

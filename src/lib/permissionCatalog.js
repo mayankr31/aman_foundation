@@ -162,6 +162,13 @@ export const PERMISSION_PAGES = [
     routes: ["/livelihood/non-farm", "/livelihood/goat-rearing"],
   },
   {
+    key: "livelihood-integrated",
+    label: "Integrated Programs",
+    group: "livelihood",
+    order: 35,
+    routes: ["/livelihood/integrated"],
+  },
+  {
     key: "participants",
     label: "Participants",
     group: "livelihood",
@@ -194,6 +201,7 @@ export const COLLECTION_PAGES = {
     "livelihood-hub",
     "livelihood-farm",
     "livelihood-non-farm",
+    "livelihood-integrated",
     "participants",
   ],
 };

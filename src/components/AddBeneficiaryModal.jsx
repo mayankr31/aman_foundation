@@ -161,6 +161,7 @@ export default function AddBeneficiaryModal({
 
   const farmPrograms = livelihoodPrograms.filter((p) => p.category === "FARM");
   const nonFarmPrograms = livelihoodPrograms.filter((p) => p.category === "NON_FARM");
+  const mixedPrograms = livelihoodPrograms.filter((p) => p.category === "MIXED");
 
   const stateOptions = withCurrentOption(INDIA_STATES.map((state) => state.name), form.state);
   const districtOptions = withCurrentOption(getDistrictsForState(form.state), form.district);
@@ -1012,6 +1013,13 @@ export default function AddBeneficiaryModal({
                 {nonFarmPrograms.length > 0 && (
                   <optgroup label="Non-Farm Programs">
                     {nonFarmPrograms.map((program) => (
+                      <option key={program.id} value={program.id}>{program.name}</option>
+                    ))}
+                  </optgroup>
+                )}
+                {mixedPrograms.length > 0 && (
+                  <optgroup label="Integrated Programs">
+                    {mixedPrograms.map((program) => (
                       <option key={program.id} value={program.id}>{program.name}</option>
                     ))}
                   </optgroup>

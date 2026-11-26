@@ -46,16 +46,31 @@ export default function GlobalSearch() {
             .then((r) => (r.ok ? r.json() : null))
             .then((json) => {
               (json?.data?.programs || []).forEach((p) => {
-                const category = p.category === "FARM" ? "Farm Programs" : "Non-Farm Programs";
+                const category =
+                  p.category === "FARM"
+                    ? "Farm Programs"
+                    : p.category === "MIXED"
+                      ? "Integrated Programs"
+                      : "Non-Farm Programs";
                 results.push({
                   id: `livelihood-program-${p.id}`,
                   label: p.name,
                   path: ["Livelihood", category, p.name],
                   keywords: [p.name, p.description || "", "program", category],
                   href: `/livelihood/programs/${p.id}`,
-                  page: p.category === "FARM" ? "livelihood-farm" : "livelihood-non-farm",
+                  page:
+                    p.category === "FARM"
+                      ? "livelihood-farm"
+                      : p.category === "MIXED"
+                        ? "livelihood-hub"
+                        : "livelihood-non-farm",
                   group: category,
-                  icon: p.category === "FARM" ? "agriculture" : "pets",
+                  icon:
+                    p.category === "FARM"
+                      ? "agriculture"
+                      : p.category === "MIXED"
+                        ? "account_tree"
+                        : "pets",
                 });
               });
             })

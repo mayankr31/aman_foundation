@@ -53,6 +53,7 @@ enum PermissionType {
 enum LivelihoodCategory {
   FARM
   NON_FARM
+  MIXED
 }
 
 model Role {
@@ -974,8 +975,25 @@ model LivelihoodProgram {
   updatedAt     DateTime            @updatedAt
 
   assignments   BeneficiaryLivelihood[]
+  components    LivelihoodProgramComponent[]
   programManagers ProgramManagerLivelihoodProgram[]
   fellows       FellowLivelihoodProgram[]
+}
+
+model LivelihoodProgramComponent {
+  id        String   @id @default(uuid())
+  programId String
+  typeKey   String
+  target    Float?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  program   LivelihoodProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([programId, typeKey])
+  @@index([programId])
+  @@index([typeKey])
 }
 
 model LivelihoodType {
@@ -1002,6 +1020,7 @@ model BeneficiaryLivelihood {
   id              String             @id @default(uuid())
   beneficiaryId   String
   programId       String
+  typeKey         String?
   attributes      Json
   notes           String?
   enrolledAt      DateTime           @default(now())
@@ -1012,8 +1031,10 @@ model BeneficiaryLivelihood {
   program         LivelihoodProgram  @relation(fields: [programId], references: [id], onDelete: Cascade)
   events          LivelihoodEvent[]
 
+  @@unique([beneficiaryId, programId, typeKey])
   @@index([beneficiaryId])
   @@index([programId])
+  @@index([typeKey])
 }
 
 model LivelihoodEvent {
