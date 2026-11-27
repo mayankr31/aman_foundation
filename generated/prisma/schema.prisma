@@ -815,6 +815,7 @@ model Beneficiary {
   updatedAt         DateTime  @updatedAt
 
   familyMembers             FamilyMember[]
+  documents                 BeneficiaryDocument[]
   livestock                 Livestock[]
   students                  Student[]
   migrationRecords          MigrationRecord[]
@@ -829,6 +830,26 @@ model Beneficiary {
   transformativeSurveys     TransformativeCapacitySurvey[]
   vulnerabilitySurveys      VulnerabilitySurvey[]
   solutionPlans             SolutionPlan[]
+}
+
+model BeneficiaryDocument {
+  id            String   @id @default(uuid())
+  beneficiaryId String
+  type          String
+  label         String? // Custom display name for OTHER:* documents
+  hasDocument   Boolean  @default(false)
+  answered      Boolean  @default(false)
+  identifier    String?
+  identifier2   String?
+  supportType   String? // CORRECTION | CREATION
+  details       Json? // Insurance policies and other structured extras
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  beneficiary Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+
+  @@unique([beneficiaryId, type])
+  @@index([beneficiaryId])
 }
 
 model FamilyMember {

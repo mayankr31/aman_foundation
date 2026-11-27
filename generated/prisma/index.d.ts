@@ -205,6 +205,11 @@ export type ProgramEvent = $Result.DefaultSelection<Prisma.$ProgramEventPayload>
  */
 export type Beneficiary = $Result.DefaultSelection<Prisma.$BeneficiaryPayload>
 /**
+ * Model BeneficiaryDocument
+ * 
+ */
+export type BeneficiaryDocument = $Result.DefaultSelection<Prisma.$BeneficiaryDocumentPayload>
+/**
  * Model FamilyMember
  * 
  */
@@ -1166,6 +1171,16 @@ export class PrismaClient<
     * ```
     */
   get beneficiary(): Prisma.BeneficiaryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.beneficiaryDocument`: Exposes CRUD operations for the **BeneficiaryDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BeneficiaryDocuments
+    * const beneficiaryDocuments = await prisma.beneficiaryDocument.findMany()
+    * ```
+    */
+  get beneficiaryDocument(): Prisma.BeneficiaryDocumentDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.familyMember`: Exposes CRUD operations for the **FamilyMember** model.
@@ -2358,6 +2373,7 @@ export namespace Prisma {
     SchoolProgram: 'SchoolProgram',
     ProgramEvent: 'ProgramEvent',
     Beneficiary: 'Beneficiary',
+    BeneficiaryDocument: 'BeneficiaryDocument',
     FamilyMember: 'FamilyMember',
     Livestock: 'Livestock',
     LivestockHealthLog: 'LivestockHealthLog',
@@ -2445,7 +2461,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "verificationToken" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodProgramComponent" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "livelihoodProgramActivity" | "livelihoodProgramActivityComment" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "holiday" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "surveyTemplate" | "institutionStudentDataNote"
+      modelProps: "role" | "user" | "verificationToken" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "beneficiaryDocument" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodProgramComponent" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "livelihoodProgramActivity" | "livelihoodProgramActivityComment" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "holiday" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "surveyTemplate" | "institutionStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5258,6 +5274,80 @@ export namespace Prisma {
           count: {
             args: Prisma.BeneficiaryCountArgs<ExtArgs>
             result: $Utils.Optional<BeneficiaryCountAggregateOutputType> | number
+          }
+        }
+      }
+      BeneficiaryDocument: {
+        payload: Prisma.$BeneficiaryDocumentPayload<ExtArgs>
+        fields: Prisma.BeneficiaryDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BeneficiaryDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BeneficiaryDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.BeneficiaryDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BeneficiaryDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.BeneficiaryDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.BeneficiaryDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.BeneficiaryDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BeneficiaryDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.BeneficiaryDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload>
+          }
+          update: {
+            args: Prisma.BeneficiaryDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.BeneficiaryDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BeneficiaryDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BeneficiaryDocumentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload>[]
+          }
+          upsert: {
+            args: Prisma.BeneficiaryDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.BeneficiaryDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBeneficiaryDocument>
+          }
+          groupBy: {
+            args: Prisma.BeneficiaryDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BeneficiaryDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BeneficiaryDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<BeneficiaryDocumentCountAggregateOutputType> | number
           }
         }
       }
@@ -10735,6 +10825,7 @@ export namespace Prisma {
     schoolProgram?: SchoolProgramOmit
     programEvent?: ProgramEventOmit
     beneficiary?: BeneficiaryOmit
+    beneficiaryDocument?: BeneficiaryDocumentOmit
     familyMember?: FamilyMemberOmit
     livestock?: LivestockOmit
     livestockHealthLog?: LivestockHealthLogOmit
@@ -11850,6 +11941,7 @@ export namespace Prisma {
 
   export type BeneficiaryCountOutputType = {
     familyMembers: number
+    documents: number
     livestock: number
     students: number
     migrationRecords: number
@@ -11868,6 +11960,7 @@ export namespace Prisma {
 
   export type BeneficiaryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     familyMembers?: boolean | BeneficiaryCountOutputTypeCountFamilyMembersArgs
+    documents?: boolean | BeneficiaryCountOutputTypeCountDocumentsArgs
     livestock?: boolean | BeneficiaryCountOutputTypeCountLivestockArgs
     students?: boolean | BeneficiaryCountOutputTypeCountStudentsArgs
     migrationRecords?: boolean | BeneficiaryCountOutputTypeCountMigrationRecordsArgs
@@ -11900,6 +11993,13 @@ export namespace Prisma {
    */
   export type BeneficiaryCountOutputTypeCountFamilyMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FamilyMemberWhereInput
+  }
+
+  /**
+   * BeneficiaryCountOutputType without action
+   */
+  export type BeneficiaryCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BeneficiaryDocumentWhereInput
   }
 
   /**
@@ -58236,6 +58336,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     familyMembers?: boolean | Beneficiary$familyMembersArgs<ExtArgs>
+    documents?: boolean | Beneficiary$documentsArgs<ExtArgs>
     livestock?: boolean | Beneficiary$livestockArgs<ExtArgs>
     students?: boolean | Beneficiary$studentsArgs<ExtArgs>
     migrationRecords?: boolean | Beneficiary$migrationRecordsArgs<ExtArgs>
@@ -58364,6 +58465,7 @@ export namespace Prisma {
   export type BeneficiaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrolmentId" | "name" | "dob" | "panCard" | "aadhar" | "voterId" | "rationCard" | "mobNumber" | "emergencyContact" | "gender" | "resilienceScore" | "annualIncome" | "monthlyIncome" | "caste" | "religion" | "address" | "landmark" | "state" | "district" | "block" | "ward" | "village" | "photoUrl" | "householdSize" | "primaryIncomeType" | "tier" | "bankName" | "bankAccountNo" | "bankIfsc" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiary"]>
   export type BeneficiaryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     familyMembers?: boolean | Beneficiary$familyMembersArgs<ExtArgs>
+    documents?: boolean | Beneficiary$documentsArgs<ExtArgs>
     livestock?: boolean | Beneficiary$livestockArgs<ExtArgs>
     students?: boolean | Beneficiary$studentsArgs<ExtArgs>
     migrationRecords?: boolean | Beneficiary$migrationRecordsArgs<ExtArgs>
@@ -58387,6 +58489,7 @@ export namespace Prisma {
     name: "Beneficiary"
     objects: {
       familyMembers: Prisma.$FamilyMemberPayload<ExtArgs>[]
+      documents: Prisma.$BeneficiaryDocumentPayload<ExtArgs>[]
       livestock: Prisma.$LivestockPayload<ExtArgs>[]
       students: Prisma.$StudentPayload<ExtArgs>[]
       migrationRecords: Prisma.$MigrationRecordPayload<ExtArgs>[]
@@ -58831,6 +58934,7 @@ export namespace Prisma {
   export interface Prisma__BeneficiaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     familyMembers<T extends Beneficiary$familyMembersArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$familyMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documents<T extends Beneficiary$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     livestock<T extends Beneficiary$livestockArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$livestockArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivestockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     students<T extends Beneficiary$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     migrationRecords<T extends Beneficiary$migrationRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$migrationRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MigrationRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -59324,6 +59428,30 @@ export namespace Prisma {
   }
 
   /**
+   * Beneficiary.documents
+   */
+  export type Beneficiary$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    where?: BeneficiaryDocumentWhereInput
+    orderBy?: BeneficiaryDocumentOrderByWithRelationInput | BeneficiaryDocumentOrderByWithRelationInput[]
+    cursor?: BeneficiaryDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BeneficiaryDocumentScalarFieldEnum | BeneficiaryDocumentScalarFieldEnum[]
+  }
+
+  /**
    * Beneficiary.livestock
    */
   export type Beneficiary$livestockArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -59675,6 +59803,1156 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: BeneficiaryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BeneficiaryDocument
+   */
+
+  export type AggregateBeneficiaryDocument = {
+    _count: BeneficiaryDocumentCountAggregateOutputType | null
+    _min: BeneficiaryDocumentMinAggregateOutputType | null
+    _max: BeneficiaryDocumentMaxAggregateOutputType | null
+  }
+
+  export type BeneficiaryDocumentMinAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    type: string | null
+    label: string | null
+    hasDocument: boolean | null
+    answered: boolean | null
+    identifier: string | null
+    identifier2: string | null
+    supportType: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BeneficiaryDocumentMaxAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    type: string | null
+    label: string | null
+    hasDocument: boolean | null
+    answered: boolean | null
+    identifier: string | null
+    identifier2: string | null
+    supportType: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BeneficiaryDocumentCountAggregateOutputType = {
+    id: number
+    beneficiaryId: number
+    type: number
+    label: number
+    hasDocument: number
+    answered: number
+    identifier: number
+    identifier2: number
+    supportType: number
+    details: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BeneficiaryDocumentMinAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    type?: true
+    label?: true
+    hasDocument?: true
+    answered?: true
+    identifier?: true
+    identifier2?: true
+    supportType?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BeneficiaryDocumentMaxAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    type?: true
+    label?: true
+    hasDocument?: true
+    answered?: true
+    identifier?: true
+    identifier2?: true
+    supportType?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BeneficiaryDocumentCountAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    type?: true
+    label?: true
+    hasDocument?: true
+    answered?: true
+    identifier?: true
+    identifier2?: true
+    supportType?: true
+    details?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BeneficiaryDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BeneficiaryDocument to aggregate.
+     */
+    where?: BeneficiaryDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BeneficiaryDocuments to fetch.
+     */
+    orderBy?: BeneficiaryDocumentOrderByWithRelationInput | BeneficiaryDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BeneficiaryDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BeneficiaryDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BeneficiaryDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BeneficiaryDocuments
+    **/
+    _count?: true | BeneficiaryDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BeneficiaryDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BeneficiaryDocumentMaxAggregateInputType
+  }
+
+  export type GetBeneficiaryDocumentAggregateType<T extends BeneficiaryDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateBeneficiaryDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBeneficiaryDocument[P]>
+      : GetScalarType<T[P], AggregateBeneficiaryDocument[P]>
+  }
+
+
+
+
+  export type BeneficiaryDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BeneficiaryDocumentWhereInput
+    orderBy?: BeneficiaryDocumentOrderByWithAggregationInput | BeneficiaryDocumentOrderByWithAggregationInput[]
+    by: BeneficiaryDocumentScalarFieldEnum[] | BeneficiaryDocumentScalarFieldEnum
+    having?: BeneficiaryDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BeneficiaryDocumentCountAggregateInputType | true
+    _min?: BeneficiaryDocumentMinAggregateInputType
+    _max?: BeneficiaryDocumentMaxAggregateInputType
+  }
+
+  export type BeneficiaryDocumentGroupByOutputType = {
+    id: string
+    beneficiaryId: string
+    type: string
+    label: string | null
+    hasDocument: boolean
+    answered: boolean
+    identifier: string | null
+    identifier2: string | null
+    supportType: string | null
+    details: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BeneficiaryDocumentCountAggregateOutputType | null
+    _min: BeneficiaryDocumentMinAggregateOutputType | null
+    _max: BeneficiaryDocumentMaxAggregateOutputType | null
+  }
+
+  type GetBeneficiaryDocumentGroupByPayload<T extends BeneficiaryDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BeneficiaryDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BeneficiaryDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BeneficiaryDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], BeneficiaryDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BeneficiaryDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    type?: boolean
+    label?: boolean
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: boolean
+    identifier2?: boolean
+    supportType?: boolean
+    details?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["beneficiaryDocument"]>
+
+  export type BeneficiaryDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    type?: boolean
+    label?: boolean
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: boolean
+    identifier2?: boolean
+    supportType?: boolean
+    details?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["beneficiaryDocument"]>
+
+  export type BeneficiaryDocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    type?: boolean
+    label?: boolean
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: boolean
+    identifier2?: boolean
+    supportType?: boolean
+    details?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["beneficiaryDocument"]>
+
+  export type BeneficiaryDocumentSelectScalar = {
+    id?: boolean
+    beneficiaryId?: boolean
+    type?: boolean
+    label?: boolean
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: boolean
+    identifier2?: boolean
+    supportType?: boolean
+    details?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BeneficiaryDocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "type" | "label" | "hasDocument" | "answered" | "identifier" | "identifier2" | "supportType" | "details" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiaryDocument"]>
+  export type BeneficiaryDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type BeneficiaryDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type BeneficiaryDocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+
+  export type $BeneficiaryDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BeneficiaryDocument"
+    objects: {
+      beneficiary: Prisma.$BeneficiaryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      beneficiaryId: string
+      type: string
+      label: string | null
+      hasDocument: boolean
+      answered: boolean
+      identifier: string | null
+      identifier2: string | null
+      supportType: string | null
+      details: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["beneficiaryDocument"]>
+    composites: {}
+  }
+
+  type BeneficiaryDocumentGetPayload<S extends boolean | null | undefined | BeneficiaryDocumentDefaultArgs> = $Result.GetResult<Prisma.$BeneficiaryDocumentPayload, S>
+
+  type BeneficiaryDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BeneficiaryDocumentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BeneficiaryDocumentCountAggregateInputType | true
+    }
+
+  export interface BeneficiaryDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BeneficiaryDocument'], meta: { name: 'BeneficiaryDocument' } }
+    /**
+     * Find zero or one BeneficiaryDocument that matches the filter.
+     * @param {BeneficiaryDocumentFindUniqueArgs} args - Arguments to find a BeneficiaryDocument
+     * @example
+     * // Get one BeneficiaryDocument
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BeneficiaryDocumentFindUniqueArgs>(args: SelectSubset<T, BeneficiaryDocumentFindUniqueArgs<ExtArgs>>): Prisma__BeneficiaryDocumentClient<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BeneficiaryDocument that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BeneficiaryDocumentFindUniqueOrThrowArgs} args - Arguments to find a BeneficiaryDocument
+     * @example
+     * // Get one BeneficiaryDocument
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BeneficiaryDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, BeneficiaryDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BeneficiaryDocumentClient<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BeneficiaryDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryDocumentFindFirstArgs} args - Arguments to find a BeneficiaryDocument
+     * @example
+     * // Get one BeneficiaryDocument
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BeneficiaryDocumentFindFirstArgs>(args?: SelectSubset<T, BeneficiaryDocumentFindFirstArgs<ExtArgs>>): Prisma__BeneficiaryDocumentClient<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BeneficiaryDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryDocumentFindFirstOrThrowArgs} args - Arguments to find a BeneficiaryDocument
+     * @example
+     * // Get one BeneficiaryDocument
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BeneficiaryDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, BeneficiaryDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__BeneficiaryDocumentClient<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BeneficiaryDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BeneficiaryDocuments
+     * const beneficiaryDocuments = await prisma.beneficiaryDocument.findMany()
+     * 
+     * // Get first 10 BeneficiaryDocuments
+     * const beneficiaryDocuments = await prisma.beneficiaryDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const beneficiaryDocumentWithIdOnly = await prisma.beneficiaryDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BeneficiaryDocumentFindManyArgs>(args?: SelectSubset<T, BeneficiaryDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BeneficiaryDocument.
+     * @param {BeneficiaryDocumentCreateArgs} args - Arguments to create a BeneficiaryDocument.
+     * @example
+     * // Create one BeneficiaryDocument
+     * const BeneficiaryDocument = await prisma.beneficiaryDocument.create({
+     *   data: {
+     *     // ... data to create a BeneficiaryDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends BeneficiaryDocumentCreateArgs>(args: SelectSubset<T, BeneficiaryDocumentCreateArgs<ExtArgs>>): Prisma__BeneficiaryDocumentClient<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BeneficiaryDocuments.
+     * @param {BeneficiaryDocumentCreateManyArgs} args - Arguments to create many BeneficiaryDocuments.
+     * @example
+     * // Create many BeneficiaryDocuments
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BeneficiaryDocumentCreateManyArgs>(args?: SelectSubset<T, BeneficiaryDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BeneficiaryDocuments and returns the data saved in the database.
+     * @param {BeneficiaryDocumentCreateManyAndReturnArgs} args - Arguments to create many BeneficiaryDocuments.
+     * @example
+     * // Create many BeneficiaryDocuments
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BeneficiaryDocuments and only return the `id`
+     * const beneficiaryDocumentWithIdOnly = await prisma.beneficiaryDocument.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BeneficiaryDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, BeneficiaryDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BeneficiaryDocument.
+     * @param {BeneficiaryDocumentDeleteArgs} args - Arguments to delete one BeneficiaryDocument.
+     * @example
+     * // Delete one BeneficiaryDocument
+     * const BeneficiaryDocument = await prisma.beneficiaryDocument.delete({
+     *   where: {
+     *     // ... filter to delete one BeneficiaryDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BeneficiaryDocumentDeleteArgs>(args: SelectSubset<T, BeneficiaryDocumentDeleteArgs<ExtArgs>>): Prisma__BeneficiaryDocumentClient<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BeneficiaryDocument.
+     * @param {BeneficiaryDocumentUpdateArgs} args - Arguments to update one BeneficiaryDocument.
+     * @example
+     * // Update one BeneficiaryDocument
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BeneficiaryDocumentUpdateArgs>(args: SelectSubset<T, BeneficiaryDocumentUpdateArgs<ExtArgs>>): Prisma__BeneficiaryDocumentClient<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BeneficiaryDocuments.
+     * @param {BeneficiaryDocumentDeleteManyArgs} args - Arguments to filter BeneficiaryDocuments to delete.
+     * @example
+     * // Delete a few BeneficiaryDocuments
+     * const { count } = await prisma.beneficiaryDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BeneficiaryDocumentDeleteManyArgs>(args?: SelectSubset<T, BeneficiaryDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BeneficiaryDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BeneficiaryDocuments
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BeneficiaryDocumentUpdateManyArgs>(args: SelectSubset<T, BeneficiaryDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BeneficiaryDocuments and returns the data updated in the database.
+     * @param {BeneficiaryDocumentUpdateManyAndReturnArgs} args - Arguments to update many BeneficiaryDocuments.
+     * @example
+     * // Update many BeneficiaryDocuments
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BeneficiaryDocuments and only return the `id`
+     * const beneficiaryDocumentWithIdOnly = await prisma.beneficiaryDocument.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BeneficiaryDocumentUpdateManyAndReturnArgs>(args: SelectSubset<T, BeneficiaryDocumentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BeneficiaryDocument.
+     * @param {BeneficiaryDocumentUpsertArgs} args - Arguments to update or create a BeneficiaryDocument.
+     * @example
+     * // Update or create a BeneficiaryDocument
+     * const beneficiaryDocument = await prisma.beneficiaryDocument.upsert({
+     *   create: {
+     *     // ... data to create a BeneficiaryDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BeneficiaryDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BeneficiaryDocumentUpsertArgs>(args: SelectSubset<T, BeneficiaryDocumentUpsertArgs<ExtArgs>>): Prisma__BeneficiaryDocumentClient<$Result.GetResult<Prisma.$BeneficiaryDocumentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BeneficiaryDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryDocumentCountArgs} args - Arguments to filter BeneficiaryDocuments to count.
+     * @example
+     * // Count the number of BeneficiaryDocuments
+     * const count = await prisma.beneficiaryDocument.count({
+     *   where: {
+     *     // ... the filter for the BeneficiaryDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends BeneficiaryDocumentCountArgs>(
+      args?: Subset<T, BeneficiaryDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BeneficiaryDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BeneficiaryDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BeneficiaryDocumentAggregateArgs>(args: Subset<T, BeneficiaryDocumentAggregateArgs>): Prisma.PrismaPromise<GetBeneficiaryDocumentAggregateType<T>>
+
+    /**
+     * Group by BeneficiaryDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BeneficiaryDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BeneficiaryDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: BeneficiaryDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BeneficiaryDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBeneficiaryDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BeneficiaryDocument model
+   */
+  readonly fields: BeneficiaryDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BeneficiaryDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BeneficiaryDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    beneficiary<T extends BeneficiaryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryDefaultArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BeneficiaryDocument model
+   */
+  interface BeneficiaryDocumentFieldRefs {
+    readonly id: FieldRef<"BeneficiaryDocument", 'String'>
+    readonly beneficiaryId: FieldRef<"BeneficiaryDocument", 'String'>
+    readonly type: FieldRef<"BeneficiaryDocument", 'String'>
+    readonly label: FieldRef<"BeneficiaryDocument", 'String'>
+    readonly hasDocument: FieldRef<"BeneficiaryDocument", 'Boolean'>
+    readonly answered: FieldRef<"BeneficiaryDocument", 'Boolean'>
+    readonly identifier: FieldRef<"BeneficiaryDocument", 'String'>
+    readonly identifier2: FieldRef<"BeneficiaryDocument", 'String'>
+    readonly supportType: FieldRef<"BeneficiaryDocument", 'String'>
+    readonly details: FieldRef<"BeneficiaryDocument", 'Json'>
+    readonly createdAt: FieldRef<"BeneficiaryDocument", 'DateTime'>
+    readonly updatedAt: FieldRef<"BeneficiaryDocument", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BeneficiaryDocument findUnique
+   */
+  export type BeneficiaryDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which BeneficiaryDocument to fetch.
+     */
+    where: BeneficiaryDocumentWhereUniqueInput
+  }
+
+  /**
+   * BeneficiaryDocument findUniqueOrThrow
+   */
+  export type BeneficiaryDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which BeneficiaryDocument to fetch.
+     */
+    where: BeneficiaryDocumentWhereUniqueInput
+  }
+
+  /**
+   * BeneficiaryDocument findFirst
+   */
+  export type BeneficiaryDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which BeneficiaryDocument to fetch.
+     */
+    where?: BeneficiaryDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BeneficiaryDocuments to fetch.
+     */
+    orderBy?: BeneficiaryDocumentOrderByWithRelationInput | BeneficiaryDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BeneficiaryDocuments.
+     */
+    cursor?: BeneficiaryDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BeneficiaryDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BeneficiaryDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BeneficiaryDocuments.
+     */
+    distinct?: BeneficiaryDocumentScalarFieldEnum | BeneficiaryDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * BeneficiaryDocument findFirstOrThrow
+   */
+  export type BeneficiaryDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which BeneficiaryDocument to fetch.
+     */
+    where?: BeneficiaryDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BeneficiaryDocuments to fetch.
+     */
+    orderBy?: BeneficiaryDocumentOrderByWithRelationInput | BeneficiaryDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BeneficiaryDocuments.
+     */
+    cursor?: BeneficiaryDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BeneficiaryDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BeneficiaryDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BeneficiaryDocuments.
+     */
+    distinct?: BeneficiaryDocumentScalarFieldEnum | BeneficiaryDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * BeneficiaryDocument findMany
+   */
+  export type BeneficiaryDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which BeneficiaryDocuments to fetch.
+     */
+    where?: BeneficiaryDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BeneficiaryDocuments to fetch.
+     */
+    orderBy?: BeneficiaryDocumentOrderByWithRelationInput | BeneficiaryDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BeneficiaryDocuments.
+     */
+    cursor?: BeneficiaryDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BeneficiaryDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BeneficiaryDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BeneficiaryDocuments.
+     */
+    distinct?: BeneficiaryDocumentScalarFieldEnum | BeneficiaryDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * BeneficiaryDocument create
+   */
+  export type BeneficiaryDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BeneficiaryDocument.
+     */
+    data: XOR<BeneficiaryDocumentCreateInput, BeneficiaryDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * BeneficiaryDocument createMany
+   */
+  export type BeneficiaryDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BeneficiaryDocuments.
+     */
+    data: BeneficiaryDocumentCreateManyInput | BeneficiaryDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BeneficiaryDocument createManyAndReturn
+   */
+  export type BeneficiaryDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to create many BeneficiaryDocuments.
+     */
+    data: BeneficiaryDocumentCreateManyInput | BeneficiaryDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BeneficiaryDocument update
+   */
+  export type BeneficiaryDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BeneficiaryDocument.
+     */
+    data: XOR<BeneficiaryDocumentUpdateInput, BeneficiaryDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which BeneficiaryDocument to update.
+     */
+    where: BeneficiaryDocumentWhereUniqueInput
+  }
+
+  /**
+   * BeneficiaryDocument updateMany
+   */
+  export type BeneficiaryDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BeneficiaryDocuments.
+     */
+    data: XOR<BeneficiaryDocumentUpdateManyMutationInput, BeneficiaryDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which BeneficiaryDocuments to update
+     */
+    where?: BeneficiaryDocumentWhereInput
+    /**
+     * Limit how many BeneficiaryDocuments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BeneficiaryDocument updateManyAndReturn
+   */
+  export type BeneficiaryDocumentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to update BeneficiaryDocuments.
+     */
+    data: XOR<BeneficiaryDocumentUpdateManyMutationInput, BeneficiaryDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which BeneficiaryDocuments to update
+     */
+    where?: BeneficiaryDocumentWhereInput
+    /**
+     * Limit how many BeneficiaryDocuments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BeneficiaryDocument upsert
+   */
+  export type BeneficiaryDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BeneficiaryDocument to update in case it exists.
+     */
+    where: BeneficiaryDocumentWhereUniqueInput
+    /**
+     * In case the BeneficiaryDocument found by the `where` argument doesn't exist, create a new BeneficiaryDocument with this data.
+     */
+    create: XOR<BeneficiaryDocumentCreateInput, BeneficiaryDocumentUncheckedCreateInput>
+    /**
+     * In case the BeneficiaryDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BeneficiaryDocumentUpdateInput, BeneficiaryDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * BeneficiaryDocument delete
+   */
+  export type BeneficiaryDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which BeneficiaryDocument to delete.
+     */
+    where: BeneficiaryDocumentWhereUniqueInput
+  }
+
+  /**
+   * BeneficiaryDocument deleteMany
+   */
+  export type BeneficiaryDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BeneficiaryDocuments to delete
+     */
+    where?: BeneficiaryDocumentWhereInput
+    /**
+     * Limit how many BeneficiaryDocuments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BeneficiaryDocument without action
+   */
+  export type BeneficiaryDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryDocument
+     */
+    select?: BeneficiaryDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeneficiaryDocument
+     */
+    omit?: BeneficiaryDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryDocumentInclude<ExtArgs> | null
   }
 
 
@@ -144065,6 +145343,24 @@ export namespace Prisma {
   export type BeneficiaryScalarFieldEnum = (typeof BeneficiaryScalarFieldEnum)[keyof typeof BeneficiaryScalarFieldEnum]
 
 
+  export const BeneficiaryDocumentScalarFieldEnum: {
+    id: 'id',
+    beneficiaryId: 'beneficiaryId',
+    type: 'type',
+    label: 'label',
+    hasDocument: 'hasDocument',
+    answered: 'answered',
+    identifier: 'identifier',
+    identifier2: 'identifier2',
+    supportType: 'supportType',
+    details: 'details',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BeneficiaryDocumentScalarFieldEnum = (typeof BeneficiaryDocumentScalarFieldEnum)[keyof typeof BeneficiaryDocumentScalarFieldEnum]
+
+
   export const FamilyMemberScalarFieldEnum: {
     id: 'id',
     beneficiaryId: 'beneficiaryId',
@@ -148764,6 +150060,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Beneficiary"> | Date | string
     updatedAt?: DateTimeFilter<"Beneficiary"> | Date | string
     familyMembers?: FamilyMemberListRelationFilter
+    documents?: BeneficiaryDocumentListRelationFilter
     livestock?: LivestockListRelationFilter
     students?: StudentListRelationFilter
     migrationRecords?: MigrationRecordListRelationFilter
@@ -148815,6 +150112,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     familyMembers?: FamilyMemberOrderByRelationAggregateInput
+    documents?: BeneficiaryDocumentOrderByRelationAggregateInput
     livestock?: LivestockOrderByRelationAggregateInput
     students?: StudentOrderByRelationAggregateInput
     migrationRecords?: MigrationRecordOrderByRelationAggregateInput
@@ -148869,6 +150167,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Beneficiary"> | Date | string
     updatedAt?: DateTimeFilter<"Beneficiary"> | Date | string
     familyMembers?: FamilyMemberListRelationFilter
+    documents?: BeneficiaryDocumentListRelationFilter
     livestock?: LivestockListRelationFilter
     students?: StudentListRelationFilter
     migrationRecords?: MigrationRecordListRelationFilter
@@ -148963,6 +150262,97 @@ export namespace Prisma {
     isMigrated?: BoolWithAggregatesFilter<"Beneficiary"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Beneficiary"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Beneficiary"> | Date | string
+  }
+
+  export type BeneficiaryDocumentWhereInput = {
+    AND?: BeneficiaryDocumentWhereInput | BeneficiaryDocumentWhereInput[]
+    OR?: BeneficiaryDocumentWhereInput[]
+    NOT?: BeneficiaryDocumentWhereInput | BeneficiaryDocumentWhereInput[]
+    id?: StringFilter<"BeneficiaryDocument"> | string
+    beneficiaryId?: StringFilter<"BeneficiaryDocument"> | string
+    type?: StringFilter<"BeneficiaryDocument"> | string
+    label?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    hasDocument?: BoolFilter<"BeneficiaryDocument"> | boolean
+    answered?: BoolFilter<"BeneficiaryDocument"> | boolean
+    identifier?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    identifier2?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    supportType?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    details?: JsonNullableFilter<"BeneficiaryDocument">
+    createdAt?: DateTimeFilter<"BeneficiaryDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"BeneficiaryDocument"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }
+
+  export type BeneficiaryDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    type?: SortOrder
+    label?: SortOrderInput | SortOrder
+    hasDocument?: SortOrder
+    answered?: SortOrder
+    identifier?: SortOrderInput | SortOrder
+    identifier2?: SortOrderInput | SortOrder
+    supportType?: SortOrderInput | SortOrder
+    details?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beneficiary?: BeneficiaryOrderByWithRelationInput
+  }
+
+  export type BeneficiaryDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    beneficiaryId_type?: BeneficiaryDocumentBeneficiaryIdTypeCompoundUniqueInput
+    AND?: BeneficiaryDocumentWhereInput | BeneficiaryDocumentWhereInput[]
+    OR?: BeneficiaryDocumentWhereInput[]
+    NOT?: BeneficiaryDocumentWhereInput | BeneficiaryDocumentWhereInput[]
+    beneficiaryId?: StringFilter<"BeneficiaryDocument"> | string
+    type?: StringFilter<"BeneficiaryDocument"> | string
+    label?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    hasDocument?: BoolFilter<"BeneficiaryDocument"> | boolean
+    answered?: BoolFilter<"BeneficiaryDocument"> | boolean
+    identifier?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    identifier2?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    supportType?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    details?: JsonNullableFilter<"BeneficiaryDocument">
+    createdAt?: DateTimeFilter<"BeneficiaryDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"BeneficiaryDocument"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }, "id" | "beneficiaryId_type">
+
+  export type BeneficiaryDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    type?: SortOrder
+    label?: SortOrderInput | SortOrder
+    hasDocument?: SortOrder
+    answered?: SortOrder
+    identifier?: SortOrderInput | SortOrder
+    identifier2?: SortOrderInput | SortOrder
+    supportType?: SortOrderInput | SortOrder
+    details?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BeneficiaryDocumentCountOrderByAggregateInput
+    _max?: BeneficiaryDocumentMaxOrderByAggregateInput
+    _min?: BeneficiaryDocumentMinOrderByAggregateInput
+  }
+
+  export type BeneficiaryDocumentScalarWhereWithAggregatesInput = {
+    AND?: BeneficiaryDocumentScalarWhereWithAggregatesInput | BeneficiaryDocumentScalarWhereWithAggregatesInput[]
+    OR?: BeneficiaryDocumentScalarWhereWithAggregatesInput[]
+    NOT?: BeneficiaryDocumentScalarWhereWithAggregatesInput | BeneficiaryDocumentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BeneficiaryDocument"> | string
+    beneficiaryId?: StringWithAggregatesFilter<"BeneficiaryDocument"> | string
+    type?: StringWithAggregatesFilter<"BeneficiaryDocument"> | string
+    label?: StringNullableWithAggregatesFilter<"BeneficiaryDocument"> | string | null
+    hasDocument?: BoolWithAggregatesFilter<"BeneficiaryDocument"> | boolean
+    answered?: BoolWithAggregatesFilter<"BeneficiaryDocument"> | boolean
+    identifier?: StringNullableWithAggregatesFilter<"BeneficiaryDocument"> | string | null
+    identifier2?: StringNullableWithAggregatesFilter<"BeneficiaryDocument"> | string | null
+    supportType?: StringNullableWithAggregatesFilter<"BeneficiaryDocument"> | string | null
+    details?: JsonNullableWithAggregatesFilter<"BeneficiaryDocument">
+    createdAt?: DateTimeWithAggregatesFilter<"BeneficiaryDocument"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BeneficiaryDocument"> | Date | string
   }
 
   export type FamilyMemberWhereInput = {
@@ -158563,6 +159953,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -158614,6 +160005,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -158665,6 +160057,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -158716,6 +160109,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -158836,6 +160230,110 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BeneficiaryDocumentCreateInput = {
+    id?: string
+    type: string
+    label?: string | null
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: string | null
+    identifier2?: string | null
+    supportType?: string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beneficiary: BeneficiaryCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type BeneficiaryDocumentUncheckedCreateInput = {
+    id?: string
+    beneficiaryId: string
+    type: string
+    label?: string | null
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: string | null
+    identifier2?: string | null
+    supportType?: string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BeneficiaryDocumentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    hasDocument?: BoolFieldUpdateOperationsInput | boolean
+    answered?: BoolFieldUpdateOperationsInput | boolean
+    identifier?: NullableStringFieldUpdateOperationsInput | string | null
+    identifier2?: NullableStringFieldUpdateOperationsInput | string | null
+    supportType?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beneficiary?: BeneficiaryUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type BeneficiaryDocumentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    hasDocument?: BoolFieldUpdateOperationsInput | boolean
+    answered?: BoolFieldUpdateOperationsInput | boolean
+    identifier?: NullableStringFieldUpdateOperationsInput | string | null
+    identifier2?: NullableStringFieldUpdateOperationsInput | string | null
+    supportType?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BeneficiaryDocumentCreateManyInput = {
+    id?: string
+    beneficiaryId: string
+    type: string
+    label?: string | null
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: string | null
+    identifier2?: string | null
+    supportType?: string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BeneficiaryDocumentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    hasDocument?: BoolFieldUpdateOperationsInput | boolean
+    answered?: BoolFieldUpdateOperationsInput | boolean
+    identifier?: NullableStringFieldUpdateOperationsInput | string | null
+    identifier2?: NullableStringFieldUpdateOperationsInput | string | null
+    supportType?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BeneficiaryDocumentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    hasDocument?: BoolFieldUpdateOperationsInput | boolean
+    answered?: BoolFieldUpdateOperationsInput | boolean
+    identifier?: NullableStringFieldUpdateOperationsInput | string | null
+    identifier2?: NullableStringFieldUpdateOperationsInput | string | null
+    supportType?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -167883,6 +169381,12 @@ export namespace Prisma {
     none?: FamilyMemberWhereInput
   }
 
+  export type BeneficiaryDocumentListRelationFilter = {
+    every?: BeneficiaryDocumentWhereInput
+    some?: BeneficiaryDocumentWhereInput
+    none?: BeneficiaryDocumentWhereInput
+  }
+
   export type LivestockListRelationFilter = {
     every?: LivestockWhereInput
     some?: LivestockWhereInput
@@ -167962,6 +169466,10 @@ export namespace Prisma {
   }
 
   export type FamilyMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BeneficiaryDocumentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -168137,6 +169645,54 @@ export namespace Prisma {
     annualIncome?: SortOrder
     monthlyIncome?: SortOrder
     householdSize?: SortOrder
+  }
+
+  export type BeneficiaryDocumentBeneficiaryIdTypeCompoundUniqueInput = {
+    beneficiaryId: string
+    type: string
+  }
+
+  export type BeneficiaryDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    type?: SortOrder
+    label?: SortOrder
+    hasDocument?: SortOrder
+    answered?: SortOrder
+    identifier?: SortOrder
+    identifier2?: SortOrder
+    supportType?: SortOrder
+    details?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BeneficiaryDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    type?: SortOrder
+    label?: SortOrder
+    hasDocument?: SortOrder
+    answered?: SortOrder
+    identifier?: SortOrder
+    identifier2?: SortOrder
+    supportType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BeneficiaryDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    type?: SortOrder
+    label?: SortOrder
+    hasDocument?: SortOrder
+    answered?: SortOrder
+    identifier?: SortOrder
+    identifier2?: SortOrder
+    supportType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type FamilyMemberCountOrderByAggregateInput = {
@@ -176048,6 +177604,13 @@ export namespace Prisma {
     connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
   }
 
+  export type BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<BeneficiaryDocumentCreateWithoutBeneficiaryInput, BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput> | BeneficiaryDocumentCreateWithoutBeneficiaryInput[] | BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: BeneficiaryDocumentCreateOrConnectWithoutBeneficiaryInput | BeneficiaryDocumentCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: BeneficiaryDocumentCreateManyBeneficiaryInputEnvelope
+    connect?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
+  }
+
   export type LivestockCreateNestedManyWithoutBeneficiaryInput = {
     create?: XOR<LivestockCreateWithoutBeneficiaryInput, LivestockUncheckedCreateWithoutBeneficiaryInput> | LivestockCreateWithoutBeneficiaryInput[] | LivestockUncheckedCreateWithoutBeneficiaryInput[]
     connectOrCreate?: LivestockCreateOrConnectWithoutBeneficiaryInput | LivestockCreateOrConnectWithoutBeneficiaryInput[]
@@ -176151,6 +177714,13 @@ export namespace Prisma {
     connectOrCreate?: FamilyMemberCreateOrConnectWithoutBeneficiaryInput | FamilyMemberCreateOrConnectWithoutBeneficiaryInput[]
     createMany?: FamilyMemberCreateManyBeneficiaryInputEnvelope
     connect?: FamilyMemberWhereUniqueInput | FamilyMemberWhereUniqueInput[]
+  }
+
+  export type BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<BeneficiaryDocumentCreateWithoutBeneficiaryInput, BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput> | BeneficiaryDocumentCreateWithoutBeneficiaryInput[] | BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: BeneficiaryDocumentCreateOrConnectWithoutBeneficiaryInput | BeneficiaryDocumentCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: BeneficiaryDocumentCreateManyBeneficiaryInputEnvelope
+    connect?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
   }
 
   export type LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput = {
@@ -176263,6 +177833,20 @@ export namespace Prisma {
     update?: FamilyMemberUpdateWithWhereUniqueWithoutBeneficiaryInput | FamilyMemberUpdateWithWhereUniqueWithoutBeneficiaryInput[]
     updateMany?: FamilyMemberUpdateManyWithWhereWithoutBeneficiaryInput | FamilyMemberUpdateManyWithWhereWithoutBeneficiaryInput[]
     deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
+  }
+
+  export type BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<BeneficiaryDocumentCreateWithoutBeneficiaryInput, BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput> | BeneficiaryDocumentCreateWithoutBeneficiaryInput[] | BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: BeneficiaryDocumentCreateOrConnectWithoutBeneficiaryInput | BeneficiaryDocumentCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: BeneficiaryDocumentUpsertWithWhereUniqueWithoutBeneficiaryInput | BeneficiaryDocumentUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: BeneficiaryDocumentCreateManyBeneficiaryInputEnvelope
+    set?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
+    disconnect?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
+    delete?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
+    connect?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
+    update?: BeneficiaryDocumentUpdateWithWhereUniqueWithoutBeneficiaryInput | BeneficiaryDocumentUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: BeneficiaryDocumentUpdateManyWithWhereWithoutBeneficiaryInput | BeneficiaryDocumentUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: BeneficiaryDocumentScalarWhereInput | BeneficiaryDocumentScalarWhereInput[]
   }
 
   export type LivestockUpdateManyWithoutBeneficiaryNestedInput = {
@@ -176475,6 +178059,20 @@ export namespace Prisma {
     deleteMany?: FamilyMemberScalarWhereInput | FamilyMemberScalarWhereInput[]
   }
 
+  export type BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<BeneficiaryDocumentCreateWithoutBeneficiaryInput, BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput> | BeneficiaryDocumentCreateWithoutBeneficiaryInput[] | BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: BeneficiaryDocumentCreateOrConnectWithoutBeneficiaryInput | BeneficiaryDocumentCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: BeneficiaryDocumentUpsertWithWhereUniqueWithoutBeneficiaryInput | BeneficiaryDocumentUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: BeneficiaryDocumentCreateManyBeneficiaryInputEnvelope
+    set?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
+    disconnect?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
+    delete?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
+    connect?: BeneficiaryDocumentWhereUniqueInput | BeneficiaryDocumentWhereUniqueInput[]
+    update?: BeneficiaryDocumentUpdateWithWhereUniqueWithoutBeneficiaryInput | BeneficiaryDocumentUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: BeneficiaryDocumentUpdateManyWithWhereWithoutBeneficiaryInput | BeneficiaryDocumentUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: BeneficiaryDocumentScalarWhereInput | BeneficiaryDocumentScalarWhereInput[]
+  }
+
   export type LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
     create?: XOR<LivestockCreateWithoutBeneficiaryInput, LivestockUncheckedCreateWithoutBeneficiaryInput> | LivestockCreateWithoutBeneficiaryInput[] | LivestockUncheckedCreateWithoutBeneficiaryInput[]
     connectOrCreate?: LivestockCreateOrConnectWithoutBeneficiaryInput | LivestockCreateOrConnectWithoutBeneficiaryInput[]
@@ -176669,6 +178267,20 @@ export namespace Prisma {
     update?: SolutionPlanUpdateWithWhereUniqueWithoutBeneficiaryInput | SolutionPlanUpdateWithWhereUniqueWithoutBeneficiaryInput[]
     updateMany?: SolutionPlanUpdateManyWithWhereWithoutBeneficiaryInput | SolutionPlanUpdateManyWithWhereWithoutBeneficiaryInput[]
     deleteMany?: SolutionPlanScalarWhereInput | SolutionPlanScalarWhereInput[]
+  }
+
+  export type BeneficiaryCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<BeneficiaryCreateWithoutDocumentsInput, BeneficiaryUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutDocumentsInput
+    connect?: BeneficiaryWhereUniqueInput
+  }
+
+  export type BeneficiaryUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutDocumentsInput, BeneficiaryUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutDocumentsInput
+    upsert?: BeneficiaryUpsertWithoutDocumentsInput
+    connect?: BeneficiaryWhereUniqueInput
+    update?: XOR<XOR<BeneficiaryUpdateToOneWithWhereWithoutDocumentsInput, BeneficiaryUpdateWithoutDocumentsInput>, BeneficiaryUncheckedUpdateWithoutDocumentsInput>
   }
 
   export type BeneficiaryCreateNestedOneWithoutFamilyMembersInput = {
@@ -190044,6 +191656,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
     incomeRecords?: IncomeRecordCreateNestedManyWithoutBeneficiaryInput
@@ -190094,6 +191707,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
     incomeRecords?: IncomeRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -190462,6 +192076,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
     incomeRecords?: IncomeRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -190512,6 +192127,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
     incomeRecords?: IncomeRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -191756,6 +193372,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     incomeRecords?: IncomeRecordCreateNestedManyWithoutBeneficiaryInput
@@ -191806,6 +193423,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     incomeRecords?: IncomeRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -191872,6 +193490,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     incomeRecords?: IncomeRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -191922,6 +193541,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     incomeRecords?: IncomeRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -191972,6 +193592,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -192022,6 +193643,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -192088,6 +193710,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -192138,6 +193761,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -198005,6 +199629,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BeneficiaryDocumentCreateWithoutBeneficiaryInput = {
+    id?: string
+    type: string
+    label?: string | null
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: string | null
+    identifier2?: string | null
+    supportType?: string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput = {
+    id?: string
+    type: string
+    label?: string | null
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: string | null
+    identifier2?: string | null
+    supportType?: string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BeneficiaryDocumentCreateOrConnectWithoutBeneficiaryInput = {
+    where: BeneficiaryDocumentWhereUniqueInput
+    create: XOR<BeneficiaryDocumentCreateWithoutBeneficiaryInput, BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type BeneficiaryDocumentCreateManyBeneficiaryInputEnvelope = {
+    data: BeneficiaryDocumentCreateManyBeneficiaryInput | BeneficiaryDocumentCreateManyBeneficiaryInput[]
+    skipDuplicates?: boolean
+  }
+
   export type LivestockCreateWithoutBeneficiaryInput = {
     id?: string
     tagNumber: string
@@ -198551,6 +200213,40 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FamilyMember"> | Date | string
   }
 
+  export type BeneficiaryDocumentUpsertWithWhereUniqueWithoutBeneficiaryInput = {
+    where: BeneficiaryDocumentWhereUniqueInput
+    update: XOR<BeneficiaryDocumentUpdateWithoutBeneficiaryInput, BeneficiaryDocumentUncheckedUpdateWithoutBeneficiaryInput>
+    create: XOR<BeneficiaryDocumentCreateWithoutBeneficiaryInput, BeneficiaryDocumentUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type BeneficiaryDocumentUpdateWithWhereUniqueWithoutBeneficiaryInput = {
+    where: BeneficiaryDocumentWhereUniqueInput
+    data: XOR<BeneficiaryDocumentUpdateWithoutBeneficiaryInput, BeneficiaryDocumentUncheckedUpdateWithoutBeneficiaryInput>
+  }
+
+  export type BeneficiaryDocumentUpdateManyWithWhereWithoutBeneficiaryInput = {
+    where: BeneficiaryDocumentScalarWhereInput
+    data: XOR<BeneficiaryDocumentUpdateManyMutationInput, BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryInput>
+  }
+
+  export type BeneficiaryDocumentScalarWhereInput = {
+    AND?: BeneficiaryDocumentScalarWhereInput | BeneficiaryDocumentScalarWhereInput[]
+    OR?: BeneficiaryDocumentScalarWhereInput[]
+    NOT?: BeneficiaryDocumentScalarWhereInput | BeneficiaryDocumentScalarWhereInput[]
+    id?: StringFilter<"BeneficiaryDocument"> | string
+    beneficiaryId?: StringFilter<"BeneficiaryDocument"> | string
+    type?: StringFilter<"BeneficiaryDocument"> | string
+    label?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    hasDocument?: BoolFilter<"BeneficiaryDocument"> | boolean
+    answered?: BoolFilter<"BeneficiaryDocument"> | boolean
+    identifier?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    identifier2?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    supportType?: StringNullableFilter<"BeneficiaryDocument"> | string | null
+    details?: JsonNullableFilter<"BeneficiaryDocument">
+    createdAt?: DateTimeFilter<"BeneficiaryDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"BeneficiaryDocument"> | Date | string
+  }
+
   export type LivestockUpsertWithWhereUniqueWithoutBeneficiaryInput = {
     where: LivestockWhereUniqueInput
     update: XOR<LivestockUpdateWithoutBeneficiaryInput, LivestockUncheckedUpdateWithoutBeneficiaryInput>
@@ -198971,6 +200667,226 @@ export namespace Prisma {
     planData?: JsonFilter<"SolutionPlan">
   }
 
+  export type BeneficiaryCreateWithoutDocumentsInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    voterId?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    landmark?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
+    students?: StudentCreateNestedManyWithoutBeneficiaryInput
+    migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
+    incomeRecords?: IncomeRecordCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    livelihoodDetails?: BeneficiaryLivelihoodCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    voterId?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    landmark?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
+    students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
+    migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
+    incomeRecords?: IncomeRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    livelihoodDetails?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutDocumentsInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutDocumentsInput, BeneficiaryUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type BeneficiaryUpsertWithoutDocumentsInput = {
+    update: XOR<BeneficiaryUpdateWithoutDocumentsInput, BeneficiaryUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<BeneficiaryCreateWithoutDocumentsInput, BeneficiaryUncheckedCreateWithoutDocumentsInput>
+    where?: BeneficiaryWhereInput
+  }
+
+  export type BeneficiaryUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: BeneficiaryWhereInput
+    data: XOR<BeneficiaryUpdateWithoutDocumentsInput, BeneficiaryUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type BeneficiaryUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
+    students?: StudentUpdateManyWithoutBeneficiaryNestedInput
+    migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
+    incomeRecords?: IncomeRecordUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    livelihoodDetails?: BeneficiaryLivelihoodUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    incomeRecords?: IncomeRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    livelihoodDetails?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
   export type BeneficiaryCreateWithoutFamilyMembersInput = {
     id?: string
     enrolmentId: string
@@ -199005,6 +200921,7 @@ export namespace Prisma {
     isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -199055,6 +200972,7 @@ export namespace Prisma {
     isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -199121,6 +201039,7 @@ export namespace Prisma {
     isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -199171,6 +201090,7 @@ export namespace Prisma {
     isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -199222,6 +201142,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
     incomeRecords?: IncomeRecordCreateNestedManyWithoutBeneficiaryInput
@@ -199272,6 +201193,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
     incomeRecords?: IncomeRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -199366,6 +201288,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
     incomeRecords?: IncomeRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -199416,6 +201339,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
     incomeRecords?: IncomeRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -199601,6 +201525,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -199651,6 +201576,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -199738,6 +201664,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -199788,6 +201715,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -199865,6 +201793,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -199915,6 +201844,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -200038,6 +201968,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -200088,6 +202019,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -200325,6 +202257,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -200375,6 +202308,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -200464,6 +202398,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -200514,6 +202449,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -200972,6 +202908,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -201022,6 +202959,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -201159,6 +203097,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -201209,6 +203148,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -206455,6 +208395,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -206505,6 +208446,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -206571,6 +208513,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -206621,6 +208564,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -206671,6 +208615,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -206721,6 +208666,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -206787,6 +208733,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -206837,6 +208784,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -206887,6 +208835,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -206937,6 +208886,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -207003,6 +208953,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -207053,6 +209004,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -207103,6 +209055,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -207153,6 +209106,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -207219,6 +209173,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -207269,6 +209224,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -207319,6 +209275,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -207369,6 +209326,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -207435,6 +209393,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -207485,6 +209444,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -207535,6 +209495,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     students?: StudentCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordCreateNestedManyWithoutBeneficiaryInput
@@ -207585,6 +209546,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    documents?: BeneficiaryDocumentUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     students?: StudentUncheckedCreateNestedManyWithoutBeneficiaryInput
     migrationRecords?: MigrationRecordUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -207651,6 +209613,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUpdateManyWithoutBeneficiaryNestedInput
@@ -207701,6 +209664,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    documents?: BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     students?: StudentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     migrationRecords?: MigrationRecordUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -222471,6 +224435,20 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type BeneficiaryDocumentCreateManyBeneficiaryInput = {
+    id?: string
+    type: string
+    label?: string | null
+    hasDocument?: boolean
+    answered?: boolean
+    identifier?: string | null
+    identifier2?: string | null
+    supportType?: string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type LivestockCreateManyBeneficiaryInput = {
     id?: string
     tagNumber: string
@@ -222677,6 +224655,48 @@ export namespace Prisma {
     relation?: StringFieldUpdateOperationsInput | string
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contactInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BeneficiaryDocumentUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    hasDocument?: BoolFieldUpdateOperationsInput | boolean
+    answered?: BoolFieldUpdateOperationsInput | boolean
+    identifier?: NullableStringFieldUpdateOperationsInput | string | null
+    identifier2?: NullableStringFieldUpdateOperationsInput | string | null
+    supportType?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BeneficiaryDocumentUncheckedUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    hasDocument?: BoolFieldUpdateOperationsInput | boolean
+    answered?: BoolFieldUpdateOperationsInput | boolean
+    identifier?: NullableStringFieldUpdateOperationsInput | string | null
+    identifier2?: NullableStringFieldUpdateOperationsInput | string | null
+    supportType?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BeneficiaryDocumentUncheckedUpdateManyWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    hasDocument?: BoolFieldUpdateOperationsInput | boolean
+    answered?: BoolFieldUpdateOperationsInput | boolean
+    identifier?: NullableStringFieldUpdateOperationsInput | string | null
+    identifier2?: NullableStringFieldUpdateOperationsInput | string | null
+    supportType?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

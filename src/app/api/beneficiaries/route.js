@@ -26,6 +26,11 @@ import {
   normalizeBankAccountForSave,
   normalizeIfscForSave,
 } from "@/lib/validation";
+import {
+  buildDocumentRows,
+  documentsToCreateData,
+  getLegacyDocumentValue,
+} from "@/lib/beneficiaryDocuments";
 import { isProgramStaffRole } from "@/lib/roles";
 
 
@@ -202,6 +207,7 @@ export async function POST(req) {
       bankName,
       bankAccountNo,
       bankIfsc,
+      documents,
       schemes,
       programId,
       attributes,
@@ -248,6 +254,18 @@ export async function POST(req) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
     }
 
+    const documentResult = buildDocumentRows(documents);
+    if (documentResult.error) {
+      return NextResponse.json({ error: documentResult.error }, { status: 400 });
+    }
+    const documentRows = documentResult.rows || [];
+    const providedDocumentTypes = new Set(
+      (Array.isArray(documents) ? documents : []).map((document) => document?.type)
+    );
+    const legacyDocumentOr = (type, fallback) =>
+      providedDocumentTypes.has(type) ? getLegacyDocumentValue(documentRows, type) : fallback;
+    const documentCreateData = documentsToCreateData(documentRows);
+
     if (isFieldScopedRole(user)) {
       if (programId && !(await isLivelihoodProgramManaged(user.id, programId))) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
@@ -272,10 +290,10 @@ export async function POST(req) {
         enrolmentId,
         name,
         dob: dob ? new Date(dob) : null,
-        panCard: normalizePanForSave(panCard),
-        aadhar: normalizeAadhaarForSave(aadhar),
-        voterId: normalizeVoterIdForSave(voterId),
-        rationCard: normalizeRationCardForSave(rationCard),
+        panCard: legacyDocumentOr("PAN", normalizePanForSave(panCard)),
+        aadhar: legacyDocumentOr("AADHAAR", normalizeAadhaarForSave(aadhar)),
+        voterId: legacyDocumentOr("VOTER_ID", normalizeVoterIdForSave(voterId)),
+        rationCard: legacyDocumentOr("RATION_CARD", normalizeRationCardForSave(rationCard)),
         mobNumber: normalizeMobileForSave(mobNumber),
         emergencyContact: normalizeMobileForSave(emergencyContact),
         gender,
@@ -297,6 +315,9 @@ export async function POST(req) {
         bankName,
         bankAccountNo: normalizeBankAccountForSave(bankAccountNo),
         bankIfsc: normalizeIfscForSave(bankIfsc),
+        documents: documentCreateData.length
+          ? { createMany: { data: documentCreateData } }
+          : undefined,
         schemeEnrollments: schemes && schemes.length > 0 ? {
           create: await Promise.all(schemes.map(async (nameOrId) => {
             const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(nameOrId);

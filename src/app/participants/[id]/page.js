@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState, useEffect, useRef } from "react";
+import { Fragment, Suspense, useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import PhotoLightbox from "@/components/PhotoLightbox";
@@ -16,19 +16,29 @@ import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 import { buildKyrProfilePrefill } from "@/lib/kyrFormSchema";
 import DateInput from "@/components/ui/DateInput";
-import YesNoToggle from "@/components/ui/YesNoToggle";
 import Avatar from "@/components/ui/Avatar";
+import BeneficiaryDocumentsFields from "@/components/documents/BeneficiaryDocumentsFields";
 import { formatDate } from "@/lib/date";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption, normalizeStateName } from "@/lib/indiaLocations";
 import { PRIMARY_INCOME_CATEGORIES, isKnownIncomeCategory, MONTH_OPTIONS, getIncomePeriod, formatIncomePeriod } from "@/lib/incomeCategories";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import { computeBeneficiaryImpact, formatNumber, groupLivelihoodDetails } from "@/lib/beneficiaryImpact";
 import {
+  BENEFICIARY_DOCUMENTS,
+  BENEFICIARY_DOCUMENT_SECTIONS,
+  DOCUMENT_SUPPORT_TYPES,
+  INSURANCE_CATEGORIES,
+  applyBankAccountState,
+  buildDocumentsState,
+  createEmptyDocumentEntry,
+  createEmptyDocumentsState,
+  getDocumentAlerts,
+  getDocumentPolicies,
+  serializeDocuments,
+  validateDocuments,
+} from "@/lib/beneficiaryDocuments";
+import {
   validateMobile,
-  validateAadhaar,
-  validatePan,
-  validateVoterId,
-  validateRationCard,
   validateBankAccount,
   validateIfsc,
   validatePersonName,
@@ -37,10 +47,6 @@ import {
   validateInteger,
   firstError,
   toMobileInput,
-  toAadhaarInput,
-  toPanInput,
-  toVoterIdInput,
-  toRationCardInput,
   toBankAccountInput,
   toIfscInput,
   toPersonNameInput,
@@ -227,15 +233,8 @@ function BeneficiaryProfileDetailContent() {
   const [monthlyIncome, setMonthlyIncome] = useState("");
   const [tier, setTier] = useState("Tier 2");
   
-  // ID proofs
-  const [hasAadhar, setHasAadhar] = useState("no");
-  const [hasPanCard, setHasPanCard] = useState("no");
-  const [hasVoterId, setHasVoterId] = useState("no");
-  const [hasRationCard, setHasRationCard] = useState("no");
-  const [aadhar, setAadhar] = useState("");
-  const [panCard, setPanCard] = useState("");
-  const [voterId, setVoterId] = useState("");
-  const [rationCard, setRationCard] = useState("");
+  // Document registry
+  const [documents, setDocuments] = useState(() => createEmptyDocumentsState());
 
   // Bank details
   const [bankName, setBankName] = useState("");
@@ -333,14 +332,7 @@ function BeneficiaryProfileDetailContent() {
         setMonthlyIncome(b.monthlyIncome ?? "");
         setTier(b.tier || "Tier 2");
 
-        setHasAadhar(b.aadhar ? "yes" : "no");
-        setHasPanCard(b.panCard ? "yes" : "no");
-        setHasVoterId(b.voterId ? "yes" : "no");
-        setHasRationCard(b.rationCard ? "yes" : "no");
-        setAadhar(toAadhaarInput(b.aadhar || ""));
-        setPanCard(toPanInput(b.panCard || ""));
-        setVoterId(toVoterIdInput(b.voterId || ""));
-        setRationCard(toRationCardInput(b.rationCard || ""));
+        setDocuments(buildDocumentsState(b.documents, b));
 
         setBankName(b.bankName || "");
         setBankAccountNo(toBankAccountInput(b.bankAccountNo || ""));
@@ -558,18 +550,38 @@ function BeneficiaryProfileDetailContent() {
     setShowCamera(false);
   };
 
+  const updateDocument = (type, patch) => {
+    setDocuments((prev) => ({
+      ...prev,
+      [type]: { ...prev[type], ...patch },
+    }));
+  };
+
+  const hasBankDetails = Boolean(
+    bankName.trim() || bankAccountNo.trim() || bankIfsc.trim()
+  );
+  const bankSupportType = documents.BANK_ACCOUNT?.supportType || null;
+
+  const updateBankSupport = (checked) => {
+    updateDocument("BANK_ACCOUNT", {
+      supportType: checked
+        ? hasBankDetails
+          ? DOCUMENT_SUPPORT_TYPES.CORRECTION
+          : DOCUMENT_SUPPORT_TYPES.CREATION
+        : null,
+      answered: true,
+    });
+  };
+
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     const activeMembers = familyMembers.filter((m) => m.name.trim() !== "");
+    const documentErrorMessage = firstError(Object.values(validateDocuments(documents)));
     const validationMessage = firstError([
       validatePersonName(name, { required: true }),
       dob ? validateDateNotFuture(dob, { label: "Date of birth" }) : null,
       validateMobile(mobNumber),
       validateMobile(emergencyContact),
-      validateAadhaar(aadhar, { required: hasAadhar === "yes" }),
-      validatePan(panCard, { required: hasPanCard === "yes" }),
-      validateVoterId(voterId, { required: hasVoterId === "yes" }),
-      validateRationCard(rationCard, { required: hasRationCard === "yes" }),
       validateBankAccount(bankAccountNo),
       validateIfsc(bankIfsc),
       validateAmount(monthlyIncome, { min: 0 }),
@@ -577,8 +589,9 @@ function BeneficiaryProfileDetailContent() {
       ...activeMembers.map((m) => validatePersonName(m.name, { required: true })),
       ...activeMembers.map((m) => validateMobile(m.contactInfo)),
     ]);
-    if (validationMessage) {
-      toast.error(validationMessage);
+    if (documentErrorMessage || validationMessage) {
+      if (documentErrorMessage) setEditTab("IDBank");
+      toast.error(documentErrorMessage || validationMessage);
       return;
     }
     try {
@@ -592,6 +605,12 @@ function BeneficiaryProfileDetailContent() {
           ? primaryIncomeOther.trim() || "Other"
           : primaryIncomeType;
       const monthlyIncomeValue = monthlyIncome !== "" ? parseFloat(monthlyIncome) : null;
+      const documentRows = serializeDocuments(applyBankAccountState(documents, hasBankDetails));
+      const documentMap = new Map(documentRows.map((document) => [document.type, document]));
+      const legacyDocumentValue = (type) => {
+        const document = documentMap.get(type);
+        return document?.hasDocument ? document.identifier || null : null;
+      };
 
       const payload = {
         name,
@@ -617,10 +636,11 @@ function BeneficiaryProfileDetailContent() {
         annualIncome: monthlyIncomeValue !== null ? monthlyIncomeValue * 12 : null,
         monthlyIncome: monthlyIncomeValue,
         tier,
-        aadhar: hasAadhar === "yes" ? aadhar : "",
-        panCard: hasPanCard === "yes" ? panCard : "",
-        voterId: hasVoterId === "yes" ? voterId : "",
-        rationCard: hasRationCard === "yes" ? rationCard : "",
+        aadhar: legacyDocumentValue("AADHAAR"),
+        panCard: legacyDocumentValue("PAN"),
+        voterId: legacyDocumentValue("VOTER_ID"),
+        rationCard: legacyDocumentValue("RATION_CARD"),
+        documents: documentRows,
         bankName,
         bankAccountNo,
         bankIfsc,
@@ -1178,14 +1198,10 @@ function BeneficiaryProfileDetailContent() {
       ? beneficiary.monthlyIncome * 12
       : beneficiary.annualIncome;
 
-  const missingIdProofs = [
-    { label: "Aadhaar", value: beneficiary.aadhar },
-    { label: "PAN Card", value: beneficiary.panCard },
-    { label: "Voter ID", value: beneficiary.voterId },
-    { label: "Ration Card", value: beneficiary.rationCard },
-  ]
-    .filter((proof) => !proof.value || String(proof.value).trim() === "")
-    .map((proof) => proof.label);
+  const documentAlerts = getDocumentAlerts(beneficiary);
+  const missingIdProofs = documentAlerts.missing;
+  const supportDocuments = documentAlerts.support;
+  const documentRegistry = buildDocumentsState(beneficiary.documents, beneficiary);
 
   const currentYear = new Date().getFullYear();
   const incomeYears = [
@@ -1409,27 +1425,90 @@ function BeneficiaryProfileDetailContent() {
                 </div>
               </div>
 
-              {canBrowseDirectory && missingIdProofs.length > 0 && (
-                <div className="mt-5 rounded-xl border border-error/20 bg-error-container/10 px-4 py-3 font-sans">
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start">
-                    <div className="flex min-w-0 items-start gap-2">
-                      <span className="material-symbols-outlined text-error text-[18px] shrink-0">report</span>
-                      <div className="min-w-0">
-                        <p className="text-xs font-bold text-error">Missing identity proofs</p>
-                        <p className="text-xs text-on-surface-variant mt-0.5 break-words">
-                          {missingIdProofs.join(", ")}
-                        </p>
+              {canBrowseDirectory && (missingIdProofs.length > 0 || supportDocuments.length > 0) && (
+                <div className="mt-5 space-y-3 font-sans">
+                  {missingIdProofs.length > 0 && (
+                    <div className="rounded-xl border border-error/20 bg-error-container/10 px-3 py-3 sm:px-4">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start">
+                        <div className="flex min-w-0 items-start gap-2">
+                          <span className="material-symbols-outlined text-error text-[18px] shrink-0">report</span>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-bold text-error">Missing documents</p>
+                            <div className="mt-2 space-y-2">
+                              {BENEFICIARY_DOCUMENT_SECTIONS.map((section) => {
+                                const sectionMissing = missingIdProofs.filter(
+                                  (document) => document.section === section.key
+                                );
+                                if (sectionMissing.length === 0) return null;
+
+                                return (
+                                  <div key={section.key}>
+                                    <p className="text-[9px] font-bold uppercase tracking-wider text-error/70">
+                                      {section.label}
+                                    </p>
+                                    <div className="mt-1 flex flex-wrap gap-1.5">
+                                      {sectionMissing.map((document) => (
+                                        <span
+                                          key={document.type}
+                                          className="max-w-full break-words rounded-full bg-error-container/60 px-2 py-0.5 text-[10px] font-semibold text-on-error-container"
+                                        >
+                                          {document.label}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                        {canEditParticipant && (
+                          <Link
+                            href={`/participants/${id}?tab=${slugFromLabel("ID Proofs & Bank Details")}`}
+                            className="shrink-0 self-end text-[11px] font-bold text-primary hover:underline sm:ml-auto sm:self-auto"
+                          >
+                            Add details
+                          </Link>
+                        )}
                       </div>
                     </div>
-                    {canEditParticipant && (
-                      <Link
-                        href={`/participants/${id}?tab=${slugFromLabel("ID Proofs & Bank Details")}`}
-                        className="shrink-0 self-end text-[11px] font-bold text-primary hover:underline sm:ml-auto sm:self-auto"
-                      >
-                        Add details
-                      </Link>
-                    )}
-                  </div>
+                  )}
+
+                  {supportDocuments.length > 0 && (
+                    <div className="rounded-xl border border-amber-300/60 bg-amber-50 px-3 py-3 sm:px-4 dark:bg-amber-900/10">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start">
+                        <div className="flex min-w-0 items-start gap-2">
+                          <span className="material-symbols-outlined text-amber-600 text-[18px] shrink-0">support_agent</span>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-bold text-amber-800 dark:text-amber-300">
+                              Documents needing support
+                            </p>
+                            <div className="mt-1 flex flex-wrap gap-1.5">
+                              {supportDocuments.map((document) => (
+                                <span
+                                  key={document.type}
+                                  className="max-w-full break-words rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
+                                >
+                                  {document.label} —{" "}
+                                  {document.supportType === DOCUMENT_SUPPORT_TYPES.CORRECTION
+                                    ? "Needs correction"
+                                    : "Needs support obtaining"}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        {canEditParticipant && (
+                          <Link
+                            href={`/participants/${id}?tab=${slugFromLabel("ID Proofs & Bank Details")}`}
+                            className="shrink-0 self-end text-[11px] font-bold text-primary hover:underline sm:ml-auto sm:self-auto"
+                          >
+                            Review documents
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -2549,57 +2628,164 @@ function BeneficiaryProfileDetailContent() {
                   <span className="material-symbols-outlined text-primary">description</span>
                   Identity Cards &amp; Document Registry
                 </h3>
-                <p className="text-xs text-on-surface-variant mt-1 font-sans">National ID cards and public relief system credentials.</p>
+                <p className="text-xs text-on-surface-variant mt-1 font-sans">Identity cards, registrations, certificates and the support requested for each document.</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-4 border border-surface-container-highest rounded-lg font-sans bg-surface-container-low/10">
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Aadhar Identity</p>
-                  <p className="font-bold text-sm text-on-surface mt-1 font-mono tracking-wide">
-                    {beneficiary.aadhar ? beneficiary.aadhar : "Not Provided"}
-                  </p>
-                  <span className={`inline-block mt-3 px-2 py-0.5 text-[8px] font-bold rounded uppercase ${
-                    beneficiary.aadhar ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"
-                  }`}>
-                    {beneficiary.aadhar ? "Verified" : "Missing"}
-                  </span>
-                </div>
+              <div className="space-y-6">
+                {BENEFICIARY_DOCUMENT_SECTIONS.map((section) => {
+                  const sectionDocuments = BENEFICIARY_DOCUMENTS.filter(
+                    (document) =>
+                      document.section === section.key && document.type !== "BANK_ACCOUNT"
+                  );
+                  if (sectionDocuments.length === 0) return null;
 
-                <div className="p-4 border border-surface-container-highest rounded-lg font-sans bg-surface-container-low/10">
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">PAN Card Identity</p>
-                  <p className="font-bold text-sm text-on-surface mt-1 font-mono tracking-wide uppercase">
-                    {beneficiary.panCard ? beneficiary.panCard : "Not Provided"}
-                  </p>
-                  <span className={`inline-block mt-3 px-2 py-0.5 text-[8px] font-bold rounded uppercase ${
-                    beneficiary.panCard ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"
-                  }`}>
-                    {beneficiary.panCard ? "Verified" : "Missing"}
-                  </span>
-                </div>
+                  return (
+                    <div key={section.key} className="space-y-3">
+                      <h4 className="text-xs font-bold uppercase tracking-wide text-primary">
+                        {section.label}
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {sectionDocuments.map((document) => {
+                          if (document.isCustomList) {
+                            const items = documentRegistry.OTHER?.items || [];
+                            if (items.length === 0) return null;
 
-                <div className="p-4 border border-surface-container-highest rounded-lg font-sans bg-surface-container-low/10">
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Voter ID</p>
-                  <p className="font-bold text-sm text-on-surface mt-1 font-mono tracking-wide uppercase">
-                    {beneficiary.voterId ? beneficiary.voterId : "Not Provided"}
-                  </p>
-                  <span className={`inline-block mt-3 px-2 py-0.5 text-[8px] font-bold rounded uppercase ${
-                    beneficiary.voterId ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"
-                  }`}>
-                    {beneficiary.voterId ? "Verified" : "Missing"}
-                  </span>
-                </div>
+                            return (
+                              <Fragment key={document.type}>
+                                {items.map((item) => {
+                                  const isAvailable = Boolean(item.hasDocument);
+                                  return (
+                                    <div
+                                      key={item.id}
+                                      className="p-4 border border-surface-container-highest rounded-lg font-sans bg-surface-container-low/10"
+                                    >
+                                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider break-words">
+                                        {item.label || "Other document"}
+                                      </p>
+                                      <p className="font-bold text-sm text-on-surface mt-1 font-mono tracking-wide break-words">
+                                        {isAvailable
+                                          ? item.identifier || "No number recorded"
+                                          : "Not provided"}
+                                      </p>
+                                      <div className="mt-3 flex flex-wrap gap-1.5">
+                                        <span
+                                          className={`inline-block px-2 py-0.5 text-[8px] font-bold rounded uppercase ${
+                                            isAvailable
+                                              ? "bg-primary-fixed text-on-primary-fixed"
+                                              : "bg-error-container text-on-error-container"
+                                          }`}
+                                        >
+                                          {isAvailable ? "Available" : "Missing"}
+                                        </span>
+                                        {item.supportType && (
+                                          <span className="inline-block px-2 py-0.5 text-[8px] font-bold rounded uppercase bg-amber-100 text-amber-800">
+                                            {item.supportType === DOCUMENT_SUPPORT_TYPES.CORRECTION
+                                              ? "Needs help correcting"
+                                              : "Needs support obtaining"}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </Fragment>
+                            );
+                          }
 
-                <div className="p-4 border border-surface-container-highest rounded-lg font-sans bg-surface-container-low/10">
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Ration Card (SFY)</p>
-                  <p className="font-bold text-sm text-on-surface mt-1 font-mono tracking-wide uppercase">
-                    {beneficiary.rationCard ? beneficiary.rationCard : "Not Provided"}
-                  </p>
-                  <span className={`inline-block mt-3 px-2 py-0.5 text-[8px] font-bold rounded uppercase ${
-                    beneficiary.rationCard ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"
-                  }`}>
-                    {beneficiary.rationCard ? "Verified" : "Missing"}
-                  </span>
-                </div>
+                          const entry =
+                            documentRegistry[document.type] || createEmptyDocumentEntry();
+                          const isRecorded = entry.answered;
+                          const isAvailable = Boolean(entry.hasDocument);
+                          const statusLabel = !isRecorded
+                            ? "Not recorded"
+                            : isAvailable
+                              ? "Available"
+                              : "Missing";
+                          const statusClass = !isRecorded
+                            ? "bg-surface-container-high text-on-surface-variant"
+                            : isAvailable
+                              ? "bg-primary-fixed text-on-primary-fixed"
+                              : "bg-error-container text-on-error-container";
+                          const policies = getDocumentPolicies(entry);
+
+                          return (
+                            <div
+                              key={document.type}
+                              className="p-4 border border-surface-container-highest rounded-lg font-sans bg-surface-container-low/10"
+                            >
+                              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                {document.label}
+                              </p>
+
+                              {document.supportsPolicies ? (
+                                policies.length > 0 ? (
+                                  <div className="mt-1 space-y-0.5">
+                                    {policies.map((policy, index) => (
+                                      <p
+                                        key={index}
+                                        className="text-[11px] font-mono tracking-wide text-on-surface break-words"
+                                      >
+                                        <span className="font-sans font-bold uppercase text-[9px] text-slate-400">
+                                          {INSURANCE_CATEGORIES.find(
+                                            (category) => category.value === policy.category
+                                          )?.label || policy.category}
+                                          :
+                                        </span>{" "}
+                                        {policy.policyNumber}
+                                      </p>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <p className="font-bold text-sm text-on-surface-variant mt-1">
+                                    No policy numbers recorded
+                                  </p>
+                                )
+                              ) : document.hasIdentifier === false ? (
+                                <p className="font-bold text-sm text-on-surface-variant mt-1">
+                                  {isAvailable ? "Details recorded" : "Document not available"}
+                                </p>
+                              ) : document.hasSecondaryIdentifier ? (
+                                <div className="mt-1 space-y-0.5">
+                                  <p className="text-[11px] text-on-surface break-words">
+                                    <span className="font-bold uppercase text-[9px] text-slate-400">
+                                      {document.identifierLabel}:
+                                    </span>{" "}
+                                    <span className="font-mono">{entry.identifier || "Not provided"}</span>
+                                  </p>
+                                  <p className="text-[11px] text-on-surface break-words">
+                                    <span className="font-bold uppercase text-[9px] text-slate-400">
+                                      {document.identifier2Label}:
+                                    </span>{" "}
+                                    <span className="font-mono">{entry.identifier2 || "Not provided"}</span>
+                                  </p>
+                                </div>
+                              ) : (
+                                <p className="font-bold text-sm text-on-surface mt-1 font-mono tracking-wide uppercase break-words">
+                                  {entry.identifier || "Not provided"}
+                                </p>
+                              )}
+
+                              <div className="mt-3 flex flex-wrap gap-1.5">
+                                <span
+                                  className={`inline-block px-2 py-0.5 text-[8px] font-bold rounded uppercase ${statusClass}`}
+                                >
+                                  {statusLabel}
+                                </span>
+                                {entry.supportType && (
+                                  <span className="inline-block px-2 py-0.5 text-[8px] font-bold rounded uppercase bg-amber-100 text-amber-800">
+                                    {entry.supportType === DOCUMENT_SUPPORT_TYPES.CORRECTION
+                                      ? "Needs help correcting"
+                                      : "Needs support obtaining"}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="border-t border-surface-container-high pt-6">
@@ -2607,6 +2793,13 @@ function BeneficiaryProfileDetailContent() {
                   <span className="material-symbols-outlined text-primary">account_balance</span>
                   Bank Account Information
                 </h3>
+                {documentRegistry.BANK_ACCOUNT?.supportType && (
+                  <p className="mb-3 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-amber-800">
+                    {documentRegistry.BANK_ACCOUNT.supportType === DOCUMENT_SUPPORT_TYPES.CORRECTION
+                      ? "Needs help correcting bank account details"
+                      : "Needs help opening a bank account"}
+                  </p>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans text-xs">
                   <div className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10">
                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Bank Name</p>
@@ -2957,82 +3150,17 @@ function BeneficiaryProfileDetailContent() {
 
               {editTab === "IDBank" && (
                 <div className="space-y-4 text-xs">
-                  <h4 className="font-bold text-sm text-primary uppercase tracking-wide">Identity Proofs</h4>
-                  <p className="text-[10px] text-on-surface-variant">Select Yes only for documents the participant has. Details are required when Yes is selected.</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="flex flex-col gap-2 rounded-xl border border-surface-container-high p-3">
-                      <label className="font-semibold uppercase tracking-wider text-slate-400">Aadhar Number</label>
-                      <div className="self-start">
-                        <YesNoToggle
-                          label="Does the participant have an Aadhaar card?"
-                          value={hasAadhar}
-                          onChange={(value) => {
-                            setHasAadhar(value);
-                            if (value === "no") setAadhar("");
-                          }}
-                        />
-                      </div>
-                      {hasAadhar === "yes" ? (
-                        <input type="text" inputMode="numeric" maxLength={12} pattern="[0-9]{12}" title="Aadhaar must be exactly 12 digits." placeholder="123456789012" value={aadhar} onChange={e => setAadhar(toAadhaarInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
-                      ) : (
-                        <p className="text-[10px] text-on-surface-variant italic">No Aadhaar card available.</p>
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-2 rounded-xl border border-surface-container-high p-3">
-                      <label className="font-semibold uppercase tracking-wider text-slate-400">PAN Card</label>
-                      <div className="self-start">
-                        <YesNoToggle
-                          label="Does the participant have a PAN card?"
-                          value={hasPanCard}
-                          onChange={(value) => {
-                            setHasPanCard(value);
-                            if (value === "no") setPanCard("");
-                          }}
-                        />
-                      </div>
-                      {hasPanCard === "yes" ? (
-                        <input type="text" maxLength={10} pattern="[A-Z]{5}[0-9]{4}[A-Z]" title="PAN must be in the format ABCDE1234F." placeholder="ABCDE1234F" value={panCard} onChange={e => setPanCard(toPanInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
-                      ) : (
-                        <p className="text-[10px] text-on-surface-variant italic">No PAN card available.</p>
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-2 rounded-xl border border-surface-container-high p-3">
-                      <label className="font-semibold uppercase tracking-wider text-slate-400">Voter ID</label>
-                      <div className="self-start">
-                        <YesNoToggle
-                          label="Does the participant have a Voter ID?"
-                          value={hasVoterId}
-                          onChange={(value) => {
-                            setHasVoterId(value);
-                            if (value === "no") setVoterId("");
-                          }}
-                        />
-                      </div>
-                      {hasVoterId === "yes" ? (
-                        <input type="text" maxLength={10} pattern="[A-Z]{3}[0-9]{7}" title="Voter ID must be 3 letters followed by 7 digits." placeholder="ABC1234567" value={voterId} onChange={e => setVoterId(toVoterIdInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
-                      ) : (
-                        <p className="text-[10px] text-on-surface-variant italic">No Voter ID available.</p>
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-2 rounded-xl border border-surface-container-high p-3">
-                      <label className="font-semibold uppercase tracking-wider text-slate-400">Ration Card (SFY)</label>
-                      <div className="self-start">
-                        <YesNoToggle
-                          label="Does the participant have a Ration Card?"
-                          value={hasRationCard}
-                          onChange={(value) => {
-                            setHasRationCard(value);
-                            if (value === "no") setRationCard("");
-                          }}
-                        />
-                      </div>
-                      {hasRationCard === "yes" ? (
-                        <input type="text" maxLength={20} pattern="[A-Z0-9][A-Z0-9-]{5,19}" title="Ration card must be 6 to 20 letters, digits or hyphens." placeholder="RC-AS-XXXX" value={rationCard} onChange={e => setRationCard(toRationCardInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
-                      ) : (
-                        <p className="text-[10px] text-on-surface-variant italic">No Ration Card available.</p>
-                      )}
-                    </div>
-                  </div>
+                  <h4 className="font-bold text-sm text-primary uppercase tracking-wide">Identity Cards &amp; Documents</h4>
+                  <p className="text-[10px] text-on-surface-variant">
+                    Select Yes only for documents the participant has. Add the document number and
+                    tick the support box when correction help is needed. When the document is not
+                    available, tick the support box if help is needed to obtain it.
+                  </p>
+
+                  <BeneficiaryDocumentsFields
+                    documents={documents}
+                    onUpdate={updateDocument}
+                  />
 
                   <h4 className="font-bold text-sm text-primary uppercase tracking-wide border-t border-surface-container-high pt-4">Bank Details</h4>
                   <p className="text-[10px] text-on-surface-variant">Optional. Leave blank if the participant does not have a bank account.</p>
@@ -3050,6 +3178,19 @@ function BeneficiaryProfileDetailContent() {
                       <input type="text" maxLength={11} pattern="[A-Z]{4}0[A-Z0-9]{6}" title="IFSC must be in the format SBIN0007421." placeholder="SBIN000XXXX" value={bankIfsc} onChange={e => setBankIfsc(toIfscInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                     </div>
                   </div>
+                  <label className="flex cursor-pointer items-start gap-2 rounded-lg bg-surface-container-low/40 px-3 py-2 text-[11px] font-medium text-on-surface">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(bankSupportType)}
+                      onChange={(event) => updateBankSupport(event.target.checked)}
+                      className="mt-0.5 h-4 w-4 shrink-0 rounded border-outline-variant text-primary focus:ring-primary"
+                    />
+                    <span>
+                      {hasBankDetails
+                        ? "Needs help/support correcting the bank account details"
+                        : "Needs help/support opening a bank account"}
+                    </span>
+                  </label>
                 </div>
               )}
 

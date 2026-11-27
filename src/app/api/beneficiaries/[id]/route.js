@@ -25,6 +25,11 @@ import {
   normalizeBankAccountForSave,
   normalizeIfscForSave,
 } from "@/lib/validation";
+import {
+  buildDocumentRows,
+  documentsToCreateData,
+  getLegacyDocumentValue,
+} from "@/lib/beneficiaryDocuments";
 
 async function resolveBeneficiaryId(id) {
   if (!id || id === "undefined" || id === "null") return null;
@@ -84,6 +89,9 @@ export async function GET(req, { params }) {
       where: { id: beneficiaryId },
       include: {
         familyMembers: true,
+        documents: {
+          orderBy: { type: "asc" },
+        },
         livestock: {
           include: {
             healthLogs: {
@@ -142,6 +150,12 @@ export async function GET(req, { params }) {
           bankName: null,
           bankAccountNo: null,
           bankIfsc: null,
+          documents: (beneficiary.documents || []).map((document) => ({
+            ...document,
+            identifier: null,
+            identifier2: null,
+            details: null,
+          })),
         },
         access: { restricted: true },
       });
@@ -195,6 +209,17 @@ export async function PATCH(req, { params }) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
     }
 
+    const documentResult = buildDocumentRows(body.documents);
+    if (documentResult.error) {
+      return NextResponse.json({ error: documentResult.error }, { status: 400 });
+    }
+    const documentRows = documentResult.rows;
+    const providedDocumentTypes = new Set(
+      (Array.isArray(body.documents) ? body.documents : []).map((document) => document?.type)
+    );
+    const legacyDocumentOr = (type, fallback) =>
+      providedDocumentTypes.has(type) ? getLegacyDocumentValue(documentRows, type) : fallback;
+
     const result = await prisma.$transaction(async (tx) => {
       // 1. Update main Beneficiary details
       const updated = await tx.beneficiary.update({
@@ -203,10 +228,22 @@ export async function PATCH(req, { params }) {
           enrolmentId: body.enrolmentId,
           name: body.name !== undefined ? body.name.trim() : undefined,
           dob: body.dob !== undefined ? (body.dob ? new Date(body.dob) : null) : undefined,
-          panCard: body.panCard !== undefined ? normalizePanForSave(body.panCard) : undefined,
-          aadhar: body.aadhar !== undefined ? normalizeAadhaarForSave(body.aadhar) : undefined,
-          voterId: body.voterId !== undefined ? normalizeVoterIdForSave(body.voterId) : undefined,
-          rationCard: body.rationCard !== undefined ? normalizeRationCardForSave(body.rationCard) : undefined,
+          panCard: legacyDocumentOr(
+            "PAN",
+            body.panCard !== undefined ? normalizePanForSave(body.panCard) : undefined
+          ),
+          aadhar: legacyDocumentOr(
+            "AADHAAR",
+            body.aadhar !== undefined ? normalizeAadhaarForSave(body.aadhar) : undefined
+          ),
+          voterId: legacyDocumentOr(
+            "VOTER_ID",
+            body.voterId !== undefined ? normalizeVoterIdForSave(body.voterId) : undefined
+          ),
+          rationCard: legacyDocumentOr(
+            "RATION_CARD",
+            body.rationCard !== undefined ? normalizeRationCardForSave(body.rationCard) : undefined
+          ),
           mobNumber: body.mobNumber !== undefined ? normalizeMobileForSave(body.mobNumber) : undefined,
           emergencyContact: body.emergencyContact !== undefined ? normalizeMobileForSave(body.emergencyContact) : undefined,
           gender: body.gender,
@@ -235,6 +272,18 @@ export async function PATCH(req, { params }) {
           isMigrated: body.isMigrated !== undefined ? Boolean(body.isMigrated) : undefined
         }
       });
+
+      // 1.4 Replace the document registry when it was supplied.
+      if (documentRows) {
+        await tx.beneficiaryDocument.deleteMany({ where: { beneficiaryId } });
+        const createData = documentsToCreateData(documentRows).map((document) => ({
+          ...document,
+          beneficiaryId,
+        }));
+        if (createData.length > 0) {
+          await tx.beneficiaryDocument.createMany({ data: createData });
+        }
+      }
 
       // 1.5 Update Scheme Enrollments if provided
       if (body.schemes) {

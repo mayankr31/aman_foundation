@@ -6,19 +6,22 @@ import { useToast } from "@/context/ToastContext";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 import { buildKyrProfilePrefill, KYR_PROFILE_QUESTION_IDS } from "@/lib/kyrFormSchema";
 import DateInput from "@/components/ui/DateInput";
-import YesNoToggle from "@/components/ui/YesNoToggle";
 import Avatar from "@/components/ui/Avatar";
 import SelfieCaptureModal from "@/components/attendance/SelfieCaptureModal";
+import BeneficiaryDocumentsFields from "@/components/documents/BeneficiaryDocumentsFields";
 import useBodyScrollLock from "@/lib/useBodyScrollLock";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
 import { PRIMARY_INCOME_CATEGORIES, DEFAULT_PRIMARY_INCOME } from "@/lib/incomeCategories";
 import {
+  applyBankAccountState,
+  createEmptyDocumentsState,
+  DOCUMENT_SUPPORT_TYPES,
+  serializeDocuments,
+  validateDocuments,
+} from "@/lib/beneficiaryDocuments";
+import {
   validateRequired,
   validateMobile,
-  validateAadhaar,
-  validatePan,
-  validateVoterId,
-  validateRationCard,
   validateBankAccount,
   validateIfsc,
   validatePersonName,
@@ -26,10 +29,6 @@ import {
   validateAmount,
   validateInteger,
   toMobileInput,
-  toAadhaarInput,
-  toPanInput,
-  toVoterIdInput,
-  toRationCardInput,
   toBankAccountInput,
   toIfscInput,
   toPersonNameInput,
@@ -54,14 +53,7 @@ export const emptyAddForm = {
   householdSize: "4",
   emergencyContact: "",
   tier: "Tier 2",
-  hasAadhar: "no",
-  hasPanCard: "no",
-  hasVoterId: "no",
-  hasRationCard: "no",
-  aadhar: "",
-  panCard: "",
-  voterId: "",
-  rationCard: "",
+  documents: createEmptyDocumentsState(),
   bankName: "",
   bankAccountNo: "",
   bankIfsc: "",
@@ -93,7 +85,10 @@ export default function AddBeneficiaryModal({
   useBodyScrollLock(true);
 
   const [step, setStep] = useState("details");
-  const [form, setForm] = useState(emptyAddForm);
+  const [form, setForm] = useState(() => ({
+    ...emptyAddForm,
+    documents: createEmptyDocumentsState(),
+  }));
   const [errors, setErrors] = useState({});
   const [livelihoodPrograms, setLivelihoodPrograms] = useState([]);
   const [photoFile, setPhotoFile] = useState(null);
@@ -178,19 +173,37 @@ export default function AddBeneficiaryModal({
     });
   };
 
-  // Tracks whether the household actually has a given identity proof. Choosing
-  // "No" clears any previously typed value so it is not submitted.
-  const updateProof = (flagKey, valueKey, value) => {
+  // Updates a single document registry entry. Choosing "No" in the shared
+  // component clears any previously typed values so they are not submitted.
+  const updateDocument = (type, patch) => {
     setForm((prev) => ({
       ...prev,
-      [flagKey]: value,
-      ...(value === "no" ? { [valueKey]: "" } : {}),
+      documents: {
+        ...prev.documents,
+        [type]: { ...prev.documents[type], ...patch },
+      },
     }));
     setErrors((prev) => {
-      if (!prev[valueKey]) return prev;
+      if (!prev[type]) return prev;
       const next = { ...prev };
-      delete next[valueKey];
+      delete next[type];
       return next;
+    });
+  };
+
+  const hasBankDetails = Boolean(
+    form.bankName.trim() || form.bankAccountNo.trim() || form.bankIfsc.trim()
+  );
+  const bankSupportType = form.documents.BANK_ACCOUNT?.supportType || null;
+
+  const updateBankSupport = (checked) => {
+    updateDocument("BANK_ACCOUNT", {
+      supportType: checked
+        ? hasBankDetails
+          ? DOCUMENT_SUPPORT_TYPES.CORRECTION
+          : DOCUMENT_SUPPORT_TYPES.CREATION
+        : null,
+      answered: true,
     });
   };
 
@@ -234,10 +247,6 @@ export default function AddBeneficiaryModal({
     const validators = [
       ["mobNumber", validateMobile(form.mobNumber, { required: true })],
       ["emergencyContact", validateMobile(form.emergencyContact, { required: true })],
-      ["aadhar", validateAadhaar(form.aadhar, { required: form.hasAadhar === "yes" })],
-      ["panCard", validatePan(form.panCard, { required: form.hasPanCard === "yes" })],
-      ["voterId", validateVoterId(form.voterId, { required: form.hasVoterId === "yes" })],
-      ["rationCard", validateRationCard(form.rationCard, { required: form.hasRationCard === "yes" })],
       ["bankAccountNo", validateBankAccount(form.bankAccountNo)],
       ["bankIfsc", validateIfsc(form.bankIfsc)],
       ["monthlyIncome", validateAmount(form.monthlyIncome, { required: true, min: 0 })],
@@ -247,6 +256,8 @@ export default function AddBeneficiaryModal({
     for (const [key, message] of validators) {
       if (message) validationErrors[key] = message;
     }
+
+    Object.assign(validationErrors, validateDocuments(form.documents));
 
     return validationErrors;
   };
@@ -296,6 +307,12 @@ export default function AddBeneficiaryModal({
           ? form.primaryIncomeOther.trim() || "Other"
           : form.primaryIncomeType;
       const monthlyIncomeValue = form.monthlyIncome !== "" ? parseFloat(form.monthlyIncome) : null;
+      const documentRows = serializeDocuments(applyBankAccountState(form.documents, hasBankDetails));
+      const documentMap = new Map(documentRows.map((document) => [document.type, document]));
+      const legacyDocumentValue = (type) => {
+        const document = documentMap.get(type);
+        return document?.hasDocument ? document.identifier || null : null;
+      };
 
       const res = await fetch("/api/beneficiaries", {
         method: "POST",
@@ -324,10 +341,11 @@ export default function AddBeneficiaryModal({
           annualIncome: monthlyIncomeValue !== null ? monthlyIncomeValue * 12 : null,
           monthlyIncome: monthlyIncomeValue,
           tier: form.tier,
-          aadhar: form.hasAadhar === "yes" ? form.aadhar || null : null,
-          panCard: form.hasPanCard === "yes" ? form.panCard || null : null,
-          voterId: form.hasVoterId === "yes" ? form.voterId || null : null,
-          rationCard: form.hasRationCard === "yes" ? form.rationCard || null : null,
+          aadhar: legacyDocumentValue("AADHAAR"),
+          panCard: legacyDocumentValue("PAN"),
+          voterId: legacyDocumentValue("VOTER_ID"),
+          rationCard: legacyDocumentValue("RATION_CARD"),
+          documents: documentRows,
           bankName: form.bankName || null,
           bankAccountNo: form.bankAccountNo || null,
           bankIfsc: form.bankIfsc || null,
@@ -829,122 +847,17 @@ export default function AddBeneficiaryModal({
             </div>
 
             <div className="pt-2">
-              <h4 className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Identity Proofs</h4>
+              <h4 className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Identity Cards &amp; Documents</h4>
               <p className="text-[10px] text-on-surface-variant mb-3">
-                Tell us whether the participant has each document. Details are only required when you select Yes.
+                Select Yes only for documents the participant has. When a document is available,
+                enter its number and tick the support box if it needs correction. When it is not
+                available, tick the support box if help is needed to obtain it.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1.5 rounded-xl border border-surface-container-high p-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <label className={labelClass}>Aadhar Number</label>
-                    <YesNoToggle
-                      label="Does the participant have an Aadhaar card?"
-                      value={form.hasAadhar}
-                      onChange={(value) => updateProof("hasAadhar", "aadhar", value)}
-                    />
-                  </div>
-                  {form.hasAadhar === "yes" ? (
-                    <>
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={12}
-                        pattern="[0-9]{12}"
-                        title="Aadhaar must be exactly 12 digits."
-                        placeholder="e.g. 123456789012"
-                        className={fieldClass("aadhar")}
-                        value={form.aadhar}
-                        onChange={(e) => updateField("aadhar", toAadhaarInput(e.target.value))}
-                      />
-                      {fieldError("aadhar")}
-                      <span className="text-[10px] text-on-surface-variant">12 digits, numbers only.</span>
-                    </>
-                  ) : (
-                    <p className="text-[10px] text-on-surface-variant italic">No Aadhaar card available.</p>
-                  )}
-                </div>
-                <div className="flex flex-col gap-1.5 rounded-xl border border-surface-container-high p-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <label className={labelClass}>PAN Card</label>
-                    <YesNoToggle
-                      label="Does the participant have a PAN card?"
-                      value={form.hasPanCard}
-                      onChange={(value) => updateProof("hasPanCard", "panCard", value)}
-                    />
-                  </div>
-                  {form.hasPanCard === "yes" ? (
-                    <>
-                      <input
-                        type="text"
-                        maxLength={10}
-                        pattern="[A-Z]{5}[0-9]{4}[A-Z]"
-                        title="PAN must be in the format ABCDE1234F."
-                        placeholder="e.g. ABCDE1234F"
-                        className={fieldClass("panCard")}
-                        value={form.panCard}
-                        onChange={(e) => updateField("panCard", toPanInput(e.target.value))}
-                      />
-                      {fieldError("panCard")}
-                    </>
-                  ) : (
-                    <p className="text-[10px] text-on-surface-variant italic">No PAN card available.</p>
-                  )}
-                </div>
-                <div className="flex flex-col gap-1.5 rounded-xl border border-surface-container-high p-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <label className={labelClass}>Voter ID</label>
-                    <YesNoToggle
-                      label="Does the participant have a Voter ID?"
-                      value={form.hasVoterId}
-                      onChange={(value) => updateProof("hasVoterId", "voterId", value)}
-                    />
-                  </div>
-                  {form.hasVoterId === "yes" ? (
-                    <>
-                      <input
-                        type="text"
-                        maxLength={10}
-                        pattern="[A-Z]{3}[0-9]{7}"
-                        title="Voter ID must be 3 letters followed by 7 digits."
-                        placeholder="e.g. ABC1234567"
-                        className={fieldClass("voterId")}
-                        value={form.voterId}
-                        onChange={(e) => updateField("voterId", toVoterIdInput(e.target.value))}
-                      />
-                      {fieldError("voterId")}
-                    </>
-                  ) : (
-                    <p className="text-[10px] text-on-surface-variant italic">No Voter ID available.</p>
-                  )}
-                </div>
-                <div className="flex flex-col gap-1.5 rounded-xl border border-surface-container-high p-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <label className={labelClass}>Ration Card</label>
-                    <YesNoToggle
-                      label="Does the participant have a Ration Card?"
-                      value={form.hasRationCard}
-                      onChange={(value) => updateProof("hasRationCard", "rationCard", value)}
-                    />
-                  </div>
-                  {form.hasRationCard === "yes" ? (
-                    <>
-                      <input
-                        type="text"
-                        maxLength={20}
-                        pattern="[A-Z0-9][A-Z0-9-]{5,19}"
-                        title="Ration card must be 6 to 20 letters, digits or hyphens."
-                        placeholder="e.g. SFY-AS-4029"
-                        className={fieldClass("rationCard")}
-                        value={form.rationCard}
-                        onChange={(e) => updateField("rationCard", toRationCardInput(e.target.value))}
-                      />
-                      {fieldError("rationCard")}
-                    </>
-                  ) : (
-                    <p className="text-[10px] text-on-surface-variant italic">No Ration Card available.</p>
-                  )}
-                </div>
-              </div>
+              <BeneficiaryDocumentsFields
+                documents={form.documents}
+                onUpdate={updateDocument}
+                errors={errors}
+              />
             </div>
 
             <div className="pt-2">
@@ -992,6 +905,19 @@ export default function AddBeneficiaryModal({
                   {fieldError("bankIfsc")}
                 </div>
               </div>
+              <label className="mt-3 flex cursor-pointer items-start gap-2 rounded-lg bg-surface-container-low/40 px-3 py-2 text-[11px] font-medium text-on-surface">
+                <input
+                  type="checkbox"
+                  checked={Boolean(bankSupportType)}
+                  onChange={(event) => updateBankSupport(event.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-outline-variant text-primary focus:ring-primary"
+                />
+                <span>
+                  {hasBankDetails
+                    ? "Needs help/support correcting the bank account details"
+                    : "Needs help/support opening a bank account"}
+                </span>
+              </label>
             </div>
 
             <div className="pt-2">

@@ -641,6 +641,21 @@ exports.Prisma.BeneficiaryScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BeneficiaryDocumentScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  type: 'type',
+  label: 'label',
+  hasDocument: 'hasDocument',
+  answered: 'answered',
+  identifier: 'identifier',
+  identifier2: 'identifier2',
+  supportType: 'supportType',
+  details: 'details',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.FamilyMemberScalarFieldEnum = {
   id: 'id',
   beneficiaryId: 'beneficiaryId',
@@ -1655,6 +1670,7 @@ exports.Prisma.ModelName = {
   SchoolProgram: 'SchoolProgram',
   ProgramEvent: 'ProgramEvent',
   Beneficiary: 'Beneficiary',
+  BeneficiaryDocument: 'BeneficiaryDocument',
   FamilyMember: 'FamilyMember',
   Livestock: 'Livestock',
   LivestockHealthLog: 'LivestockHealthLog',
